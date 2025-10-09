@@ -1,20 +1,20 @@
-# 用于构建和部署 Rsbuild 站点到 GitHub Pages 的示例工作流
+# .github/workflows/deploy.yml
 name: Rsbuild Deployment
 
 on:
-  # 在推送到默认分支时触发
+  # 当推送到 main 分支时触发部署
   push:
     branches: ['main']
-  # 允许你从 Actions tabs 手动运行这个工作流
+  # 允许手动触发
   workflow_dispatch:
 
-# 设置 GITHUB_TOKEN 的权限以允许部署到 GitHub Pages
+# 允许 GitHub Actions 部署到 Pages
 permissions:
   contents: read
   pages: write
   id-token: write
 
-# 同时只允许一个部署执行
+# 同时只允许一个部署运行
 concurrency:
   group: 'pages'
   cancel-in-progress: false
@@ -24,32 +24,41 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Use Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 22
 
-      # 如果你使用其他的包管理器，如 yarn 或 pnpm，
-      # 你需要先安装它们
       - name: Install pnpm
         run: npm i -g pnpm
-      - name: Install dependencies
-        run: pnpm i
 
-      - name: Build
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build Rsbuild project
         run: pnpm run build
 
+      # 初始化 GitHub Pages
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
+      # 上传构建产物
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './dist'
+          path: dist  # Rsbuild 默认输出目录
 
+  # 真正部署到 Pages
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
