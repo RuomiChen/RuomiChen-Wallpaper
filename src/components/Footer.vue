@@ -3,7 +3,7 @@
     <!-- 左侧 Logo / 名称 -->
     <div class="flex items-center gap-2">
       <span class="font-semibold text-lg">
-        <img src="/logo.svg"/>
+        <img src="../../public/logo.svg"/>
       </span>
     </div>
 

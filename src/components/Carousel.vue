@@ -6,22 +6,13 @@
         <div class="card">
             <Carousel :value="data" :numVisible="3" :numScroll="1" :responsiveOptions="responsiveOptions">
                 <template #item="slotProps">
-                    <div class="border border-surface-200 dark:border-surface-700 rounded m-2  p-4">
+                    <div class="!h-full border border-surface-200 dark:border-surface-700 rounded mx-2  px-4">
                         <div class="mb-4">
-                            <div class="relative mx-auto">
-                                <img :src="getServerSource(slotProps.data?.source)" :alt="slotProps.data?.name"
-                                    class="w-full rounded" />
-                                <!-- <Tag :value="slotProps.data.inventoryStatus" :severity="getSeverity(slotProps.data.inventoryStatus)" class="absolute" style="left:5px; top: 5px"/> -->
+                            <div class="relative ">
+                                <Image  preview  :src="getServerSource(slotProps.data?.source)" alt="Image" class="flex flex-col items-center" />
                             </div>
                         </div>
                         <div class="mb-4 font-medium">{{ slotProps.data?.name }}</div>
-                        <div class="flex justify-between items-center">
-                            <!-- <div class="mt-0 font-semibold text-xl">${{ slotProps.data.price }}</div> -->
-                            <!-- <span>
-                            <Button icon="pi pi-heart" severity="secondary" variant="outlined" />
-                            <Button icon="pi pi-shopping-cart" class="ml-2"/>
-                        </span> -->
-                        </div>
                     </div>
                 </template>
             </Carousel>
@@ -32,6 +23,7 @@
 
 <script setup>
 import { Carousel } from "primevue";
+import Image from 'primevue/image';
 import { ref } from "vue";
 import { getServerSource } from "../utils";
 defineProps({

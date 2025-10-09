@@ -2,7 +2,7 @@
     <div class="card">
         <MegaMenu :model="items" class="px-8 " style="border-radius: 3rem">
             <template #start>
-                <img src="/logo.svg" class="size-14 " />
+                <img src="../../public/logo.svg" class="size-14 " />
             </template>
             <template #item="{ item }">
                 <a v-if="item.root" :href="item.url"
