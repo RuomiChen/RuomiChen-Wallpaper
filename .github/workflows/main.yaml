@@ -1,20 +1,15 @@
-# .github/workflows/deploy.yml
 name: Rsbuild Deployment
 
 on:
-  # 当推送到 main 分支时触发部署
   push:
     branches: ['main']
-  # 允许手动触发
   workflow_dispatch:
 
-# 允许 GitHub Actions 部署到 Pages
 permissions:
   contents: read
   pages: write
   id-token: write
 
-# 同时只允许一个部署运行
 concurrency:
   group: 'pages'
   cancel-in-progress: false
@@ -41,14 +36,21 @@ jobs:
       - name: Build Rsbuild project
         run: pnpm run build
 
-      # 初始化 GitHub Pages
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
-      # 上传构建产物
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: dist  # Rsbuild 默认输出目录
-          branch: gh-pages   # 推送到 gh-pages 分支
-          folder: dist       # dist 目录内容
+          path: dist  # ✅ 不要写 branch 或 folder
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
