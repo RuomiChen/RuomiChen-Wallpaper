@@ -1,20 +1,8 @@
 <template>
-    <!-- <div class="bg-white border-b border-gray-200 px-6 py-4">
-        <div class="flex items-center justify-between">
-            <div>
-                <h2 class="text-2xl font-bold text-gray-800">{{ activeMenu }}</h2>
-                <p class="text-sm text-gray-500 mt-1">Manage your {{ activeMenu.toLowerCase() }} here</p>
-            </div>
-            <div class="flex gap-2">
-                <Button label="Export" icon="pi pi-download" severity="secondary" outlined />
-                <Button label="Create New" icon="pi pi-plus" />
-            </div>
-        </div>
-    </div> -->
 
     <div class="flex-1 overflow-auto p-6">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-            <Card v-for="stat in stats" :key="stat.title">
+            <Card v-for="stat in stats" :key="stat.title" >
                 <template #content>
                     <div class="flex items-center justify-between">
                         <div>
@@ -40,7 +28,7 @@
                 </div>
             </template>
             <template #content>
-                <DataTable :value="data" stripedRows>
+                <DataTable :value="data" stripedRows :loading="isFetching">
                     <Column field="data.name" header="Name" sortable></Column>
                     <Column field="status" header="Status">
                         <template #body="slotProps">
@@ -79,7 +67,7 @@ import { Button, Card, Column, DataTable, Tag } from 'primevue';
 import { router } from '../../router';
 import { useMyFetch } from '../../utils/request';
 
-const { data } = useMyFetch('/api/creator/recent').json()
+const { data ,isFetching} = useMyFetch('/api/creator/recent').json()
 
 
 const stats = [
