@@ -1,4 +1,5 @@
 import Aura from '@primeuix/themes/aura';
+import { DialogService } from 'primevue';
 import AnimateOnScroll from 'primevue/animateonscroll';
 import PrimeVue from 'primevue/config';
 import FocusTrap from 'primevue/focustrap';
@@ -8,7 +9,7 @@ import App from './App.vue';
 import './index.css';
 import { router } from './router';
 
-createApp(App).directive('animateonscroll', AnimateOnScroll).directive('focustrap', FocusTrap).use(ToastService).use(router).use(PrimeVue, {
+createApp(App).directive('animateonscroll', AnimateOnScroll).directive('focustrap', FocusTrap).use(ToastService).use(DialogService).use(router).use(PrimeVue, {
     theme: {
         preset: Aura,
         options: {
