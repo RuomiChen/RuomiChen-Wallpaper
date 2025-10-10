@@ -1,35 +1,52 @@
-
 <template>
     <div class="card">
         <DataView :value="data">
             <template #list="slotProps">
                 <div class="flex flex-col">
                     <div v-for="(item, index) in slotProps.items" :key="index">
-                        <div class="flex flex-col sm:flex-row sm:items-center py-6 px-2 gap-4" :class="{ 'border-t border-surface-200 dark:border-surface-700': index !== 0 }">
+                        <div class="flex flex-col sm:flex-row py-6 px-2 gap-4"
+                            :class="{ 'border-t border-surface-200 dark:border-surface-700': index !== 0 }">
                             <div class="md:w-40 relative">
-                                <img class="block xl:block mx-auto rounded w-full" :src="getServerSource(item.source)" :alt="item.name" />
-                                <!-- <div class="absolute bg-black/70 rounded-border" style="left: 4px; top: 4px">
-                                    <Tag :value="item.inventoryStatus" :severity="getSeverity(item)"></Tag>
-                                </div> -->
+                                <img class="block xl:block mx-auto rounded w-full" :src="getServerSource(item.source)"
+                                    :alt="item.name" />
                             </div>
-                            <div class="flex flex-col md:flex-row justify-between md:items-center flex-1 gap-6">
-                                <div class="flex flex-row md:flex-col justify-between items-start gap-2">
+                            <div class="flex flex-col md:flex-row justify-between  flex-1 gap-6">
+                                <div class="p-1 flex flex-row md:flex-col justify-between items-start gap-2">
                                     <div>
-                                        <span class="font-medium text-surface-500 dark:text-surface-400 text-sm">{{ item.category }}</span>
+                                        <div class="flex items-center gap-2" v-if="item.category.length">
+                                            <Tag v-for="j in item.category" severity="contrast" :value="j"
+                                                class="text-[12px]"></Tag>
+                                        </div>
+                                        <span class="font-medium text-surface-500 dark:text-surface-400 text-sm">{{
+                                            }}</span>
                                         <div class="text-lg font-medium mt-2">{{ item.name }}</div>
                                     </div>
-                                    <div class="bg-surface-100 p-1" style="border-radius: 30px">
-                                        <div class="bg-surface-0 flex items-center gap-2 justify-center py-1 px-2" style="border-radius: 30px; box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.04), 0px 1px 2px 0px rgba(0, 0, 0, 0.06)">
-                                            <span class="text-surface-900 font-medium text-sm">{{ item.rating }}</span>
-                                            <i class="pi pi-star-fill text-yellow-500"></i>
+                                    <div class="flex items-center justify-between gap-4">
+                                        <div class="flex items-center gap-1.5 text-surface-600 dark:text-surface-400">
+                                            <i class="pi pi-eye text-sm"></i>
+                                            <span class="text-sm font-medium">{{ item.view }}</span>
                                         </div>
+
+                                        <div class="flex items-center gap-1.5 text-surface-600 dark:text-surface-400">
+                                            <i class="pi pi-download text-sm"></i>
+                                            <span class="text-sm font-medium">{{ item.download }}</span>
+                                        </div>
+
+                                        <div class="flex items-center gap-1.5 text-surface-600 dark:text-surface-400">
+                                            <i class="pi pi-heart text-sm"></i>
+                                            <span class="text-sm font-medium">{{ item.collect }}</span>
+                                        </div>
+
                                     </div>
                                 </div>
+                                <!-- avatar  -->
                                 <div class="flex flex-col md:items-end gap-8">
                                     <span class="text-xl font-semibold">${{ item.price }}</span>
                                     <div class="flex flex-row-reverse md:flex-row gap-2">
                                         <Button icon="pi pi-heart" variant="outlined"></Button>
-                                        <Button icon="pi pi-shopping-cart" label="Buy Now" :disabled="item.inventoryStatus === 'OUTOFSTOCK'" class="flex-auto md:flex-initial whitespace-nowrap"></Button>
+                                        <Button icon="pi pi-shopping-cart" label="Buy Now"
+                                            :disabled="item.inventoryStatus === 'OUTOFSTOCK'"
+                                            class="flex-auto md:flex-initial whitespace-nowrap"></Button>
                                     </div>
                                 </div>
                             </div>
@@ -42,7 +59,7 @@
 </template>
 
 <script setup lang="ts">
-import { DataView } from "primevue";
+import { DataView, Tag } from "primevue";
 import { getServerSource } from "../utils";
 
 
