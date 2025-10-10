@@ -4,7 +4,9 @@
             <div class="flex items-center gap-4">
                 <i class="pi pi-bars text-2xl text-primary cursor-pointer"
                     @click="sidebarVisible = !sidebarVisible"></i>
-                <h1 class="text-xl font-semibold text-gray-800">Workbench</h1>
+                <h1 class="text-xl font-semibold text-gray-800">
+                    <Button label="Go Back" rounded  raised @click="()=>router.push({name:'Home'})" />
+                </h1>
             </div>
             <div class="flex items-center gap-3">
                 <Button icon="pi pi-bell" severity="secondary" text rounded />
