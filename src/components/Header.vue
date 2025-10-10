@@ -19,21 +19,18 @@
                         <span class="whitespace-nowrap">{{ item.subtext }}</span>
                     </span>
                 </a>
-                <div v-else class="flex flex-col items-start gap-4 p-2">
-                    <img alt="megamenu-demo" :src="item.image" class="w-full" />
-                    <span>{{ item.subtext }}</span>
-                    <Button :label="item.label" variant="outlined" />
-                </div>
+
             </template>
             <template #end>
-                <div class="flex gap-4">
-                    <Button class=" self-center" :icon="`pi ${isDark ? 'pi-sun' : 'pi-moon'}`" aria-label="Save"
-                        @click="toggleDark()" />
-                        
-                    <OverlayBadge v-if="hasLogin" value="4" severity="danger" class="inline-flex">
-                        <!-- <Avatar class="p-overlay-badge"
+                <div class="flex gap-4 items-center">
+                    <Button icon="pi pi-search" aria-label="Save" @click="search" />
+                    <Button :icon="`pi ${isDark ? 'pi-sun' : 'pi-moon'}`" aria-label="Save" @click="toggleDark()" />
+                    <OverlayBadge value="4" v-if="hasLogin" severity="danger" class="inline-flex">
+                        <SplitButton :plain="false" raised text :model="userDropdown" @click="save">
+                            <!-- <Avatar class="p-overlay-badge"
                             :image="getServerSource(user.avatar)" size="xlarge" /> -->
-                        <img :src="getServerSource(user.avatar)" class="size-14 rounded-full" />
+                            <img :src="getServerSource(user.avatar)" class="size-14 rounded-full" />
+                        </SplitButton>
                     </OverlayBadge>
                     <Button v-else icon="pi pi-user" aria-label="Account"
                         @click="() => router.push({ name: 'Account' })" />
@@ -44,24 +41,59 @@
 </template>
 
 <script setup>
-import { Button, MegaMenu, OverlayBadge } from "primevue";
+import { Button, MegaMenu, OverlayBadge, SplitButton, useDialog } from "primevue";
 import { computed, ref } from "vue";
 import { router } from "../router";
 
 import { useDark, useStorage, useToggle } from '@vueuse/core';
+import { useGlobalState } from "../store/user";
 import { getServerSource } from "../utils";
+import { AppDialog } from "../utils/dialog";
+import { AppToast } from "../utils/toast";
+import SearchDIalog from "./dialog/SearchDIalog.vue";
 
 const isDark = useDark()
 const toggleDark = useToggle(isDark)
-
-
+const userDropdown = [
+    {
+        label: 'Download Center',
+        command: () => {
+            AppToast.add({ severity: 'success', summary: 'Updated', detail: 'Data Updated', life: 3000 });
+        }
+    },
+    {
+        label: 'Delete',
+        command: () => {
+            AppToast.add({ severity: 'warn', summary: 'Delete', detail: 'Data Deleted', life: 3000 });
+        }
+    },
+    {
+        separator: true
+    },
+    {
+        label: 'Logout',
+        command: () => {
+            userState.logout()
+            hasLogin.value = null
+            AppToast.success('logout success')
+        }
+    }
+];
 
 const hasLogin = useStorage('token', null)
 const user = computed(() => {
     const data = useStorage('userInfo', null, localStorage)
     return JSON.parse(data.value)
 })
+const userState = useGlobalState()
 
+const dialog = useDialog()
+const search = () => {
+    AppDialog.open(SearchDIalog, {
+        header: '系统提示',
+        props: { message: '注册成功！' },
+    });
+}
 const items = ref([
     {
         label: 'Home',
@@ -149,3 +181,8 @@ const items = ref([
     },
 ]);
 </script>
+<style scoped>
+.p-splitbutton-raised {
+    --p-splitbutton-raised-shadow: none;
+}
+</style>
