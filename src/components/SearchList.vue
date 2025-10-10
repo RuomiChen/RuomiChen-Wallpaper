@@ -1,16 +1,16 @@
 
 <template>
     <div class="card">
-        <DataView :value="products">
+        <DataView :value="data">
             <template #list="slotProps">
                 <div class="flex flex-col">
                     <div v-for="(item, index) in slotProps.items" :key="index">
-                        <div class="flex flex-col sm:flex-row sm:items-center p-6 gap-4" :class="{ 'border-t border-surface-200 dark:border-surface-700': index !== 0 }">
+                        <div class="flex flex-col sm:flex-row sm:items-center py-6 px-2 gap-4" :class="{ 'border-t border-surface-200 dark:border-surface-700': index !== 0 }">
                             <div class="md:w-40 relative">
-                                <img class="block xl:block mx-auto rounded w-full" :src="`https://primefaces.org/cdn/primevue/images/product/${item.image}`" :alt="item.name" />
-                                <div class="absolute bg-black/70 rounded-border" style="left: 4px; top: 4px">
+                                <img class="block xl:block mx-auto rounded w-full" :src="getServerSource(item.source)" :alt="item.name" />
+                                <!-- <div class="absolute bg-black/70 rounded-border" style="left: 4px; top: 4px">
                                     <Tag :value="item.inventoryStatus" :severity="getSeverity(item)"></Tag>
-                                </div>
+                                </div> -->
                             </div>
                             <div class="flex flex-col md:flex-row justify-between md:items-center flex-1 gap-6">
                                 <div class="flex flex-row md:flex-col justify-between items-start gap-2">
@@ -41,28 +41,12 @@
     </div>
 </template>
 
-<script setup>
-import { ProductService } from '@/service/ProductService';
-import { onMounted, ref } from "vue";
+<script setup lang="ts">
+import { DataView } from "primevue";
+import { getServerSource } from "../utils";
 
-onMounted(() => {
-    ProductService.getProductsSmall().then((data) => (products.value = data.slice(0, 5)));
-});
 
-const products = ref();
-const getSeverity = (product) => {
-    switch (product.inventoryStatus) {
-        case 'INSTOCK':
-            return 'success';
+defineProps<{ data: [] }>();
 
-        case 'LOWSTOCK':
-            return 'warn';
 
-        case 'OUTOFSTOCK':
-            return 'danger';
-
-        default:
-            return null;
-    }
-};
 </script>
