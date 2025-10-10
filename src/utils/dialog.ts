@@ -1,4 +1,4 @@
-import type { DialogServiceMethods } from "primevue/dialogservice";
+import type { DialogServiceMethods, DialogServiceRef } from "primevue/dialogservice";
 
 let dialogInstance: DialogServiceMethods | null = null;
 
@@ -14,22 +14,28 @@ function getDialog() {
   return dialogInstance;
 }
 
-// 全局对话框工具
 export const AppDialog = {
-  /**
-   * 打开一个通用对话框
-   * @param component 要展示的组件
-   * @param options Dialog 配置项
-   */
-  open(component: any, options: Record<string, any> = {}) {
+  open(component: any, options: Record<string, any> = {}): DialogServiceRef | null {
     const dialog = getDialog();
-    if (!dialog) return;
-    dialog.open(component, {
+    if (!dialog) return null;
+
+    const dialogRef = dialog.open(component, {
       props: {
         header: options.header || '提示',
         modal: true,
         ...options.props,
       },
     });
+
+    return dialogRef; // dialogRef 包含 hide() 方法
   },
+
+  close(dialogRef: DialogServiceRef | null) {
+    if (!dialogRef) return;
+    if (typeof dialogRef.hide === 'function') {
+      dialogRef.hide(); // 使用 hide() 关闭
+    } else {
+      console.warn('[dialog] dialogRef does not have hide() method.');
+    }
+  }
 };

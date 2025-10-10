@@ -40,8 +40,8 @@
     </div>
 </template>
 
-<script setup>
-import { Button, MegaMenu, OverlayBadge, SplitButton, useDialog } from "primevue";
+<script setup lang="ts">
+import { Button, MegaMenu, OverlayBadge, SplitButton } from "primevue";
 import { computed, ref } from "vue";
 import { router } from "../router";
 
@@ -58,13 +58,13 @@ const userDropdown = [
     {
         label: 'Workbench',
         command: () => {
-            router.push({name:'Dashboard'})
+            router.push({ name: 'Dashboard' })
         }
     },
     {
         label: 'Download Center',
         command: () => {
-            AppToast.add({ severity: 'success', summary: 'Updated', detail: 'Data Updated', life: 3000 });
+            AppToast.success('Updated','')
         }
     },
     {
@@ -82,12 +82,11 @@ const userDropdown = [
 
 const hasLogin = useStorage('token', null)
 const user = computed(() => {
-    const data = useStorage('userInfo', null, localStorage)
+    const data = useStorage('userInfo', '', localStorage)
     return JSON.parse(data.value)
 })
 const userState = useGlobalState()
 
-const dialog = useDialog()
 const search = () => {
     AppDialog.open(SearchDIalog, {
         header: 'Search',
@@ -98,7 +97,9 @@ const search = () => {
             '960px': '75vw',
             '640px': '90vw'
         },
-        props: { message: '注册成功！' },
+        props: {
+            message: '注册成功！'
+        },
     });
 }
 const items = ref([

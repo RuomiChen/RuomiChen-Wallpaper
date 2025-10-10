@@ -27,6 +27,7 @@ const filterData = computed(() => {
   return data.value.filter(item => item.name.toLowerCase().includes(kw))
 })
 
+
 const {data} = useMyFetch('/api/product/all').json()
 
 </script>
