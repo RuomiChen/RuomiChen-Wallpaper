@@ -20,7 +20,7 @@ export const useGlobalState = createGlobalState(
             if (data.value) {
                 const { user, token } = data.value
                 localStorage.setItem('userInfo', JSON.stringify(user))
-                localStorage.setItem('token', JSON.stringify(token))
+                localStorage.setItem('token', token)
                 userInfo.value = user // 更新全局状态
 
 

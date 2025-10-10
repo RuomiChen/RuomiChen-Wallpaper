@@ -1,12 +1,12 @@
-import { createFetch } from "@vueuse/core";
+import { createFetch, useStorage } from "@vueuse/core";
 import { AppToast } from "./toast";
 export const BASE_URL = 'https://www-zihao-hk.kooboo.io'
 export const useMyFetch = createFetch({
     baseUrl: 'https://www-zihao-hk.kooboo.io',
     options: {
         async beforeFetch({ options }) {
-            //   const myToken = await getMyToken()
-            //   options.headers.Authorization = `Bearer ${myToken}`
+            const token = useStorage('token', null)
+            options.headers.Authorization = `Bearer ${token.value}`
 
             return { options }
         },

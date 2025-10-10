@@ -5,6 +5,9 @@ import Account from '../views/Account.vue'
 import Contact from '../views/Contact.vue'
 import Home from '../views/Home.vue'
 import WallpaperCategory from '../views/WallpaperCategory.vue'
+import Dashboard from '../views/user/Dashboard.vue'
+import HandleProject from '../views/user/HandleProject.vue'
+import Workbench from '../views/user/Workbench.vue'
 
 const routes = [
   {
@@ -15,6 +18,16 @@ const routes = [
     ]
   }, {
     name: 'Account', path: '/account', component: Account
+  },
+  {
+    name: 'Workbench', path: '/workbench', component: Workbench, children: [
+      {
+        name: 'Dashboard', path: '', component: Dashboard
+      },
+      {
+        name: 'HandleProject', path: 'handle_project/:id?', component: HandleProject
+      }
+    ]
   }
 
 ]

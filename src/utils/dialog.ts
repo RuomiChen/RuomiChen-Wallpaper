@@ -1,4 +1,4 @@
-import type { DialogServiceMethods } from 'primevue/dynamicdialog';
+import type { DialogServiceMethods } from "primevue/dialogservice";
 
 let dialogInstance: DialogServiceMethods | null = null;
 
@@ -28,7 +28,6 @@ export const AppDialog = {
       props: {
         header: options.header || '提示',
         modal: true,
-        style: { width: '400px' },
         ...options.props,
       },
     });
