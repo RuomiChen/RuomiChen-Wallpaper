@@ -1,7 +1,7 @@
 <script setup lang="ts">
+import ScrollTop from 'primevue/scrolltop';
 import Footer from '../components/Footer.vue';
 import Header from '../components/Header.vue';
-
 </script>
 
 <template>
@@ -9,5 +9,6 @@ import Header from '../components/Header.vue';
         <Header />
         <router-view/>
         <Footer />
+        <ScrollTop />
     </div>
 </template>

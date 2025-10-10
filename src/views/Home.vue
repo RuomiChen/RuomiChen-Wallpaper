@@ -15,7 +15,7 @@ const { isFetching, error, data } = useMyFetch<{
     <div v-if="isFetching">loading...</div>
     <div v-else-if="error">{{error}}</div>
     <div class="flex flex-col gap-20 w-full" v-else>
-        <Carousel title="New Wallpaper" :data="data?.carousel!" />
+        <Carousel :data="data?.carousel!" />
         <People :data="data?.people!"/>
         <Advantages />
     </div>
