@@ -16,14 +16,14 @@
                     <InputIcon>
                         <i class="pi pi-user" />
                     </InputIcon>
-                    <InputText id="name" v-model="form.firstName" type="text" placeholder="Name" fluid />
+                    <InputText id="name" v-model="form.firstName" type="text" placeholder="FirstName" fluid />
                 </IconField>
 
                 <IconField v-if="!isLogin">
                     <InputIcon>
                         <i class="pi pi-user" />
                     </InputIcon>
-                    <InputText id="name" v-model="form.lastName" type="text" placeholder="Name" fluid />
+                    <InputText id="name" v-model="form.lastName" type="text" placeholder="LastName" fluid />
                 </IconField>
 
                 <IconField>
@@ -62,16 +62,15 @@ import {
     IconField,
     InputIcon,
     InputText,
-    ToggleSwitch,
-    useToast
+    ToggleSwitch
 } from 'primevue';
 import { reactive, ref } from 'vue';
 import { router } from '../router';
 import { useGlobalState } from '../store/user';
-const toast = useToast();
+import { AppToast } from '../utils/toast';
 
 
-const isLogin = ref(true) // true = 登录, false = 注册
+const isLogin = ref(false) // true = 登录, false = 注册
 
 const form = reactive({
     email: '',
@@ -89,14 +88,11 @@ const handleSubmit = async () => {
             password: form.password
         }
         await userState.login(loginData)
-        toast.add({
-            severity: 'success',
-            summary: 'login success',
-            life: 2000
-        })
-        router.push({name:'Home'})
+        router.push({ name: 'Home' })
     } else {
+        if (!accept.value) return AppToast.error('please accept the terms first')
         await userState.register(form)
+        isLogin.value = true
     }
 }
 </script>

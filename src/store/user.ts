@@ -2,6 +2,7 @@
 import { createGlobalState } from '@vueuse/core';
 import { shallowRef } from 'vue';
 import { useMyFetch } from '../utils/request';
+import { AppToast } from '../utils/toast';
 
 export const useGlobalState = createGlobalState(
     () => {
@@ -22,17 +23,26 @@ export const useGlobalState = createGlobalState(
                 localStorage.setItem('token', JSON.stringify(token))
                 userInfo.value = user // 更新全局状态
 
-              
+
             }
         }
+
+        const logout = () => {
+            localStorage.removeItem('userInfo')
+            localStorage.removeItem('token')
+            userInfo.value = null
+        }
+
         const register = async (bodyData: any) => {
-            const { data } = useMyFetch('/api/account/register').post(bodyData).json()
+            useMyFetch('/api/account/register').post(bodyData).json()
+            AppToast.success('register success')
 
         }
         return {
             userInfo,
             login,
-            register
+            register,
+            logout
         }
     }
 )
