@@ -50,13 +50,13 @@
       </div>
 
       <!-- Contact Info + Map -->
-      <div class="space-y-6" >
+      <div class="flex flex-col justify-between" >
         <div class="rounded-lg shadow-lg p-8 space-y-4">
           <h2 class="text-2xl font-semibold mb-4">Contact Information</h2>
 
           <div class="space-y-4" v-if="data">
             <div class="flex items-start gap-4">
-              <i class="pi pi-map-marker text-indigo-600 text-xl"></i>
+              <i class="pi pi-map-marker text-primary text-xl"></i>
               <div>
                 <h3 class="font-medium text-sm">Address</h3>
                 <p class="text-sm" >{{ data!.address }}</p>
@@ -64,7 +64,7 @@
             </div>
 
             <div class="flex items-start gap-4">
-              <i class="pi pi-phone text-indigo-600 text-xl"></i>
+              <i class="pi pi-phone text-primary text-xl"></i>
               <div>
                 <h3 class="font-medium text-sm">Phone</h3>
                 <Skeleton size="2rem" class="mr-2" v-if="isFetching"></Skeleton>
@@ -73,7 +73,7 @@
             </div>
 
             <div class="flex items-start gap-4">
-              <i class="pi pi-envelope text-indigo-600 text-xl"></i>
+              <i class="pi pi-envelope text-primary text-xl"></i>
               <div>
                 <h3 class="font-medium text-sm">Email</h3>
                 <Skeleton size="2rem" class="mr-2" v-if="isFetching"></Skeleton>
@@ -82,29 +82,31 @@
             </div>
 
             <div class="flex items-start gap-4">
-              <i class="pi pi-clock text-indigo-600 text-xl"></i>
+              <i class="pi pi-clock text-primary text-xl"></i>
               <div v-html="data!.tip">
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Social Media -->
-        <div class="bg-indigo-600 rounded-lg shadow-lg p-6 text-white">
-          <h3 class="text-xl font-semibold mb-4">Follow Us</h3>
-          <div class="flex space-x-4">
-            <Button icon="pi pi-facebook" rounded text severity="secondary" class="text-white hover:bg-indigo-700" />
-            <Button icon="pi pi-twitter" rounded text severity="secondary" class="text-white hover:bg-indigo-700" />
-            <Button icon="pi pi-linkedin" rounded text severity="secondary" class="text-white hover:bg-indigo-700" />
-            <Button icon="pi pi-github" rounded text severity="secondary" class="text-white hover:bg-indigo-700" />
-          </div>
-        </div>
+       
 
         <!-- Google Map -->
         <div class="rounded-lg overflow-hidden shadow-lg h-64">
-          <iframe :src="mapUrl" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"
+          <iframe :src="mapUrl" width="100%" height="100%" style="border:0;" allowfullscreen="true" loading="lazy"
             referrerpolicy="no-referrer-when-downgrade">
           </iframe>
+        </div>
+
+         <!-- Social Media -->
+        <div class="bg-primary rounded-lg shadow-lg p-6 text-white">
+          <h3 class="text-xl font-semibold mb-4">Follow Us</h3>
+          <div class="flex space-x-4">
+            <Button icon="pi pi-facebook" rounded text severity="secondary" class="text-primary hover:bg-white/70 bg-white" />
+            <Button icon="pi pi-twitter" rounded text severity="secondary" class="text-primary hover:bg-white/70 bg-white" />
+            <Button icon="pi pi-linkedin" rounded text severity="secondary" class="text-primary hover:bg-white/70 bg-white" />
+            <Button icon="pi pi-github" rounded text severity="secondary" class="text-primary hover:bg-white/70 bg-white" />
+          </div>
         </div>
       </div>
     </div>
@@ -122,6 +124,7 @@ import Textarea from 'primevue/textarea'
 import Toast from 'primevue/toast'
 import { computed, ref } from 'vue'
 import { useMyFetch } from '../utils/request'
+import { AppToast } from '../utils/toast'
 
 interface FormData {
   name: string
@@ -166,13 +169,7 @@ const handleSubmit = async () => {
   loading.value = true
   setTimeout(() => {
     loading.value = false
-    toast.value?.add({
-      severity: 'success',
-      summary: 'Message Sent',
-      detail: 'We have received your message and will reply soon!',
-      life: 3000
-    })
-
+    AppToast.success('message sent','We have received your message and will reply soon!')
     formData.value = { name: '', email: '', phone: '', subject: '', message: '' }
     submitted.value = false
   }, 1500)
@@ -190,7 +187,6 @@ const { isFetching, error, data } = useMyFetch<{
   address:string,
   phone:string,
   tip:string
-}>('/api/contact/all')
-console.log(data);
+}>('/api/contact/all').json()
 
 </script>
