@@ -56,15 +56,15 @@ const isDark = useDark()
 const toggleDark = useToggle(isDark)
 const userDropdown = [
     {
-        label: 'Download Center',
+        label: 'Workbench',
         command: () => {
-            AppToast.add({ severity: 'success', summary: 'Updated', detail: 'Data Updated', life: 3000 });
+            router.push({name:'Dashboard'})
         }
     },
     {
-        label: 'Delete',
+        label: 'Download Center',
         command: () => {
-            AppToast.add({ severity: 'warn', summary: 'Delete', detail: 'Data Deleted', life: 3000 });
+            AppToast.add({ severity: 'success', summary: 'Updated', detail: 'Data Updated', life: 3000 });
         }
     },
     {
@@ -90,7 +90,14 @@ const userState = useGlobalState()
 const dialog = useDialog()
 const search = () => {
     AppDialog.open(SearchDIalog, {
-        header: '系统提示',
+        header: 'Search',
+        style: {
+            width: '50vw',
+        },
+        breakpoints: {
+            '960px': '75vw',
+            '640px': '90vw'
+        },
         props: { message: '注册成功！' },
     });
 }
