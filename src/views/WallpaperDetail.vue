@@ -4,9 +4,11 @@ import { Button, Divider } from 'primevue';
 import { computed, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import CreatorCard from '../components/CreatorCard.vue';
+import SimpleDIalog from '../components/dialog/SimpleDIalog.vue';
 import Dock from '../components/utils/Dock.vue';
 import { useGlobalState } from '../store/user';
 import { getServerSource } from '../utils';
+import { AppDialog } from '../utils/dialog';
 import { useMyFetch } from '../utils/request';
 import { AppToast } from '../utils/toast';
 const route = useRoute()
@@ -72,6 +74,32 @@ async function download() {
     // 4️⃣ 释放 blob URL
     URL.revokeObjectURL(blobUrl)
 }
+enum IOpenType {
+    'official'
+}
+const open = (type: IOpenType) => {
+    let setting = useStorage('setting', null)
+    if(setting) setting = JSON.parse(setting.value)    
+    switch (type) {
+        case IOpenType.official:
+            AppDialog.open(SimpleDIalog, {
+                header: 'Official',
+                style: {
+                    width: '50vw',
+                },
+                breakpoints: {
+                    '960px': '75vfw',
+                    '640px': '90vw'
+                },
+                data: {
+                    type: 'image',
+                    data: setting.wechat_img
+                }
+
+            });
+
+    }
+}
 </script>
 
 <template>
@@ -101,7 +129,8 @@ async function download() {
                         <Button icon="pi pi-download" label="Download" severity="secondary" raised @click="download" />
                         <Button icon="pi pi-heart" severity="secondary" raised />
                         <Button icon="pi pi-comment" label="Jogin Group" severity="secondary" raised />
-                        <Button icon="pi pi-comment" label="Official" severity="secondary" raised />
+                        <Button icon="pi pi-comment" label="Official" severity="secondary" raised
+                            @click="open(IOpenType.official)" />
                     </div>
                 </div>
             </div>
