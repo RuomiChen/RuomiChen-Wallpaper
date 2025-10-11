@@ -11,13 +11,16 @@ export const useMyFetch = createFetch({
             return { options }
         },
         afterFetch({ data, response, context, execute }) {
+            console.log(data);
+            console.log(response);
 
             if (data.code == 0) {
                 return { data: data.data, response }
             }
-            else {
+            else if (data.code) {
                 throw Error(data.message || "Network error");
             }
+            return { data, response }
 
         }, updateDataOnError: true,
         onFetchError({ error, data, response, context, execute }) {

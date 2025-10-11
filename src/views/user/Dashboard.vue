@@ -2,18 +2,18 @@
 
     <div class="flex-1 overflow-auto p-6">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-            <Card v-for="stat in stats" :key="stat.title" >
+            <Card v-for="stat in stats" :key="stat.title">
                 <template #content>
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-sm text-gray-500 mb-1">{{ stat.title }}</p>
-                            <p class="text-3xl font-bold text-gray-800">{{ stat.value }}</p>
-                            <p class="text-xs text-green-600 mt-2">
+                            <p class="text-sm  mb-1">{{ stat.title }}</p>
+                            <p class="text-3xl font-bold ">{{ stat.value }}</p>
+                            <p class="text-xs  mt-2">
                                 <i class="pi pi-arrow-up"></i> {{ stat.change }}
                             </p>
                         </div>
                         <div :class="['w-12 h-12 rounded-full flex items-center justify-center bg-primary/10']">
-                            <i :class="[stat.icon, 'text-2xl text-primary']"></i>
+                            <i :class="[`pi ${stat.icon}`, 'text-2xl text-primary']"></i>
                         </div>
                     </div>
                 </template>
@@ -51,7 +51,7 @@
                     <Column header="Actions">
                         <template #body="slotProps">
                             <div class="flex gap-2">
-                                <Button icon="pi pi-pencil" text rounded @click="toProject(slotProps.data._id)"/>
+                                <Button icon="pi pi-pencil" text rounded @click="toProject(slotProps.data._id)" />
                                 <Button icon="pi pi-trash" severity="danger" text rounded />
                             </div>
                         </template>
@@ -64,17 +64,22 @@
 <script setup lang="ts">
 import { useDateFormat } from '@vueuse/core';
 import { Button, Card, Column, DataTable, Tag } from 'primevue';
+import { computed } from 'vue';
 import { router } from '../../router';
 import { useMyFetch } from '../../utils/request';
 
-const { data ,isFetching} = useMyFetch('/api/creator/recent').json()
+const { data: statsData, isFetching: statsFetching } = useMyFetch('/api/creator/stats').json()
+const { data, isFetching } = useMyFetch('/api/creator/recent').json()
 
 
-const stats = [
-    { title: 'Total Projects', value: '24', change: '+12%', icon: 'pi pi-folder' },
-    { title: 'Active Tasks', value: '156', change: '+8%', icon: 'pi pi-check-square' },
-    { title: 'Team Members', value: '48', change: '+3%', icon: 'pi pi-users' }
-]
+const iconData = ['pi-folder', 'pi-check-square', 'pi-check-users']
+const stats = computed(() => {
+    if (!statsData.value) return []  // 数据还没来，返回空数组
+    return statsData.value.map((item:any, index:number) => ({
+        ...item,
+        icon: iconData[index] ?? ''   // 防止 iconData 不够长度
+    }))
+})
 enum Status {
     Waiting = 0,
     Success = 1,
@@ -82,10 +87,10 @@ enum Status {
 }
 
 const toProject = (_id?: string) => {
-  router.push({
-    name: 'HandleProject',
-    params: { id: _id } // 可选
-  })
+    router.push({
+        name: 'HandleProject',
+        params: { id: _id } // 可选
+    })
 }
 const statusMap: Record<Status, { text: string; severity: "success" | "info" | "warn" | "danger" | "secondary" }> = {
     [Status.Waiting]: { text: "Pending", severity: "warn" },

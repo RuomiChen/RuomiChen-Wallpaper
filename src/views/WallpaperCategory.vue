@@ -19,6 +19,7 @@ watch(
 )
 
 import { ref } from "vue";
+import { router } from '../router';
 
 
 
@@ -84,7 +85,7 @@ const imageClick = (index:any) => {
 
       <div v-if="images" class="grid grid-cols-12 gap-4 w-full" >
         <div v-for="(item, index) of data" :key="index" class="col-span-3">
-          <img :src="getServerSource(item.source)" :alt="item.name" class="w-full h-full bg-contain shadow-xl rounded-md"  @click="imageClick(index)" />
+          <img :src="getServerSource(item.source)" :alt="item.name" class="cursor-pointer w-full h-full bg-contain shadow-xl rounded-md"  @click="()=>router.push({name:'WallpaperDetail',params:{id:item._id}})" />
         </div>
       </div>
     </div>

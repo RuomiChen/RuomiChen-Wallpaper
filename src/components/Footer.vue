@@ -10,7 +10,7 @@
     <!-- 中间导航 -->
     <div class="flex items-center gap-4 font-bold">
       <router-link to="/" class="hover:bg-white/5 p-2 rounded-md transition-colors">Home</router-link>
-      <router-link to="about" class="hover:bg-white/5 p-2 rounded-md transition-colors">About</router-link>
+      <router-link to="about" class="hover:bg-white/5 p-2 rounded-md transition-colors">About Us</router-link>
       <router-link to="contact" class="hover:bg-white/5 p-2 rounded-md transition-colors">Contact</router-link>
     </div>
 

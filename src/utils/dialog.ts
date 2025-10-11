@@ -1,41 +1,65 @@
-import type { DialogServiceMethods, DialogServiceRef } from "primevue/dialogservice";
+import type { DialogServiceMethods } from "primevue/dialogservice";
 
 let dialogInstance: DialogServiceMethods | null = null;
 
+/**
+ * 注册 Dialog 实例
+ */
 export function setDialogInstance(instance: DialogServiceMethods) {
   dialogInstance = instance;
 }
 
-function getDialog() {
+/**
+ * 获取全局 Dialog 实例
+ */
+function getDialog(): DialogServiceMethods | null {
   if (!dialogInstance) {
-    console.warn('[dialog] Dialog instance not registered yet.');
+    console.warn("[dialog] Dialog instance not registered yet.");
     return null;
   }
   return dialogInstance;
 }
 
+/**
+ * 定义一个兼容类型，代表 dialog.open() 的返回引用
+ */
+type DialogRefLike = {
+  close: () => void;
+  [key: string]: any;
+};
+
+let dialogRef: DialogRefLike | null = null;
+
 export const AppDialog = {
-  open(component: any, options: Record<string, any> = {}): DialogServiceRef | null {
+  /**
+   * 打开对话框
+   */
+  open(component: any, options: Record<string, any> = {}): DialogRefLike | null {
     const dialog = getDialog();
     if (!dialog) return null;
 
-    const dialogRef = dialog.open(component, {
+    const ref = dialog.open(component, {
+      ...options,
       props: {
-        header: options.header || '提示',
-        modal: true,
+        header: options.header || "提示",
+        modal:true,
         ...options.props,
       },
-    });
+    }) as DialogRefLike;
 
-    return dialogRef; // dialogRef 包含 hide() 方法
+    dialogRef = ref;
+    return ref;
   },
 
-  close(dialogRef: DialogServiceRef | null) {
-    if (!dialogRef) return;
-    if (typeof dialogRef.hide === 'function') {
-      dialogRef.hide(); // 使用 hide() 关闭
+  /**
+   * 关闭对话框
+   */
+  close() {
+    if (dialogRef && typeof dialogRef.close === "function") {
+      dialogRef.close();
+      dialogRef = null;
     } else {
-      console.warn('[dialog] dialogRef does not have hide() method.');
+      console.warn("[dialog] No active dialog to close.");
     }
-  }
+  },
 };

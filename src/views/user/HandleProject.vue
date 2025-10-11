@@ -1,5 +1,5 @@
 <template>
-    <div class="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8">
+    <div class="min-h-screen ">
         <Card>
             <template #title>
                 <div class="flex items-center gap-3">
@@ -8,7 +8,7 @@
                 </div>
             </template>
             <template #content>
-                <CreateProjectForm v-if="!projectId || formData._id" :category="categoryOptions" :type="typeOptions"
+                <CreateProjectForm v-if="!projectId || formData._id" :tag="tagOptions" :category="categoryOptions" :type="typeOptions"
                     :form-data="formData" :is-edit="!!projectId" @success="handleSuccess" />
             </template>
         </Card>
@@ -40,6 +40,7 @@ const formData = ref({
 // 获取分类和类型选项
 const { data: categoryOptions } = useMyFetch('/api/category/all').json()
 const { data: typeOptions } = useMyFetch('/api/type/all').json()
+const { data: tagOptions } = useMyFetch('/api/tag/all').json()
 
 // 编辑场景：拉取已有项目数据
 const fetchProjectData = async () => {

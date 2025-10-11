@@ -3,7 +3,7 @@
         <DataView :value="data">
             <template #list="slotProps">
                 <div class="flex flex-col">
-                    <div @click="to(item._id)" v-for="(item, index) in slotProps.items" :key="index">
+                    <div class="cursor-pointer" @click="to(item._id)" v-for="(item, index) in slotProps.items" :key="index">
                         <div class="flex flex-col sm:flex-row py-6 px-2 gap-4"
                             :class="{ 'border-t border-surface-200 dark:border-surface-700': index !== 0 }">
                             <div class="md:w-40 relative">
@@ -59,7 +59,7 @@
 </template>
 
 <script setup lang="ts">
-import { DataView, DialogService, Tag } from "primevue";
+import { DataView,  Tag } from "primevue";
 import { getServerSource } from "../utils";
 import { router } from "../router";
 import { AppDialog } from "../utils/dialog";
@@ -68,8 +68,10 @@ import { AppDialog } from "../utils/dialog";
 defineProps<{ data: [] }>();
 
 const to = (id:string) => {
-    AppDialog.close()
+    console.log(id);
+    
     router.push({ name: 'WallpaperDetail', params: { id } })
+    AppDialog.close()
 }
 
 </script>

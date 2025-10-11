@@ -28,8 +28,18 @@
             <label for="category" class="block text-sm font-medium text-gray-700">
                 Category <span class="text-red-500">*</span>
             </label>
-            <MultiSelect v-model="localForm.categoryArr" :options="category" optionLabel="name" filter
+            <MultiSelect v-model="localForm.category" :options="category" optionLabel="name" filter
                 placeholder="Select categories" :maxSelectedLabels="3" class="w-full md:w-80" />
+
+        </div>
+
+        <!-- Tag Multi-Select -->
+        <div class="space-y-3">
+            <label for="tag" class="block text-sm font-medium text-gray-700">
+                Tag
+            </label>
+            <MultiSelect v-model="localForm.tag" :options="tag" optionLabel="name" filter placeholder="Select tag"
+                :maxSelectedLabels="3" class="w-full md:w-80" />
 
         </div>
 
@@ -52,11 +62,8 @@
 </template>
 
 <script setup lang="ts">
+import { Dropdown, FileUpload, InputText, MultiSelect } from 'primevue'
 import Button from 'primevue/button'
-import Dropdown from 'primevue/dropdown'
-import FileUpload from 'primevue/fileupload'
-import InputText from 'primevue/inputtext'
-import MultiSelect from 'primevue/multiselect'
 import { computed, ref } from 'vue'
 import { getServerSource } from '../../utils'
 import { useMyFetch } from '../../utils/request'
@@ -64,82 +71,129 @@ import { AppToast } from '../../utils/toast'
 
 interface FormDataType {
     name: string
-    category: string
+    category: { id: string; name: string }[]   // 修正类型为对象数组
+    tag: { id: string; name: string }[]        // 修正类型为对象数组
     type: string | null
-    file: string | null
+    file: File | null
     source: string | undefined
 }
 
 // Props 接收父组件传入的数据和选项
 const props = defineProps<{
     category: { id: string; name: string }[]
+    tag: { id: string; name: string }[]
     type: { id: string; name: string }[]
-    formData?: { data: FormDataType, _id: string }
+    formData?: { data: FormDataType; _id: string }
     isEdit?: boolean
 }>()
 
-
-const localForm = ref<FormDataType & { categoryArr: string[]; source: string | undefined }>({
+const localForm = ref<FormDataType>({
     name: props.formData?.data?.name || '',
-    category: props.formData?.data?.category || '',
-    categoryArr: props.formData?.data?.category.length
-        ? props.formData?.data?.category?.split(',').map((s) => s.trim())
-        : [],
+    category: (() => {
+        const cat = props.formData?.data?.category
+        if (!props.isEdit || !cat) return []
+
+        if (typeof cat === 'string') { // 字符串
+            return (cat as string).includes(',')
+                ? (cat as string).split(',').map(id => props.category.find(item => item.id === id)).filter((item): item is { id: string; name: string } => !!item)
+                : [props.category.find(item => item.id === cat)].filter((item): item is { id: string; name: string } => !!item)
+        }
+
+        return cat // 已经是对象数组
+    })(),
+
+    tag: (() => {
+        const tg = props.formData?.data.tag
+        if (!props.isEdit || !tg) return []
+
+        if (typeof tg === 'string') { // 字符串
+            return (tg as string).includes(',')
+                ? (tg as string).split(',').map(id => props.tag.find(item => item.id === id)).filter((item): item is { id: string; name: string } => !!item)
+                : [props.tag.find(item => item.id === tg)].filter((item): item is { id: string; name: string } => !!item)
+        }
+
+        return tg // 已经是对象数组
+    })(),
+
     type: props.formData?.data?.type || null,
-    file: null,  // 用户新上传的文件
-    source: props.formData?.data?.source, // 已有图片 URL
+    file: null,
+    source: props.formData?.data?.source
 })
 
+// 绑定图片 src
 const src = ref<string | null>(props.isEdit ? props.formData?.data?.source || null : null)
+
 const submitted = ref(false)
 const loading = ref(false)
+
+// ------------------------
+// 保证 category 与 categoryArr 同步
+// ------------------------
+// watch(() => localForm.value.categoryArr, (newVal) => {
+//     localForm.value.category = newVal.join(',')
+// })
+
+// watch(() => localForm.value.tagArr, (newVal) => {
+//     localForm.value.tag = newVal.join(',')
+// })
+
+// ------------------------
 // 校验表单
+// ------------------------
 const isFormValid = computed(() => {
+    const form = localForm.value
     return (
-        localForm.value.name.trim() !== '' &&
-        localForm.value.category.length > 0 &&
-        localForm.value.type !== null &&
-        (src.value !== null || localForm.value.source !== null)
+        form.name.trim() !== '' &&
+        // form.categoryArr.length > 0 &&
+        form.type !== null &&
+        (src.value !== null || form.source !== null)
     )
 })
 
+// ------------------------
 // 文件选择
+// ------------------------
 const onFileSelect = (event: any) => {
     const file = event.files[0]
-    if (file) {
-        localForm.value.file = file
-        const reader = new FileReader()
-        reader.onload = (e) => {
-            src.value = e.target?.result as string
-            localForm.value.source = '' // 用户上传新文件后，source 置空
-        }
-        reader.readAsDataURL(file)
+    if (!file) return
+
+    localForm.value.file = file
+    const reader = new FileReader()
+    reader.onload = (e) => {
+        src.value = e.target?.result as string
+        localForm.value.source = undefined // 用户上传新文件后，source 清空
     }
+    reader.readAsDataURL(file)
 }
+
+// ------------------------
+// 提交表单
+// ------------------------
 const handleSubmit = async () => {
     if (!isFormValid.value) return
     loading.value = true
 
     const fd = new FormData()
     fd.append('name', localForm.value.name)
-    fd.append('category', localForm.value.categoryArr.join(','))
+    fd.append('category', localForm.value.category.map(item => item.id).join(','))
+    fd.append('tag', localForm.value.tag.map(item => item.id).join(','))
     fd.append('type', localForm.value.type!)
 
     // 上传新文件优先，否则传 source
     if (localForm.value.file) {
         fd.append('file', localForm.value.file)
     } else if (localForm.value.source) {
-        fd.append('source', localForm.value.source) // 后端处理已有 URL
+        fd.append('source', localForm.value.source!)
     }
 
     try {
         let response
-        if (props.isEdit && props.formData?.data) {
-            response = await useMyFetch(`/api/creator/check/${props.formData._id}`).put(fd).json()
+        if (props.isEdit) {
+            response = await useMyFetch(`/api/creator/check/${props.formData!._id}`).put(fd).json()
         } else {
             response = await useMyFetch('/api/creator/create').post(fd).json()
         }
-        console.log(response);
+        console.log(response)
 
         AppToast.success('Submit success')
         submitted.value = true
@@ -151,15 +205,17 @@ const handleSubmit = async () => {
     }
 }
 
-// 重置
+// ------------------------
+// 重置表单
+// ------------------------
 const handleReset = () => {
     localForm.value = {
         name: '',
-        category: '',
-        categoryArr: [],
+        category: [],
+        tag: [],
         type: null,
         file: null,
-        source: ''
+        source: undefined
     }
     src.value = null
     submitted.value = false

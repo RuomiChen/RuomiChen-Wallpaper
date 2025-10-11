@@ -50,8 +50,8 @@
       </div>
 
       <!-- Contact Info + Map -->
-      <div class="flex flex-col justify-between" >
-        <div class="rounded-lg shadow-lg p-8 space-y-4">
+      <div class="flex flex-col justify-between">
+        <div class="rounded-lg shadow-lg p-4 ">
           <h2 class="text-2xl font-semibold mb-4">Contact Information</h2>
 
           <div class="space-y-4" v-if="data">
@@ -59,16 +59,17 @@
               <i class="pi pi-map-marker text-primary text-xl"></i>
               <div>
                 <h3 class="font-medium text-sm">Address</h3>
-                <p class="text-sm" >{{ data!.address }}</p>
+                <p class="text-sm">{{ data!.address }}</p>
               </div>
             </div>
 
             <div class="flex items-start gap-4">
               <i class="pi pi-phone text-primary text-xl"></i>
               <div>
-                <h3 class="font-medium text-sm">Phone</h3>
+                <h3 class="font-medium text-sm">Ins</h3>
                 <Skeleton size="2rem" class="mr-2" v-if="isFetching"></Skeleton>
-                <p class="text-sm" v-else>{{ data!.phone }}</p>
+                <Button v-else class="p-0" as="a" variant="link" :label="data!.ins" :href="data!.ins" target="_blank"
+                  rel="noopener" />
               </div>
             </div>
 
@@ -77,19 +78,16 @@
               <div>
                 <h3 class="font-medium text-sm">Email</h3>
                 <Skeleton size="2rem" class="mr-2" v-if="isFetching"></Skeleton>
-                <p class="text-sm" v-else>{{ data!.email }}</p>
+                <Button v-else class="p-0" as="a" variant="link" :label="data!.email" :href="`mailto:${data!.email}`"
+                  target="_blank" rel="noopener" />
+
               </div>
             </div>
 
-            <div class="flex items-start gap-4">
-              <i class="pi pi-clock text-primary text-xl"></i>
-              <div v-html="data!.tip">
-              </div>
-            </div>
           </div>
         </div>
 
-       
+
 
         <!-- Google Map -->
         <div class="rounded-lg overflow-hidden shadow-lg h-64">
@@ -98,14 +96,21 @@
           </iframe>
         </div>
 
-         <!-- Social Media -->
+        <!-- Social Media -->
         <div class="bg-primary rounded-lg shadow-lg p-6 text-white">
           <h3 class="text-xl font-semibold mb-4">Follow Us</h3>
           <div class="flex space-x-4">
-            <Button icon="pi pi-facebook" rounded text severity="secondary" class="text-primary hover:bg-white/70 bg-white" />
-            <Button icon="pi pi-twitter" rounded text severity="secondary" class="text-primary hover:bg-white/70 bg-white" />
-            <Button icon="pi pi-linkedin" rounded text severity="secondary" class="text-primary hover:bg-white/70 bg-white" />
-            <Button icon="pi pi-github" rounded text severity="secondary" class="text-primary hover:bg-white/70 bg-white" />
+            <!-- <Button icon="pi pi-facebook" rounded text severity="secondary"
+              class="text-primary hover:bg-white/70 bg-white" />
+            <Button icon="pi pi-twitter" rounded text severity="secondary"
+              class="text-primary hover:bg-white/70 bg-white" />
+            <Button icon="pi pi-linkedin" rounded text severity="secondary"
+              class="text-primary hover:bg-white/70 bg-white" />
+            <Button icon="pi pi-github" rounded text severity="secondary"
+              class="text-primary hover:bg-white/70 bg-white" /> -->
+            <Button icon="pi pi-instagram" rounded severity="secondary" as="a" variant="link" :href="data!.ins"
+              target="_blank" rel="noopener" class="text-primary hover:bg-white/70 bg-white" />
+
           </div>
         </div>
       </div>
@@ -122,7 +127,7 @@ import InputText from 'primevue/inputtext'
 import Skeleton from 'primevue/skeleton'
 import Textarea from 'primevue/textarea'
 import Toast from 'primevue/toast'
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useMyFetch } from '../utils/request'
 import { AppToast } from '../utils/toast'
 
@@ -167,26 +172,42 @@ const handleSubmit = async () => {
   }
 
   loading.value = true
+  const { data } = useMyFetch('/api/contact').post(formData.value).json()
+  console.log(data);
+
   setTimeout(() => {
     loading.value = false
-    AppToast.success('message sent','We have received your message and will reply soon!')
+    AppToast.success('message sent', 'We have received your message and will reply soon!')
     formData.value = { name: '', email: '', phone: '', subject: '', message: '' }
     submitted.value = false
   }, 1500)
 }
 
+const { isFetching, error, data } = useMyFetch<{
+  email: string,
+  address: string,
+  phone: string,
+  tip: string
+}>('/api/contact/all').json()
+
+
 // Google Map - random city
 // 随机城市
-const cities = ['Xiamen']
-const randomCity = cities[Math.floor(Math.random() * cities.length)]
+// 默认地图城市（后端未返回前）
+const defaultCity = 'Xiamen'
 
-// 不需要 API Key 的 Google Maps Embed URL
-const mapUrl = `https://www.google.com/maps?q=${encodeURIComponent(randomCity)}&output=embed`
-const { isFetching, error, data } = useMyFetch<{
-  email:string,
-  address:string,
-  phone:string,
-  tip:string
-}>('/api/contact/all').json()
+// 响应式 mapUrl
+const mapUrl = ref(`https://www.google.com/maps?q=${encodeURIComponent(defaultCity)}&output=embed`)
+
+// 当 data 加载完成后更新地图
+watch(
+  () => data.value?.address,
+  (address) => {
+    if (address) {
+      mapUrl.value = `https://www.google.com/maps?q=${encodeURIComponent(address)}&output=embed`
+    }
+  },
+  { immediate: true } // 首次也执行一次
+)
 
 </script>

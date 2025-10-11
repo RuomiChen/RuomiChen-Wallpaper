@@ -1,10 +1,10 @@
 <template>
-    <div class="h-screen flex flex-col bg-gray-50">
-        <div class="bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between">
+    <div class="h-screen flex flex-col ">
+        <div class="  px-4 py-3 flex items-center justify-between">
             <div class="flex items-center gap-4">
                 <i class="pi pi-bars text-2xl text-primary cursor-pointer"
                     @click="sidebarVisible = !sidebarVisible"></i>
-                <h1 class="text-xl font-semibold text-gray-800">
+                <h1 class="text-xl font-semibold ">
                     <Button label="Go Back" rounded  raised @click="()=>router.push({name:'Home'})" />
                 </h1>
             </div>
@@ -17,7 +17,7 @@
 
         <div class="flex flex-1 overflow-hidden">
             <Transition name="slide">
-                <div v-if="sidebarVisible" class="w-64 bg-white border-r border-gray-200 flex flex-col">
+                <div v-if="sidebarVisible" class="w-64 flex flex-col">
                     <div class="p-4">
                         <InputText v-model="searchQuery" placeholder="Search..." class="w-full" />
                     </div>
@@ -27,8 +27,8 @@
                             <div @click="handleMenuClick(item)" :class="[
                                 'flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer transition-colors',
                                 activeMenu === item.label
-                                    ? 'bg-primary text-white'
-                                    : 'text-gray-700 hover:bg-gray-100'
+                                    ? 'bg-primary text-white  dark:text-black'
+                                    : 'text-primary hover:bg-primary hover:text-white dark:hover:text-black' 
                             ]">
                                 <i :class="item.icon"></i>
                                 <span class="font-medium">{{ item.label }}</span>
@@ -36,7 +36,7 @@
                         </div>
                     </nav>
 
-                    <div class="p-4 border-t border-gray-200">
+                    <div class="p-4 ">
                         <Button label="New Project" icon="pi pi-plus" class="w-full"
                             @click="() => router.push({ name: 'HandleProject' })" />
                     </div>

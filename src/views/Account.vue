@@ -69,29 +69,54 @@ import { router } from '../router';
 import { useGlobalState } from '../store/user';
 import { AppToast } from '../utils/toast';
 
-
 const isLogin = ref(false) // true = 登录, false = 注册
 
 const form = reactive({
     email: '',
     password: '',
     firstName: '',
-    lastName: '',
+    lastName: ''
 })
 const accept = ref(false)
 const userState = useGlobalState()
 
+// 邮箱校验
+const isValidEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+
 const handleSubmit = async () => {
+    // === 登录 ===
     if (isLogin.value) {
-        const loginData = {
+        if (!form.email || !form.password) {
+            return AppToast.error('Please fill in both email and password.')
+        }
+        if (!isValidEmail(form.email)) {
+            return AppToast.error('Invalid email format.')
+        }
+
+        await userState.login({
             email: form.email,
             password: form.password
-        }
-        await userState.login(loginData)
+        })
         router.push({ name: 'Home' })
-    } else {
-        if (!accept.value) return AppToast.error('please accept the terms first')
+    }
+
+    // === 注册 ===
+    else {
+        if (!form.firstName || !form.lastName) {
+            return AppToast.error('Please fill in your first and last name.')
+        }
+        if (!form.email || !isValidEmail(form.email)) {
+            return AppToast.error('Please enter a valid email address.')
+        }
+        if (!form.password || form.password.length < 6) {
+            return AppToast.error('Password must be at least 6 characters long.')
+        }
+        if (!accept.value) {
+            return AppToast.error('Please accept the terms and conditions.')
+        }
+
         await userState.register(form)
+        AppToast.success('Registration successful!', 'You can now log in.')
         isLogin.value = true
     }
 }

@@ -26,7 +26,7 @@
                     <Button icon="pi pi-search" aria-label="Save" @click="search" />
                     <Button :icon="`pi ${isDark ? 'pi-sun' : 'pi-moon'}`" aria-label="Save" @click="toggleDark()" />
                     <OverlayBadge value="4" v-if="hasLogin" severity="danger" class="inline-flex">
-                        <SplitButton :plain="false" raised text :model="userDropdown" @click="save">
+                        <SplitButton :plain="false" raised text :model="userDropdown">
                             <!-- <Avatar class="p-overlay-badge"
                             :image="getServerSource(user.avatar)" size="xlarge" /> -->
                             <img :src="getServerSource(user.avatar)" class="size-14 rounded-full" />
@@ -62,9 +62,9 @@ const userDropdown = [
         }
     },
     {
-        label: 'Download Center',
+        label: 'Center',
         command: () => {
-            AppToast.success('Updated','')
+            router.push({ name: 'Center' })
         }
     },
     {
@@ -94,12 +94,13 @@ const search = () => {
             width: '50vw',
         },
         breakpoints: {
-            '960px': '75vw',
+            '960px': '75vfw',
             '640px': '90vw'
         },
         props: {
             message: '注册成功！'
         },
+
     });
 }
 const items = ref([
@@ -141,12 +142,19 @@ const items = ref([
                 }
             ],
         ]
+    }, {
+        label: 'About Us',
+        command: () => {
+            // Callback to run
+            router.push({ name: 'About' })
+        },
+        root: true
     },
     {
         label: 'Contact',
         command: () => {
             // Callback to run
-            router.push('/contact')
+            router.push({ name: 'Contact' })
         },
         root: true
     }, {

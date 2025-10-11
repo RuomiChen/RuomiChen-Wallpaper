@@ -6,10 +6,10 @@
         <div class="card">
             <Carousel :value="data" :numVisible="3" :numScroll="1" :responsiveOptions="responsiveOptions">
                 <template #item="slotProps">
-                    <div class="!h-full border border-surface-200 dark:border-surface-700 rounded mx-2  px-4">
+                    <div @click="()=>router.push({name:'WallpaperDetail',params:{id:slotProps.data?._id}})" class="!h-full border border-surface-200 dark:border-surface-700 rounded mx-2  px-4 cursor-pointer">
                         <div class="mb-4">
                             <div class="relative ">
-                                <Image  preview  :src="getServerSource(slotProps.data?.source)" alt="Image" class="flex flex-col items-center" />
+                                <img  :src="getServerSource(slotProps.data?.source)" alt="Image" class="flex flex-col items-center" />
                             </div>
                         </div>
                         <div class="mb-4 font-medium">{{ slotProps.data?.name }}</div>
@@ -23,8 +23,8 @@
 
 <script setup>
 import { Carousel } from "primevue";
-import Image from 'primevue/image';
 import { ref } from "vue";
+import { router } from "../router";
 import { getServerSource } from "../utils";
 defineProps({
     title: String,

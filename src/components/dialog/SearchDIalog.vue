@@ -24,7 +24,7 @@ const debouncedKeyword = useDebounce(keyword, 300)
 const filterData = computed(() => {
   const kw = debouncedKeyword.value.trim().toLowerCase()
   if (!kw) return data.value
-  return data.value.filter(item => item.name.toLowerCase().includes(kw))
+  return data.value.filter((item: { name: string; }) => item.name.toLowerCase().includes(kw))
 })
 
 
