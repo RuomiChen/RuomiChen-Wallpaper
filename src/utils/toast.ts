@@ -41,7 +41,7 @@ export const AppToast = {
     } else if (typeof summary === 'string') {
       message = summary
     }
-    AppToast.show('error', '错误', message, life)
+    AppToast.show('error', 'Error', message, life)
   },
 
   info(summary: string, detail?: string, life = 3000) {

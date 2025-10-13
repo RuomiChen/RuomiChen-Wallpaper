@@ -1,8 +1,8 @@
 <template>
     <div class="space-y-6">
         <!-- File Upload -->
-        <div class="space-y-3">
-            <FileUpload mode="basic" @select="onFileSelect" customUpload auto severity="secondary"
+        <div class="space-y-3" v-if="!disabled" >
+            <FileUpload  mode="basic" @select="onFileSelect" customUpload auto severity="secondary"
                 class="p-button-outlined" accept="image/*" :maxFileSize="5000000" />
             <p class="text-xs text-gray-500">
                 Maximum file size: 5MB. Supported formats: JPG, PNG, GIF
@@ -20,7 +20,7 @@
             <label for="name" class="block text-sm font-medium text-gray-700">
                 Name <span class="text-red-500">*</span>
             </label>
-            <InputText id="name" v-model="localForm.name" placeholder="Enter image name" class="w-full" />
+            <InputText  :disabled="disabled" id="name" v-model="localForm.name" placeholder="Enter image name" class="w-full" />
         </div>
 
         <!-- Category Multi-Select -->
@@ -28,7 +28,7 @@
             <label for="category" class="block text-sm font-medium text-gray-700">
                 Category <span class="text-red-500">*</span>
             </label>
-            <MultiSelect v-model="localForm.category" :options="category" optionLabel="name" filter
+            <MultiSelect  :disabled="disabled" v-model="localForm.category" :options="category" optionLabel="name" filter
                 placeholder="Select categories" :maxSelectedLabels="3" class="w-full md:w-80" />
 
         </div>
@@ -38,7 +38,7 @@
             <label for="tag" class="block text-sm font-medium text-gray-700">
                 Tag
             </label>
-            <MultiSelect v-model="localForm.tag" :options="tag" optionLabel="name" filter placeholder="Select tag"
+            <MultiSelect  :disabled="disabled" v-model="localForm.tag" :options="tag" optionLabel="name" filter placeholder="Select tag"
                 :maxSelectedLabels="3" class="w-full md:w-80" />
 
         </div>
@@ -48,15 +48,15 @@
             <label for="type" class="block text-sm font-medium text-gray-700">
                 Type <span class="text-red-500">*</span>
             </label>
-            <Dropdown id="type" v-model="localForm.type" :options="type" optionLabel="name" optionValue="id"
+            <Dropdown  :disabled="disabled" id="type" v-model="localForm.type" :options="type" optionLabel="name" optionValue="id"
                 placeholder="Select type" class="w-full" />
         </div>
 
         <!-- Action Buttons -->
         <div class="flex gap-3 pt-4">
-            <Button label="Submit" :loading="loading" icon="pi pi-check" @click="handleSubmit" :disabled="!isFormValid"
+            <Button v-if="handleType!='view'"  :label="disabled?'Pass':'Submit'" :loading="loading" icon="pi pi-check" @click="btnAction" :disabled="!isFormValid"
                 severity="primary" />
-            <Button label="Reset" icon="pi pi-refresh" @click="handleReset" severity="secondary" outlined />
+            <Button label="Reset" icon="pi pi-refresh" @click="handleReset" severity="secondary" outlined  v-if="!disabled"/>
         </div>
     </div>
 </template>
@@ -80,12 +80,14 @@ interface FormDataType {
 
 // Props 接收父组件传入的数据和选项
 const props = defineProps<{
+    handleType:string
     category: { id: string; name: string }[]
     tag: { id: string; name: string }[]
     type: { id: string; name: string }[]
     formData?: { data: FormDataType; _id: string }
     isEdit?: boolean
 }>()
+const disabled = computed(()=>props?.handleType=='check'||props?.handleType=='view')
 
 const localForm = ref<FormDataType>({
     name: props.formData?.data?.name || '',
@@ -169,6 +171,19 @@ const onFileSelect = (event: any) => {
 // ------------------------
 // 提交表单
 // ------------------------
+const btnAction = ()=>{
+    if(props.disabled){
+        //pass
+        passProject()
+    }else{
+        handleSubmit()
+    }
+}
+const passProject = async () =>{
+    const { data } = useMyFetch(`/api/creator/pass_check/${props.formData?._id}`).json()
+    console.log(data);
+    
+}
 const handleSubmit = async () => {
     if (!isFormValid.value) return
     loading.value = true

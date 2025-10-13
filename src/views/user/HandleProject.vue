@@ -4,11 +4,11 @@
             <template #title>
                 <div class="flex items-center gap-3">
                     <i class="pi pi-cloud-upload text-primary text-2xl"></i>
-                    <span>{{ projectId ? 'Edit Project' : 'Upload Image' }}</span>
+                    <span>{{type?`${capitalize(type)} Project`: (projectId ? 'Edit Project' : 'Upload Image' )}}</span>
                 </div>
             </template>
             <template #content>
-                <CreateProjectForm v-if="!projectId || formData._id" :tag="tagOptions" :category="categoryOptions" :type="typeOptions"
+                <CreateProjectForm :handle-type="type" v-if="!projectId || formData._id" :tag="tagOptions" :category="categoryOptions" :type="typeOptions"
                     :form-data="formData" :is-edit="!!projectId" @success="handleSuccess" />
             </template>
         </Card>
@@ -17,7 +17,7 @@
 
 <script setup lang="ts">
 import Card from 'primevue/card'
-import { onMounted, ref } from 'vue'
+import { capitalize, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import CreateProjectForm from '../../components/form/CreateProjectForm.vue'
 import { router } from '../../router'
@@ -26,6 +26,7 @@ import { AppToast } from '../../utils/toast'
 
 const route = useRoute()
 const projectId = route.params.id as string | undefined
+const type = route.params.type as string | undefined
 
 const formData = ref({
     _id: '',

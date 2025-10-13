@@ -29,7 +29,7 @@
                         <SplitButton :plain="false" raised text :model="userDropdown">
                             <!-- <Avatar class="p-overlay-badge"
                             :image="getServerSource(user.avatar)" size="xlarge" /> -->
-                            <img :src="getServerSource(user.avatar)" class="size-14 rounded-full" />
+                            <img :src="getServerSource(user?.avatar)" class="size-14 rounded-full" />
                         </SplitButton>
                     </OverlayBadge>
                     <Button v-else icon="pi pi-user" aria-label="Account"
@@ -42,7 +42,7 @@
 
 <script setup lang="ts">
 import { Button, MegaMenu, OverlayBadge, SplitButton } from "primevue";
-import { computed, ref } from "vue";
+import { ref } from "vue";
 import { router } from "../router";
 
 import { useDark, useStorage, useToggle } from '@vueuse/core';
@@ -81,11 +81,9 @@ const userDropdown = [
 ];
 
 const hasLogin = useStorage('token', null)
-const user = computed(() => {
-    const data = useStorage('userInfo', '', localStorage)
-    return JSON.parse(data.value)
-})
+
 const userState = useGlobalState()
+const user = userState.userInfo
 
 const search = () => {
     AppDialog.open(SearchDIalog, {

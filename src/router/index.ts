@@ -31,7 +31,7 @@ const routes = [
         name: 'Dashboard', path: '', component: Dashboard
       },
       {
-        name: 'HandleProject', path: 'handle_project/:id?', component: HandleProject
+        name: 'HandleProject', path: 'handle_project/:type?/:id?', component: HandleProject
       }
     ]
   }

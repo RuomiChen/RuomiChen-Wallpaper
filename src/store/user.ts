@@ -1,12 +1,12 @@
 // store.ts
-import { createGlobalState } from '@vueuse/core';
-import { shallowRef } from 'vue';
+import { createGlobalState, StorageSerializers, useStorage } from '@vueuse/core';
+import { router } from '../router';
 import { useMyFetch } from '../utils/request';
 import { AppToast } from '../utils/toast';
 
 export const useGlobalState = createGlobalState(
     () => {
-        const userInfo = shallowRef(null)
+        const userInfo = useStorage('userInfo', null, undefined, { serializer: StorageSerializers.object }) // 持久化到 localStorage
         const login = async (bodyData: any) => {
             const { data, error } = await useMyFetch('/api/account/login')
                 .post(bodyData)
@@ -19,18 +19,18 @@ export const useGlobalState = createGlobalState(
 
             if (data.value) {
                 const { user, token } = data.value
-                localStorage.setItem('userInfo', JSON.stringify(user))
+                userInfo.value = user
                 localStorage.setItem('token', token)
-                userInfo.value = user // 更新全局状态
-
-
             }
         }
-
+        // ✅ 新增方法：更新用户信息
+        const updateUserInfo = (newData: Partial<typeof userInfo.value>) => {
+            if (!userInfo.value) return;
+            userInfo.value = { ...userInfo.value, ...newData };
+        };
         const logout = () => {
-            localStorage.removeItem('userInfo')
-            localStorage.removeItem('token')
             userInfo.value = null
+            router.push({ name: 'Account' })
         }
 
         const register = async (bodyData: any) => {
@@ -42,7 +42,8 @@ export const useGlobalState = createGlobalState(
             userInfo,
             login,
             register,
-            logout
+            logout,
+            updateUserInfo
         }
     }
 )

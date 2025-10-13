@@ -51,7 +51,9 @@
                     <Column header="Actions">
                         <template #body="slotProps">
                             <div class="flex gap-2">
-                                <Button icon="pi pi-pencil" text rounded @click="toProject(slotProps.data._id)" />
+                                <Button icon="pi pi-check" v-if="slotProps.data.status==0&&userInfo.role==1" text rounded @click="toProject(slotProps.data._id,'check')" />
+                                <Button icon="pi pi-eye" v-else-if="slotProps.data.status==1" text rounded @click="toProject(slotProps.data._id,'view')" />
+                                <Button icon="pi pi-pencil" v-else text rounded @click="toProject(slotProps.data._id)" />
                                 <Button icon="pi pi-trash" severity="danger" text rounded />
                             </div>
                         </template>
@@ -62,7 +64,7 @@
     </div>
 </template>
 <script setup lang="ts">
-import { useDateFormat } from '@vueuse/core';
+import { useDateFormat, useStorage } from '@vueuse/core';
 import { Button, Card, Column, DataTable, Tag } from 'primevue';
 import { computed } from 'vue';
 import { router } from '../../router';
@@ -71,7 +73,8 @@ import { useMyFetch } from '../../utils/request';
 const { data: statsData, isFetching: statsFetching } = useMyFetch('/api/creator/stats').json()
 const { data, isFetching } = useMyFetch('/api/creator/recent').json()
 
-
+const user = useStorage('userInfo',null)
+const userInfo = computed(()=>user?JSON.parse(user.value):null)
 const iconData = ['pi-folder', 'pi-check-square', 'pi-check-users']
 const stats = computed(() => {
     if (!statsData.value) return []  // 数据还没来，返回空数组
@@ -86,10 +89,10 @@ enum Status {
     Failed = 2,
 }
 
-const toProject = (_id?: string) => {
+const toProject = (_id?: string,type?:string) => {
     router.push({
         name: 'HandleProject',
-        params: { id: _id } // 可选
+        params: { id: _id ,type} // 可选
     })
 }
 const statusMap: Record<Status, { text: string; severity: "success" | "info" | "warn" | "danger" | "secondary" }> = {

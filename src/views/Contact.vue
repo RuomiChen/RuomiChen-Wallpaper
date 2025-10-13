@@ -67,7 +67,7 @@
               <i class="pi pi-phone text-primary text-xl"></i>
               <div>
                 <h3 class="font-medium text-sm">Ins</h3>
-                <Skeleton size="2rem" class="mr-2" v-if="isFetching"></Skeleton>
+                <Skeleton size="2rem" class="mr-2" v-if="!isFinished"></Skeleton>
                 <Button v-else class="p-0" as="a" variant="link" :label="data!.ins" :href="data!.ins" target="_blank"
                   rel="noopener" />
               </div>
@@ -77,7 +77,7 @@
               <i class="pi pi-envelope text-primary text-xl"></i>
               <div>
                 <h3 class="font-medium text-sm">Email</h3>
-                <Skeleton size="2rem" class="mr-2" v-if="isFetching"></Skeleton>
+                <Skeleton size="2rem" class="mr-2" v-if="!isFinished"></Skeleton>
                 <Button v-else class="p-0" as="a" variant="link" :label="data!.email" :href="`mailto:${data!.email}`"
                   target="_blank" rel="noopener" />
 
@@ -99,7 +99,7 @@
         <!-- Social Media -->
         <div class="bg-primary rounded-lg shadow-lg p-6 text-white">
           <h3 class="text-xl font-semibold mb-4">Follow Us</h3>
-          <div class="flex space-x-4">
+          <div class="flex space-x-4" v-if="isFinished">
             <!-- <Button icon="pi pi-facebook" rounded text severity="secondary"
               class="text-primary hover:bg-white/70 bg-white" />
             <Button icon="pi pi-twitter" rounded text severity="secondary"
@@ -183,7 +183,7 @@ const handleSubmit = async () => {
   }, 1500)
 }
 
-const { isFetching, error, data } = useMyFetch<{
+const { isFinished, error, data } = useMyFetch<{
   email: string,
   address: string,
   phone: string,
