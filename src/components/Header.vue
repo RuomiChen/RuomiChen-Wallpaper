@@ -25,7 +25,8 @@
                 <div class="flex gap-4 items-center">
                     <Button icon="pi pi-search" aria-label="Save" @click="search" />
                     <Button :icon="`pi ${isDark ? 'pi-sun' : 'pi-moon'}`" aria-label="Save" @click="toggleDark()" />
-                    <OverlayBadge value="4" v-if="hasLogin" severity="danger" class="inline-flex">
+                    <!-- value="0" -->
+                    <OverlayBadge v-if="hasLogin" severity="danger" class="inline-flex">
                         <SplitButton :plain="false" raised text :model="userDropdown">
                             <!-- <Avatar class="p-overlay-badge"
                             :image="getServerSource(user.avatar)" size="xlarge" /> -->

@@ -1,5 +1,5 @@
 <template>
-  <footer class=" text-white p-4 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+  <footer class=" text-white py-4 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
     <!-- 左侧 Logo / 名称 -->
     <div class="flex items-center gap-2">
       <span class="font-semibold text-lg">

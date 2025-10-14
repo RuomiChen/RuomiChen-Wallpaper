@@ -44,15 +44,15 @@
 
                 <!-- 注册时显示“同意条款” -->
                 <div v-if="!isLogin" class="flex items-center gap-2">
-                    <Checkbox id="accept" v-model="accept" name="accept" value="yes" />
-                    <label for="accept" class="text-white text-sm">
+                    <Checkbox inputId="accept" v-model="accept" name="accept" value="yes" />
+                    <label for="accept" class="text-white text-sm cursor-pointer">
                         I agree to the terms and conditions.
                     </label>
                 </div>
 
                 <!-- 按钮 -->
                 <div class="flex items-center gap-2">
-                    <Button icon="pi pi-home" severity="contrast"   />
+                    <Button icon="pi pi-home" severity="secondary"  @click="router.push({name:'Home'})" />
                     <Button type="submit" class="ml-auto flex-1" :label="isLogin ? 'Login' : 'Register'"  @click="handleSubmit" />
                 </div>
             </div>

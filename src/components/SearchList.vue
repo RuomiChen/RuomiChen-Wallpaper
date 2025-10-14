@@ -39,7 +39,7 @@
 
                                     </div>
                                 </div>
-                                <!-- avatar  -->
+                                <!-- avatar 
                                 <div class="flex flex-col md:items-end gap-8">
                                     <span class="text-xl font-semibold">${{ item.price }}</span>
                                     <div class="flex flex-row-reverse md:flex-row gap-2">
@@ -48,7 +48,7 @@
                                             :disabled="item.inventoryStatus === 'OUTOFSTOCK'"
                                             class="flex-auto md:flex-initial whitespace-nowrap"></Button>
                                     </div>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                     </div>

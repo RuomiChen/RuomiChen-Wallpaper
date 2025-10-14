@@ -16,7 +16,7 @@ if (!setting.value) {
 </script>
 
 <template>
-    <div class="container mx-auto py-4 flex flex-col gap-4">
+    <div class="container mx-auto py-4 flex flex-col gap-4 px-4 md:px-0">
         <Header />
         <router-view />
         <Footer />

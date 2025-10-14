@@ -1,46 +1,23 @@
 <script setup lang="ts">
-import { useClipboard } from '@vueuse/core'
-import { Button, Column, DataTable } from 'primevue'
-import { ref } from 'vue'
-import { useRoute } from 'vue-router'
-import { router } from '../../router'
-import { useGlobalState } from '../../store/user'
-const props = defineProps<{ data: [] }>();
+import { useClipboard } from '@vueuse/core';
+import { Button, Column, DataTable } from 'primevue';
+import { router } from '../../router';
+import { useGlobalState } from '../../store/user';
+defineProps<{
+    data: {
+        list: [],
+        totalInvite: number
+        activeUsers: number
+        rewards: number
+    }
+}>();
 
-const route = useRoute()
 
-
-interface CheckInDay {
-    date: string
-    day: number
-    checked: boolean
-    isToday: boolean
-}
-
-interface CheckInRecord {
-    date: string
-    points: number
-    consecutive: number
-    time: string
-}
-
-interface InviteRecord {
-    username: string
-    registerDate: string
-    status: 'active' | 'inactive'
-    reward: number
-}
 
 // 邀请相关
 
 const userState = useGlobalState()
 const user = userState.userInfo
-const inviteStats = ref({
-    total: 12,
-    active: 8,
-    rewards: 240
-})
-
 
 
 const { text, copy, copied, isSupported } = useClipboard({ source: user.value?.inviteCode })
@@ -59,7 +36,7 @@ const copyAction = (text: string) => {
             <h2 class="text-xl font-semibold mb-4">My invitation code</h2>
             <div class="flex items-center gap-4">
                 <div class="flex-1 /20 backdrop-blur rounded-lg p-4">
-                    <div class="text-3xl font-bold tracking-wider">{{ user?.inviteCode }}</div>
+                    <div class="text-3xl font-bold tracking-wider max-w-30 truncate md:max-w-none">{{ user?.inviteCode }}</div>
                 </div>
                 <Button @click="copyAction(user?.inviteCode)" :label="!copied ? 'Copy' : 'Copied!'" icon="pi pi-copy"
                     class="p-button-secondary" />
@@ -76,7 +53,7 @@ const copyAction = (text: string) => {
                         <i class="pi pi-users text-blue-600 text-xl"></i>
                     </div>
                     <div>
-                        <div class="text-2xl font-bold ">{{ inviteStats.total }}</div>
+                        <div class="text-2xl font-bold ">{{ data.totalInvite }}</div>
                         <div class="text-sm ">Total number of invitations</div>
                     </div>
                 </div>
@@ -88,7 +65,7 @@ const copyAction = (text: string) => {
                         <i class="pi pi-check-circle text-green-600 text-xl"></i>
                     </div>
                     <div>
-                        <div class="text-2xl font-bold ">{{ inviteStats.active }}</div>
+                        <div class="text-2xl font-bold ">{{ data.activeUsers }}</div>
                         <div class="text-sm ">Active users</div>
                     </div>
                 </div>
@@ -100,7 +77,7 @@ const copyAction = (text: string) => {
                         <i class="pi pi-gift text-purple-600 text-xl"></i>
                     </div>
                     <div>
-                        <div class="text-2xl font-bold ">{{ inviteStats.rewards }}</div>
+                        <div class="text-2xl font-bold ">{{ data.rewards }}</div>
                         <div class="text-sm ">Cumulative rewards</div>
                     </div>
                 </div>
@@ -108,8 +85,10 @@ const copyAction = (text: string) => {
         </div>
 
         <div class=" rounded-lg shadow-sm p-6">
-            <h3 class="text-lg font-semibold  mb-4">Invitation Record{{ data }}</h3>
-            <DataTable :value="data" :paginator="true" :rows="10">
+            <h3 class="text-lg font-semibold  mb-4">Invitation Record</h3>
+            <DataTable :value="data.list" :rows="10" paginator :rowsPerPageOptions="[5, 10, 20, 50]"
+                tableStyle="min-width: 50rem">
+                <template #empty> No data found. </template>
                 <Column field="invitee.nickname" header="Nickname"></Column>
                 <Column field="created" header="Registration time" sortable></Column>
                 <Column field="status" header="Status">
@@ -124,8 +103,8 @@ const copyAction = (text: string) => {
                         </span>
                     </template>
                 </Column>
-                <Column field="invitee.type" header="Type"></Column>
-                <Column field="invitee.value" header="Value"></Column>
+                <Column field="type" header="Type"></Column>
+                <Column field="value" header="Value"></Column>
 
             </DataTable>
         </div>

@@ -113,7 +113,10 @@ const preview = ()=>{
             data: userInfo.value.avatar, // ✅ 直接传 base64
             emits: {
                 onSuccess: async (e) => {
+                    console.log(e);
+                    
                     originalProfile.value.avatar =e
+                    
                     // AppToast.success('update avatar success!')
                 }
             }

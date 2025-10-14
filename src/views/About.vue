@@ -2,7 +2,7 @@
     <div class="card my-20">
         <Timeline :value="events" align="alternate" class="customized-timeline">
             <template #marker="slotProps">
-                <span class="flex w-8 h-8 items-center justify-center text-white rounded-full z-10 shadow-sm"
+                <span class="flex w-8 h-8 items-center justify-center text-white rounded-full shadow-sm"
                     :style="{ backgroundColor: slotProps.item.color }">
                     <i :class="slotProps.item.icon"></i>
                 </span>
@@ -31,8 +31,9 @@ import { Card, Timeline } from "primevue";
 import { ref } from "vue";
 
 const events = ref([
-    { status: 'Init', date: '10/8/2025', color: '#9C27B0'},
-    { status: 'Processing', date: '11/10/2025', color: '#673AB7', content: 'The wallpaper website has been initially completed' },
+    { status: 'Init', date: '2025-10-8', color: '#9C27B0'},
+    { status: 'Processing', date: '2025-10-11', color: '#673AB7', content: 'The wallpaper website has been initially completed' },
+    { status: 'Processing', date: '2025-10-14', color: '#673AB7', content: 'Initially completed' },
 ]);
 
 </script>
