@@ -5,6 +5,7 @@ import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { router } from '../../router'
 import { useGlobalState } from '../../store/user'
+const props = defineProps<{ data: [] }>();
 
 const route = useRoute()
 
@@ -29,46 +30,6 @@ interface InviteRecord {
     status: 'active' | 'inactive'
     reward: number
 }
-// 签到相关
-const hasCheckedInToday = ref(false)
-const consecutiveDays = ref(7)
-
-const checkInCalendar = ref<CheckInDay[]>([
-    { date: '2025-01-07', day: 7, checked: true, isToday: false },
-    { date: '2025-01-08', day: 8, checked: true, isToday: false },
-    { date: '2025-01-09', day: 9, checked: true, isToday: false },
-    { date: '2025-01-10', day: 10, checked: true, isToday: false },
-    { date: '2025-01-11', day: 11, checked: true, isToday: false },
-    { date: '2025-01-12', day: 12, checked: true, isToday: false },
-    { date: '2025-01-13', day: 13, checked: false, isToday: true }
-])
-
-const checkInRecords = ref<CheckInRecord[]>([
-    { date: '2025-01-12', points: 10, consecutive: 6, time: '09:23:15' },
-    { date: '2025-01-11', points: 10, consecutive: 5, time: '08:45:32' },
-    { date: '2025-01-10', points: 10, consecutive: 4, time: '10:12:08' },
-    { date: '2025-01-09', points: 10, consecutive: 3, time: '07:56:41' },
-    { date: '2025-01-08', points: 10, consecutive: 2, time: '09:34:22' },
-    { date: '2025-01-07', points: 10, consecutive: 1, time: '11:08:55' }
-])
-
-const checkIn = () => {
-    hasCheckedInToday.value = true
-    consecutiveDays.value++
-    // 更新日历
-    const today = checkInCalendar.value.find(day => day.isToday)
-    if (today) {
-        today.checked = true
-    }
-    // 添加签到记录
-    checkInRecords.value.unshift({
-        date: '2025-01-13',
-        points: 10,
-        consecutive: consecutiveDays.value,
-        time: new Date().toLocaleTimeString('zh-CN')
-    })
-    console.log('签到成功')
-}
 
 // 邀请相关
 
@@ -80,14 +41,7 @@ const inviteStats = ref({
     rewards: 240
 })
 
-const inviteRecords = ref<InviteRecord[]>([
-    { username: '李四', registerDate: '2025-01-10', status: 'active', reward: 20 },
-    { username: '王五', registerDate: '2025-01-08', status: 'active', reward: 20 },
-    { username: '赵六', registerDate: '2025-01-05', status: 'inactive', reward: 20 },
-    { username: '孙七', registerDate: '2025-01-03', status: 'active', reward: 20 },
-    { username: '周八', registerDate: '2024-12-28', status: 'active', reward: 20 },
-    { username: '吴九', registerDate: '2024-12-25', status: 'active', reward: 20 }
-])
+
 
 const { text, copy, copied, isSupported } = useClipboard({ source: user.value?.inviteCode })
 const copyAction = (text: string) => {
@@ -123,7 +77,7 @@ const copyAction = (text: string) => {
                     </div>
                     <div>
                         <div class="text-2xl font-bold ">{{ inviteStats.total }}</div>
-                        <div class="text-sm text-gray-600">总邀请人数</div>
+                        <div class="text-sm ">Total number of invitations</div>
                     </div>
                 </div>
             </div>
@@ -135,7 +89,7 @@ const copyAction = (text: string) => {
                     </div>
                     <div>
                         <div class="text-2xl font-bold ">{{ inviteStats.active }}</div>
-                        <div class="text-sm text-gray-600">活跃用户</div>
+                        <div class="text-sm ">Active users</div>
                     </div>
                 </div>
             </div>
@@ -147,34 +101,32 @@ const copyAction = (text: string) => {
                     </div>
                     <div>
                         <div class="text-2xl font-bold ">{{ inviteStats.rewards }}</div>
-                        <div class="text-sm text-gray-600">累计奖励</div>
+                        <div class="text-sm ">Cumulative rewards</div>
                     </div>
                 </div>
             </div>
         </div>
 
         <div class=" rounded-lg shadow-sm p-6">
-            <h3 class="text-lg font-semibold  mb-4">邀请记录</h3>
-            <DataTable :value="inviteRecords" :paginator="true" :rows="10">
-                <Column field="username" header="用户名"></Column>
-                <Column field="registerDate" header="注册时间" sortable></Column>
-                <Column field="status" header="状态">
+            <h3 class="text-lg font-semibold  mb-4">Invitation Record{{ data }}</h3>
+            <DataTable :value="data" :paginator="true" :rows="10">
+                <Column field="invitee.nickname" header="Nickname"></Column>
+                <Column field="created" header="Registration time" sortable></Column>
+                <Column field="status" header="Status">
                     <template #body="slotProps">
                         <span :class="[
                             'px-3 py-1 rounded-full text-xs font-medium',
-                            slotProps.data.status === 'active'
+                            slotProps.data.status === 1
                                 ? 'bg-green-100 text-green-700'
-                                : 'bg-gray-100 text-gray-700'
+                                : 'bg-gray-100 text-red-700'
                         ]">
-                            {{ slotProps.data.status === 'active' ? '活跃' : '未激活' }}
+                            {{ slotProps.data.status === 1 ? 'Active' : 'Not activated' }}
                         </span>
                     </template>
                 </Column>
-                <Column field="reward" header="获得奖励">
-                    <template #body="slotProps">
-                        <span class="text-green-600 font-medium">+{{ slotProps.data.reward }} 积分</span>
-                    </template>
-                </Column>
+                <Column field="invitee.type" header="Type"></Column>
+                <Column field="invitee.value" header="Value"></Column>
+
             </DataTable>
         </div>
     </div>

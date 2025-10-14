@@ -21,8 +21,8 @@
 
                 <div class="lg:col-span-3">
                     <UserInfo v-if="activeTab === 'profile'" />
-                    <Invite v-if="activeTab === 'invite'"/>
-                    <CheckIn v-if="activeTab === 'checkin'"/>
+                    <Invite v-if="activeTab === 'invite'" :data="inviteRecords"/>
+                    <CheckIn v-if="activeTab === 'checkin'" :data="checkInRecords" @reload="checkInExe"/>
                    
                 </div>
             </div>
@@ -72,6 +72,8 @@ const tabs = [
 
 const activeTab = ref('profile')
 
+const { data: checkInRecords,execute:checkInExe } = useMyFetch('/api/user/checkIn').json()
+const { data: inviteRecords } = useMyFetch('/api/user/invite').json()
 
 
 </script>

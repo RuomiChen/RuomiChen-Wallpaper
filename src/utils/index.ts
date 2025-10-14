@@ -1,5 +1,6 @@
+import dayjs from 'dayjs';
+import { ref } from "vue";
 import { BASE_URL } from "./request";
-
 export const getServerSource = (url: string | null | undefined) => {
   if (!url) return '' 
   // 判断是否是 Base64
@@ -10,3 +11,33 @@ export const getServerSource = (url: string | null | undefined) => {
   return BASE_URL + url
 }
 
+// 签到相关
+export interface CheckInDay {
+  date: string
+  day: number
+  checked: boolean
+  isToday: boolean
+}
+
+export interface ServerCheckIn {
+  date: string
+  time: string
+}
+
+export function useCheckInCalendar(serverData: ServerCheckIn[], days = 7) {
+  const today = dayjs()
+  const list: CheckInDay[] = []
+
+  for (let i = days - 1; i >= 0; i--) {
+    const current = today.subtract(i, 'day')
+    const dateStr = current.format('YYYY-MM-DD')
+    list.push({
+      date: dateStr,
+      day: current.date(),
+      checked: serverData.some(d => d.date === dateStr),
+      isToday: dateStr === today.format('YYYY-MM-DD')
+    })
+  }
+
+  return ref(list)
+}

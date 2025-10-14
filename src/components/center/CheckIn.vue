@@ -1,56 +1,65 @@
 <script setup lang="ts">
+import dayjs from 'dayjs';
 import { Button, Column, DataTable } from 'primevue';
-import { ref } from 'vue';
+import { computed, ref, watch } from 'vue';
+import { useGlobalState } from '../../store/user';
+import { useCheckInCalendar, type ServerCheckIn } from '../../utils';
 import { useMyFetch } from '../../utils/request';
 import { AppToast } from '../../utils/toast';
-
-interface CheckInDay {
-    date: string
-    day: number
-    checked: boolean
-    isToday: boolean
-}
-
-interface CheckInRecord {
-    date: string
-    time: string
-}
-
-// 签到相关
-const hasCheckedInToday = ref(false)
-const consecutiveDays = ref(7)
-
-const checkInCalendar = ref<CheckInDay[]>([
-    { date: '2025-01-07', day: 7, checked: true, isToday: false },
-    { date: '2025-01-08', day: 8, checked: true, isToday: false },
-    { date: '2025-01-09', day: 9, checked: true, isToday: false },
-    { date: '2025-01-10', day: 10, checked: true, isToday: false },
-    { date: '2025-01-11', day: 11, checked: true, isToday: false },
-    { date: '2025-01-12', day: 12, checked: true, isToday: false },
-    { date: '2025-01-13', day: 13, checked: false, isToday: true }
-])
-
-
-
+const props = defineProps<{ data: ServerCheckIn[] }>();
+const emit = defineEmits(['reload'])
+const userState = useGlobalState()
+const userInfo = userState.userInfo
 const checkIn = async () => {
-
-    // 添加签到记录
-    const { data, error } = await useMyFetch('/api/user/checkIn').post().json()
-    if (!error) {
-        hasCheckedInToday.value = true
-        consecutiveDays.value++
-        // 更新日历
-        const today = checkInCalendar.value.find(day => day.isToday)
-        if (today) {
-            today.checked = true
-        }
-        AppToast.success('checkIn success')
-    }
-
+  const { data, error } = await useMyFetch('/api/user/checkIn').post().json()
+  if (!error.value) {
+    emit('reload')
+    userInfo.value.points = data.value
+    AppToast.success('Check-in success ✅')
+  } else {
+    AppToast.error('Check-in failed ❌')
+  }
 }
-const { data: checkInRecords } = useMyFetch('/api/user/checkIn').json()
-console.log(checkInRecords);
+const checkInCalendar = ref([])
+watch(
+  () => props.data,
+  (val) => {
+    if (val) {
+        console.log('val',val);
+        
+      checkInCalendar.value = useCheckInCalendar(val, 7).value
+    }
+  },
+  { immediate: true }
+)
+const hasCheckedInToday = computed(() => {
+  if (!props.data) return false
+  const today = dayjs().format('YYYY-MM-DD')
+  return props.data.some(record => record.date === today)
+})
 
+const consecutiveDays = computed(() => {
+  if (!props.data || props.data.length === 0) return 0
+
+  // ✅ 取出所有日期并排序（升序）
+  const dates = props.data
+    .map(r => dayjs(r.date))
+    .sort((a, b) => a.diff(b))
+
+  // ✅ 从最后一天开始往前数连续天数
+  let count = 1
+  for (let i = dates.length - 1; i > 0; i--) {
+    const diff = dates[i].diff(dates[i - 1], 'day')
+    if (diff === 1) {
+      count++
+    } else if (diff > 1) {
+      // 断了
+      break
+    }
+  }
+
+  return count
+})
 </script>
 
 <template>
@@ -73,13 +82,14 @@ console.log(checkInRecords);
                 ]">
                     <div class="font-medium">{{ day.day }}</div>
                     <i v-if="day.checked" class="pi pi-check text-xs mt-1"></i>
+                    <div v-if="day.checked" class="mt-4">10 Points</div>
                 </div>
             </div>
         </div>
 
         <div class=" rounded-lg shadow-sm p-6">
             <h3 class="text-lg font-semibold  mb-4">Check History</h3>
-            <DataTable :value="checkInRecords" :paginator="true" :rows="10">
+            <DataTable :value="data" :paginator="true" :rows="10">
                 <Column field="date" header="Date" sortable></Column>
                 <Column field="time" header="Time"></Column>
             </DataTable>

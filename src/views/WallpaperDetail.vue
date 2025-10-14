@@ -74,6 +74,11 @@ async function download() {
     // 4️⃣ 释放 blob URL
     URL.revokeObjectURL(blobUrl)
 }
+
+const collect = async()=>{
+    const {data:res} = await useMyFetch('/api/collect').post({target_id:data.value._id}).json()
+    data.value = { ...data.value, is_collect: res.value }
+}
 enum IOpenType {
     'official'
 }
@@ -127,7 +132,7 @@ const open = (type: IOpenType) => {
                     <Divider />
                     <div class="flex items-center justify-between px-6 ">
                         <Button icon="pi pi-download" label="Download" severity="secondary" raised @click="download" />
-                        <Button icon="pi pi-heart" severity="secondary" raised />
+                        <Button :icon="`pi ${data.is_collect?'pi-heart-fill':'pi-heart'}`" severity="secondary" raised  @click="collect" />
                         <Button icon="pi pi-comment" label="Jogin Group" severity="secondary" raised />
                         <Button icon="pi pi-comment" label="Official" severity="secondary" raised
                             @click="open(IOpenType.official)" />
