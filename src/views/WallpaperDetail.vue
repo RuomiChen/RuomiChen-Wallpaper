@@ -6,6 +6,7 @@ import { useRoute } from 'vue-router';
 import CreatorCard from '../components/CreatorCard.vue';
 import SimpleDIalog from '../components/dialog/SimpleDialog.vue';
 import Dock from '../components/utils/Dock.vue';
+import { router } from '../router';
 import { useGlobalState } from '../store/user';
 import { getServerSource } from '../utils';
 import { AppDialog } from '../utils/dialog';
@@ -25,7 +26,7 @@ watch(
 )
 const userState = useGlobalState()
 
-const user = userState.userInfo.value ?? JSON.parse(useStorage('userInfo', '').value)
+const user = userState.userInfo
 
 // 下载
 console.log(user);
@@ -61,7 +62,7 @@ async function download() {
     console.log(res2.value);
 
     // 2️⃣ 转为 blob URL
-    const blobUrl = URL.createObjectURL(res2.value)
+    const blobUrl = URL.createObjectURL(res2.value!)
 
     // 3️⃣ 触发下载
     const link = document.createElement('a')
@@ -75,16 +76,20 @@ async function download() {
     URL.revokeObjectURL(blobUrl)
 }
 
-const collect = async()=>{
-    const {data:res} = await useMyFetch('/api/collect').post({target_id:data.value._id}).json()
-    data.value = { ...data.value, is_collect: res.value }
+const collect = async () => {
+    const { data: res,error } = await useMyFetch('/api/collect').post({ target_id: data.value._id }).json()
+    if(error.value){
+        return router.push({name:'Account',query:{type:'login'}})
+    }
+    data.value = { ...data.value, ...res.value }
 }
 enum IOpenType {
     'official'
 }
 const open = (type: IOpenType) => {
-    let setting = useStorage('setting', null)
-    if(setting) setting = JSON.parse(setting.value)    
+    let setting = useStorage<{
+        wechat_img:string
+    }>('setting', null)
     switch (type) {
         case IOpenType.official:
             AppDialog.open(SimpleDIalog, {
@@ -98,7 +103,7 @@ const open = (type: IOpenType) => {
                 },
                 data: {
                     type: 'image',
-                    data: setting.wechat_img
+                    data: setting.value.wechat_img
                 }
 
             });
@@ -132,7 +137,8 @@ const open = (type: IOpenType) => {
                     <Divider />
                     <div class="flex items-center justify-between px-6 ">
                         <Button icon="pi pi-download" label="Download" severity="secondary" raised @click="download" />
-                        <Button :icon="`pi ${data.is_collect?'pi-heart-fill':'pi-heart'}`" severity="secondary" raised  @click="collect" />
+                        <Button :icon="`pi ${data.is_collect ? 'pi-heart-fill' : 'pi-heart'}`" severity="secondary" raised
+                            @click="collect" />
                         <Button icon="pi pi-comment" label="Jogin Group" severity="secondary" raised />
                         <Button icon="pi pi-comment" label="Official" severity="secondary" raised
                             @click="open(IOpenType.official)" />

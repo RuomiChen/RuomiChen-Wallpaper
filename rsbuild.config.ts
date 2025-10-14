@@ -15,7 +15,7 @@ export default defineConfig({
     output: {
     // 请将 <REPO_NAME> 替换为仓库的名称。
     // 比如 "/my-project/"
-    assetPrefix: '/RuomiChen-Wallpaper/',
+    assetPrefix: '/',
   },
   plugins: [pluginVue()],
 });

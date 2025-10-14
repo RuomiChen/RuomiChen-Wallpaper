@@ -30,14 +30,16 @@
                     <InputIcon>
                         <i class="pi pi-envelope" />
                     </InputIcon>
-                    <InputText id="email" v-model="form.email" type="email" placeholder="Email" fluid />
+                    <InputText autocomplete="off" id="email" v-model="form.email" type="email" placeholder="Email"
+                        fluid />
                 </IconField>
 
                 <IconField>
                     <InputIcon>
                         <i class="pi pi-lock" />
                     </InputIcon>
-                    <InputText id="password" v-model="form.password" type="password" placeholder="Password" fluid />
+                    <InputText id="password" autocomplete="off" v-model="form.password" type="password"
+                        placeholder="Password" fluid />
                 </IconField>
 
                 <!-- 注册时显示“同意条款” -->
@@ -49,7 +51,10 @@
                 </div>
 
                 <!-- 按钮 -->
-                <Button type="submit" :label="isLogin ? 'Login' : 'Register'" class="mt-2" @click="handleSubmit" />
+                <div class="flex items-center gap-2">
+                    <Button icon="pi pi-home" severity="contrast"   />
+                    <Button type="submit" class="ml-auto flex-1" :label="isLogin ? 'Login' : 'Register'"  @click="handleSubmit" />
+                </div>
             </div>
         </div>
     </div>
@@ -64,12 +69,26 @@ import {
     InputText,
     ToggleSwitch
 } from 'primevue';
-import { reactive, ref } from 'vue';
+import { reactive, ref, watch } from 'vue';
+import { useRoute } from 'vue-router';
 import { router } from '../router';
 import { useGlobalState } from '../store/user';
 import { AppToast } from '../utils/toast';
 
+const route = useRoute()
+
 const isLogin = ref(false) // true = 登录, false = 注册
+
+// ✅ 监听 query 变化（包括刷新页面时）
+watch(
+    () => route.query.type,
+    (val) => {
+        isLogin.value = val == 'login'
+    },
+    { immediate: true } // ✅ 页面刷新时立即执行一次
+)
+
+
 
 const form = reactive({
     email: '',
