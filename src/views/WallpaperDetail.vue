@@ -4,7 +4,7 @@ import { Button, Divider } from 'primevue';
 import { computed, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import CreatorCard from '../components/CreatorCard.vue';
-import SimpleDIalog from '../components/dialog/SimpleDIalog.vue';
+import SimpleDIalog from '../components/dialog/SimpleDialog.vue';
 import Dock from '../components/utils/Dock.vue';
 import { useGlobalState } from '../store/user';
 import { getServerSource } from '../utils';
