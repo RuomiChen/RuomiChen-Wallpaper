@@ -18,4 +18,18 @@ export default defineConfig({
     assetPrefix: '/',
   },
   plugins: [pluginVue()],
+   performance: {
+    removeConsole: true, // 移除 console
+  },
+  tools: {
+    terser: {
+      compress: {
+        drop_console: true,
+        drop_debugger: true,
+      },
+      mangle: {
+        toplevel: true,
+      },
+    },
+  },
 });
