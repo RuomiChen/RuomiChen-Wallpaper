@@ -90,7 +90,7 @@ const consecutiveDays = computed(() => {
         </div>
 
         <div class=" rounded-lg shadow-sm p-6">
-            <h3 class="text-lg font-semibold  mb-4">Check History</h3>
+            <h3 class="text-lg font-semibold  mb-4">CheckIn History</h3>
             <DataTable :value="data" :paginator="true" :rows="10">
                 <Column field="date" header="Date" sortable></Column>
                 <Column field="time" header="Time"></Column>
