@@ -2,7 +2,8 @@
     <div class="rounded-lg shadow-sm p-6">
         <div class="flex items-center justify-between mb-6">
             <h2 class="text-xl font-semibold ">User Info</h2>
-            <Button v-if="!isEditing" @click="isEditing = true" label="Edit" icon="pi pi-pencil" class="p-button-sm" />
+            <Button v-if="!isEditing" @click="isEditing = !isEditing" label="Edit" icon="pi pi-pencil"
+                class="p-button-sm" />
             <div v-else class="space-x-2">
                 <Button @click="saveProfile" label="Save" icon="pi pi-check" class="p-button-sm" />
                 <Button @click="cancelEdit" label="Cancel" icon="pi pi-times" class="p-button-sm p-button-secondary" />
@@ -57,6 +58,7 @@
     </div>
 </template>
 <script setup lang="ts">
+import { useCloned } from '@vueuse/core'
 import { Button, FileUpload, InputText, Textarea } from 'primevue'
 import { ref } from 'vue'
 import { useGlobalState } from '../../store/user'
@@ -86,8 +88,8 @@ const originalProfile = ref({ ...userInfo.value })
 const saveProfile = async () => {
     // 保存成功后，更新快照
     isEditing.value = false
-    const {nickname,email,signature,avatar} = originalProfile.value
-    const {data} = await useMyFetch('/api/user/info').put({nickname,email,signature,avatar}).json()
+    const { nickname, email, signature, avatar } = originalProfile.value
+    const { data } = await useMyFetch('/api/user/info').put({ nickname, email, signature, avatar }).json()
     // 可以同步到后端
     userState.userInfo.value = data.value
     AppToast.success('update info success')
@@ -95,13 +97,14 @@ const saveProfile = async () => {
 
 const cancelEdit = () => {
     // 恢复原始数据
-    originalProfile.value = userInfo.value
+    const { cloned } = useCloned(userState.userInfo)
+    originalProfile.value = cloned.value
     isEditing.value = false
 }
 const src = ref(null)
-const preview = ()=>{
-    if(isEditing.value)
-    AppDialog.open(Cropper, {
+const preview = () => {
+    if (isEditing.value)
+        AppDialog.open(Cropper, {
             header: 'Clip',
             style: {
                 width: '50vw',
@@ -114,9 +117,9 @@ const preview = ()=>{
             emits: {
                 onSuccess: async (e) => {
                     console.log(e);
-                    
-                    originalProfile.value.avatar =e
-                    
+
+                    originalProfile.value.avatar = e
+
                     // AppToast.success('update avatar success!')
                 }
             }
@@ -143,7 +146,7 @@ function onFileSelect(event) {
             data: base64, // ✅ 直接传 base64
             emits: {
                 onSuccess: async (e) => {
-                    originalProfile.value.avatar =e
+                    originalProfile.value.avatar = e
                     // AppToast.success('update avatar success!')
                 }
             }
