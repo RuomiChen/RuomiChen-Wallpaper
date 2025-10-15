@@ -6,8 +6,12 @@ import Account from '../views/Account.vue'
 import Center from '../views/Center.vue'
 import Contact from '../views/Contact.vue'
 import Home from '../views/Home.vue'
+import Analytics from '../views/user/Analytics.vue'
 import Dashboard from '../views/user/Dashboard.vue'
 import HandleProject from '../views/user/HandleProject.vue'
+import Project from '../views/user/Project.vue'
+import Settings from '../views/user/Settings.vue'
+import Trash from '../views/user/Trash.vue'
 import Workbench from '../views/user/Workbench.vue'
 import WallpaperCategory from '../views/WallpaperCategory.vue'
 import WallpaperDetail from '../views/WallpaperDetail.vue'
@@ -32,6 +36,18 @@ const routes = [
       },
       {
         name: 'HandleProject', path: 'handle_project/:type?/:id?', component: HandleProject
+      },
+      {
+        name: 'Projects', path: 'projects', component: Project
+      },
+      {
+        name: 'Analytics', path: 'analytics', component: Analytics
+      },
+      {
+        name: 'Trash', path: 'trash', component: Trash
+      },
+      {
+        name: 'Settings', path: 'settings', component: Settings
       }
     ]
   }

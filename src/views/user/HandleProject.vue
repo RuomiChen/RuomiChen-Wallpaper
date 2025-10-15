@@ -1,21 +1,25 @@
 <template>
     <div class="min-h-screen ">
+        <Button label="Back" rounded raised @click="router.back()" />
+
         <Card>
             <template #title>
                 <div class="flex items-center gap-3">
                     <i class="pi pi-cloud-upload text-primary text-2xl"></i>
-                    <span>{{type?`${capitalize(type)} Project`: (projectId ? 'Edit Project' : 'Upload Image' )}}</span>
+                    <span>{{ type ? `${capitalize(type)} Project` : (projectId ? 'Edit Project' : 'Upload Image') }}</span>
                 </div>
             </template>
             <template #content>
-                <CreateProjectForm :handle-type="type" v-if="!projectId || formData._id" :tag="tagOptions" :category="categoryOptions" :type="typeOptions"
-                    :form-data="formData" :is-edit="!!projectId" @success="handleSuccess" />
+                <CreateProjectForm :handle-type="type" v-if="!projectId || formData._id" :tag="tagOptions"
+                    :category="categoryOptions" :type="typeOptions" :form-data="formData" :is-edit="!!projectId"
+                    @success="handleSuccess" />
             </template>
         </Card>
     </div>
 </template>
 
 <script setup lang="ts">
+import { Button } from 'primevue'
 import Card from 'primevue/card'
 import { capitalize, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'

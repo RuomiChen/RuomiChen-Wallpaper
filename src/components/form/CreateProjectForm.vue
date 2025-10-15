@@ -65,6 +65,7 @@
 import { Dropdown, FileUpload, InputText, MultiSelect } from 'primevue'
 import Button from 'primevue/button'
 import { computed, ref } from 'vue'
+import { router } from '../../router'
 import { getServerSource } from '../../utils'
 import { useMyFetch } from '../../utils/request'
 import { AppToast } from '../../utils/toast'
@@ -211,6 +212,7 @@ const handleSubmit = async () => {
         console.log(response)
 
         AppToast.success('Submit success')
+        router.push({name:'Dashboard'})
         submitted.value = true
     } catch (err) {
         console.error(err)

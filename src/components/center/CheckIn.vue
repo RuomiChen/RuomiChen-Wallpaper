@@ -79,8 +79,8 @@ const consecutiveDays = computed(() => {
             <div class="grid grid-cols-7 gap-2">
                 <div v-for="day in checkInCalendar" :key="day.date" :class="[
                     '  aspect-square rounded-lg flex flex-col items-center justify-center text-sm',
-                    day.checked ? ' dark:bg-primary text-black dark:text-white' : 'bg-black/500 dark:text-white',
-                    day.isToday ? 'ring-2 dark:ring-green-500 ring-black' : ''
+                    day.checked ? 'bg-primary text-white ' : 'bg-black/500 dark:text-white',
+                    day.isToday ? 'ring-2 dark:ring-green-500 ring-black/80' : ''
                 ]">
                     <div class="font-medium">{{ day.day }}</div>
                     <i v-if="day.checked" class="pi pi-check text-xs mt-1"></i>

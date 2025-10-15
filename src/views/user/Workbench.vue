@@ -5,7 +5,7 @@
                 <i class="pi pi-bars text-2xl text-primary cursor-pointer"
                     @click="sidebarVisible = !sidebarVisible"></i>
                 <h1 class="text-xl font-semibold ">
-                    <Button label="Go Back" rounded  raised @click="()=>router.push({name:'Home'})" />
+                    <Button label="Website" rounded  raised @click="router.push({name:'Home'})" />
                 </h1>
             </div>
             <div class="flex items-center gap-3">
@@ -54,20 +54,34 @@
 import Avatar from 'primevue/avatar'
 import Button from 'primevue/button'
 import InputText from 'primevue/inputtext'
-import { ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
 import { router } from '../../router'
 
 const sidebarVisible = ref(true)
 const searchQuery = ref('')
+const route = useRoute()
+// 🔁 根据当前路径同步菜单选中状态
+function syncActiveMenu() {
+  const found = menuItems.find((item) => item.route?.name === route.name)
+  if (found) {
+    activeMenu.value = found.label
+  } else {
+    activeMenu.value = ''
+  }
+}
+
+// 页面加载时 & 路由变化时 都自动同步
+onMounted(syncActiveMenu)
+watch(() => route.name, syncActiveMenu)
 const activeMenu = ref('Dashboard')
 
 const menuItems = [
     { label: 'Dashboard', icon: 'pi pi-home', route: { name: 'Dashboard' } },
     { label: 'Projects', icon: 'pi pi-folder', route: { name: 'Projects' } },
     { label: 'Tasks', icon: 'pi pi-check-square', route: { name: 'Tasks' } },
-    { label: 'Calendar', icon: 'pi pi-calendar', route: { name: 'Calendar' } },
-    { label: 'Messages', icon: 'pi pi-envelope', route: { name: 'Messages' } },
     { label: 'Analytics', icon: 'pi pi-chart-line', route: { name: 'Analytics' } },
+    { label: 'Trash', icon: 'pi pi-trash', route: { name: 'Trash' } },
     { label: 'Settings', icon: 'pi pi-cog', route: { name: 'Settings' } },
 ]
 

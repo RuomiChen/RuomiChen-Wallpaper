@@ -28,53 +28,23 @@
                 </div>
             </template>
             <template #content>
-                <DataTable :value="data" stripedRows :loading="isFetching">
-                    <Column field="data.name" header="Name" sortable></Column>
-                    <Column field="status" header="Status">
-                        <template #body="slotProps">
-                            <Tag :value="getStatusText(slotProps.data.status)"
-                                :severity="getStatusSeverity(slotProps.data.status)" />
-                        </template>
-                    </Column>
-                    <Column field="updated" header="Date" sortable>
-                        <template #body="slotProps">
-                            <div>
-                                {{ useDateFormat(slotProps.data.updated, 'YYYY-MM-DD HH:mm:ss') }}
-                            </div>
-                        </template>
-                    </Column>
-                    <Column field="progress" header="Progress">
-                        <template #body="slotProps">
-                            <ProgressBar :value="slotProps.data.progress" :showValue="false" />
-                        </template>
-                    </Column>
-                    <Column header="Actions">
-                        <template #body="slotProps">
-                            <div class="flex gap-2">
-                                <Button icon="pi pi-check" v-if="slotProps.data.status==0&&userInfo.role==1" text rounded @click="toProject(slotProps.data._id,'check')" />
-                                <Button icon="pi pi-eye" v-else-if="slotProps.data.status==1" text rounded @click="toProject(slotProps.data._id,'view')" />
-                                <Button icon="pi pi-pencil" v-else text rounded @click="toProject(slotProps.data._id)" />
-                                <Button icon="pi pi-trash" severity="danger" text rounded />
-                            </div>
-                        </template>
-                    </Column>
-                </DataTable>
+                <ProjectTable :data="data" :isFetching="isFetching"/>
             </template>
         </Card>
     </div>
 </template>
 <script setup lang="ts">
-import { useDateFormat, useStorage } from '@vueuse/core';
-import { Button, Card, Column, DataTable, Tag } from 'primevue';
+import { Button, Card } from 'primevue';
 import { computed } from 'vue';
-import { router } from '../../router';
+import ProjectTable from '../../components/workbench/ProjectTable.vue';
+import { useGlobalState } from '../../store/user';
 import { useMyFetch } from '../../utils/request';
 
 const { data: statsData, isFetching: statsFetching } = useMyFetch('/api/creator/stats').json()
 const { data, isFetching } = useMyFetch('/api/creator/recent').json()
 
-const user = useStorage('userInfo',null)
-const userInfo = computed(()=>user?JSON.parse(user.value):null)
+const userState = useGlobalState()
+const userInfo = userState.userInfo
 const iconData = ['pi-folder', 'pi-check-square', 'pi-check-users']
 const stats = computed(() => {
     if (!statsData.value) return []  // 数据还没来，返回空数组
@@ -83,30 +53,8 @@ const stats = computed(() => {
         icon: iconData[index] ?? ''   // 防止 iconData 不够长度
     }))
 })
-enum Status {
-    Waiting = 0,
-    Success = 1,
-    Failed = 2,
-}
 
-const toProject = (_id?: string,type?:string) => {
-    router.push({
-        name: 'HandleProject',
-        params: { id: _id ,type} // 可选
-    })
-}
-const statusMap: Record<Status, { text: string; severity: "success" | "info" | "warn" | "danger" | "secondary" }> = {
-    [Status.Waiting]: { text: "Pending", severity: "warn" },
-    [Status.Success]: { text: "Success", severity: "success" },
-    [Status.Failed]: { text: "Failed", severity: "danger" },
-}
 
-// ✅ 工具函数
-function getStatusText(status: Status): string {
-    return statusMap[status]?.text ?? "未知"
-}
 
-function getStatusSeverity(status: Status) {
-    return statusMap[status]?.severity ?? "secondary"
-}
+
 </script>

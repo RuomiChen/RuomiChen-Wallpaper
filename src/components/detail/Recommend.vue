@@ -8,8 +8,8 @@ defineProps<{ data: [] }>();
 <template>
     <div>
          <IconTitle  icon="pi-bullseye" title="Similar recommendations" />
-         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3" v-if="data.length">
-            <WallpaperCard :data="data" v-for="item in data" :key="item"/>
+         <div class="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10" v-if="data.length">
+            <WallpaperCard :data="item" v-for="item in data" :key="item"/>
          </div>
          <template v-else>
             no data...
