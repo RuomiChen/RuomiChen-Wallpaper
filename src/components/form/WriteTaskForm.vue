@@ -6,11 +6,13 @@ import Editor from 'primevue/editor';
 import { useToast } from "primevue/usetoast";
 import { ref } from 'vue';
 import { z } from 'zod';
+
 const toast = useToast();
 const initialValues = ref({
     title: '',
     content: ''
 });
+
 const resolver = ref(zodResolver(
     z.object({
         title: z.string().min(1, { message: 'Title is required.' }),
@@ -23,6 +25,7 @@ const onFormSubmit = ({ valid }: { valid: any }) => {
         toast.add({ severity: 'success', summary: 'Form is submitted.', life: 3000 });
     }
 };
+
 </script>
 
 <template>
