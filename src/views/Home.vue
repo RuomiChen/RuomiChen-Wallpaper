@@ -18,6 +18,7 @@ const { isFetching, error, data } = useMyFetch<{
         <Carousel :data="data?.carousel!" />
         <People :data="data?.people!"/>
         <Advantages />
+       
     </div>
 
 </template>
