@@ -4,7 +4,7 @@
             <h2 class="text-xl font-semibold ">User Info</h2>
             <Button v-if="!isEditing" @click="isEditing = true" label="Edit" icon="pi pi-pencil" class="p-button-sm" />
             <div v-else class="space-x-2">
-                <Button @click="saveProfile" label="Save" icon="pi pi-check" class="p-button-sm p-button-success" />
+                <Button @click="saveProfile" label="Save" icon="pi pi-check" class="p-button-sm" />
                 <Button @click="cancelEdit" label="Cancel" icon="pi pi-times" class="p-button-sm p-button-secondary" />
             </div>
         </div>
