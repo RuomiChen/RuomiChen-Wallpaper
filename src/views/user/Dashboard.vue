@@ -24,11 +24,11 @@
             <template #title>
                 <div class="flex items-center justify-between">
                     <span>Recent Project</span>
-                    <Button icon="pi pi-refresh" text rounded />
+                    <Button icon="pi pi-refresh" text rounded @click="()=>execute()"/>
                 </div>
             </template>
             <template #content>
-                <ProjectTable :data="data" :isFetching="isFetching"/>
+                <ProjectTable :data="data" :isFetching="isFetching" @reload="execute"/>
             </template>
         </Card>
     </div>
@@ -41,10 +41,9 @@ import { useGlobalState } from '../../store/user';
 import { useMyFetch } from '../../utils/request';
 
 const { data: statsData, isFetching: statsFetching } = useMyFetch('/api/creator/stats').json()
-const { data, isFetching } = useMyFetch('/api/creator/recent').json()
+const { data, isFetching ,execute} = useMyFetch('/api/creator/recent').json()
 
 const userState = useGlobalState()
-const userInfo = userState.userInfo
 const iconData = ['pi-folder', 'pi-check-square', 'pi-check-users']
 const stats = computed(() => {
     if (!statsData.value) return []  // 数据还没来，返回空数组

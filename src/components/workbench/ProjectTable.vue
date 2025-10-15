@@ -4,6 +4,8 @@ import { Button, Column, DataTable, Tag, useConfirm } from 'primevue';
 import { router } from '../../router';
 import { useMyFetch } from '../../utils/request';
 import { AppToast } from '../../utils/toast';
+
+const emit = defineEmits(['reload'])
 const props = defineProps<{
     data: any
     isFetching: boolean
@@ -54,8 +56,35 @@ const confirmDelete = (event, id) => {
             severity: 'danger'
         },
         accept: async () => {
-            const { data } = useMyFetch(`/api/creator/check/${id}`).delete().json()
+            const { data } = await useMyFetch(`/api/creator/check/${id}`).delete().json()
+            emit('reload')
             AppToast.show('info', 'Confirmed', 'Record deleted')
+        },
+        reject: () => {
+            // AppToast.show('error','Rejected', 'Record deleted')
+        }
+    });
+};
+const confirmRestore = (event, id) => {
+    confirm.require({
+        target: event.currentTarget,
+        message: 'Do you want to restore this project?',
+        icon: 'pi pi-info-circle',
+        rejectProps: {
+            label: 'Cancel',
+            severity: 'secondary',
+            outlined: true
+        },
+        acceptProps: {
+            label: 'Restore',
+            severity: 'success'
+        },
+        accept: async () => {
+            const { data, error } = await useMyFetch(`/api/creator/trash_restore/${id}`).json()
+            if (!error.value) {
+                emit('reload')
+                AppToast.success('restore check success')
+            }
         },
         reject: () => {
             // AppToast.show('error','Rejected', 'Record deleted')
@@ -98,7 +127,7 @@ const confirmDelete = (event, id) => {
                     <Button icon="pi pi-trash" v-if="slotProps.data.status != 3" severity="danger" text rounded
                         @click="confirmDelete($event, slotProps.data._id)" />
                     <Button icon="pi pi-undo" v-else severity="danger" text rounded
-                        @click="confirmDelete($event, slotProps.data._id)" />
+                        @click="confirmRestore($event, slotProps.data._id)" />
                 </div>
             </template>
         </Column>
