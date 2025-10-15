@@ -44,7 +44,7 @@
               :class="{ 'p-invalid': submitted && !formData.message }" />
           </div>
 
-          <Button type="submit" label="Send Message" icon="pi pi-send" :loading="loading" class="w-full"
+          <Button type="submit" label="Send Message" icon="pi pi-send" :loading="loading" class="w-full dark:text-white"
             severity="primary" />
         </form>
       </div>
