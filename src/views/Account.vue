@@ -38,8 +38,7 @@
                     <InputIcon>
                         <i class="pi pi-lock" />
                     </InputIcon>
-                    <InputText id="password" autocomplete="off" v-model="form.password" type="password"
-                        placeholder="Password" fluid />
+                    <Password id="password" :feedback="!isLogin" placeholder="Password" autocomplete="off" v-model="form.password" fluid />
                 </IconField>
 
                 <!-- 注册时显示“同意条款” -->
@@ -52,8 +51,9 @@
 
                 <!-- 按钮 -->
                 <div class="flex items-center gap-2">
-                    <Button icon="pi pi-home" severity="secondary"  @click="router.push({name:'Home'})" />
-                    <Button type="submit" class="ml-auto flex-1" :label="isLogin ? 'Login' : 'Register'"  @click="handleSubmit" />
+                    <Button icon="pi pi-home" severity="secondary" @click="router.push({ name: 'Home' })" />
+                    <Button type="submit" class="ml-auto flex-1" :label="isLogin ? 'Login' : 'Register'"
+                        @click="handleSubmit" />
                 </div>
             </div>
         </div>
@@ -67,6 +67,7 @@ import {
     IconField,
     InputIcon,
     InputText,
+    Password,
     ToggleSwitch
 } from 'primevue';
 import { reactive, ref, watch } from 'vue';

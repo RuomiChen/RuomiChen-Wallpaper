@@ -11,6 +11,7 @@ import Dashboard from '../views/user/Dashboard.vue'
 import HandleProject from '../views/user/HandleProject.vue'
 import Project from '../views/user/Project.vue'
 import Settings from '../views/user/Settings.vue'
+import Tasks from '../views/user/Tasks.vue'
 import Trash from '../views/user/Trash.vue'
 import Workbench from '../views/user/Workbench.vue'
 import WallpaperCategory from '../views/WallpaperCategory.vue'
@@ -39,6 +40,8 @@ const routes = [
       },
       {
         name: 'Projects', path: 'projects', component: Project
+      },{
+        name: 'Tasks', path: 'tasks', component: Tasks
       },
       {
         name: 'Analytics', path: 'analytics', component: Analytics

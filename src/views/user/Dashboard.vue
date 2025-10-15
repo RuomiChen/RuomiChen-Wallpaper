@@ -1,6 +1,6 @@
 <template>
 
-    <div class="flex-1 overflow-auto p-6">
+    <div class="flex-1 overflow-auto ">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
             <Card v-for="stat in stats" :key="stat.title">
                 <template #content>
