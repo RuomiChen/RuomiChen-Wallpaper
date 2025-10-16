@@ -2,7 +2,7 @@
     <div class="flex flex-col gap-4">
         <InputText type="text" v-model="keyword" placeholder="Enter you want to search..." />
         <ScrollPanel style="width: 100%; height: 600px">
-            <SearchList class="md:w-300" :data="filterData" />
+            <SearchList class="md:w-300" :data="filterData" :rows="4" />
         </ScrollPanel>
     </div>
 </template>

@@ -1,9 +1,10 @@
 <template>
     <div class="card">
-        <DataView :value="data">
+        <DataView :value="data" paginator :rows="rows">
             <template #list="slotProps">
                 <div class="flex flex-col">
-                    <div class="cursor-pointer" @click="to(item._id)" v-for="(item, index) in slotProps.items" :key="index">
+                    <div class="cursor-pointer" @click="to(item._id)" v-for="(item, index) in slotProps.items"
+                        :key="index">
                         <div class="flex flex-col sm:flex-row py-6 px-2 gap-4"
                             :class="{ 'border-t border-surface-200 dark:border-surface-700': index !== 0 }">
                             <div class="md:w-40 relative">
@@ -59,17 +60,20 @@
 </template>
 
 <script setup lang="ts">
-import { DataView,  Tag } from "primevue";
+import { DataView, Tag } from "primevue";
 import { getServerSource } from "../utils";
 import router from "../router";
 import { AppDialog } from "../utils/dialog";
 
 
-defineProps<{ data: [] }>();
+defineProps<{
+    data: [],
+    rows:number
+}>();
 
-const to = (id:string) => {
+const to = (id: string) => {
     console.log(id);
-    
+
     router.push({ name: 'WallpaperDetail', params: { id } })
     AppDialog.close()
 }
