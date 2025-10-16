@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { useDateFormat } from '@vueuse/core';
 import { Button, Column, DataTable, Tag, useConfirm } from 'primevue';
-import { router } from '../../router';
+import router from '../../router';
+import { useGlobalState } from '../../store/user';
 import { useMyFetch } from '../../utils/request';
 import { AppToast } from '../../utils/toast';
 
@@ -91,6 +92,9 @@ const confirmRestore = (event, id) => {
         }
     });
 };
+
+const userState = useGlobalState()
+const userInfo = userState.userInfo
 </script>
 
 <template>
@@ -122,7 +126,7 @@ const confirmRestore = (event, id) => {
                         @click="toProject(slotProps.data._id, 'check')" />
                     <Button icon="pi pi-eye" v-else-if="slotProps.data.status == 1" text rounded
                         @click="toProject(slotProps.data._id, 'view')" />
-                    <Button icon="pi pi-pencil" v-if="slotProps.data.status != 0 && slotProps.data.status != 3" text
+                    <Button icon="pi pi-pencil" v-if="slotProps.data.status != 0 && slotProps.data.status != 3 && slotProps.data.user_id==userInfo._id" text
                         rounded @click="toProject(slotProps.data._id)" />
                     <Button icon="pi pi-trash" v-if="slotProps.data.status != 3" severity="danger" text rounded
                         @click="confirmDelete($event, slotProps.data._id)" />

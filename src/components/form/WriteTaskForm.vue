@@ -6,6 +6,7 @@ import Editor from 'primevue/editor';
 import { useToast } from "primevue/usetoast";
 import { ref } from 'vue';
 import { z } from 'zod';
+import { useMyFetch } from '../../utils/request';
 
 const toast = useToast();
 const initialValues = ref({
@@ -22,6 +23,9 @@ const resolver = ref(zodResolver(
 
 const onFormSubmit = ({ valid }: { valid: any }) => {
     if (valid) {
+        const {data} = useMyFetch('/api/creator/tasks').post(initialValues.value).json()
+        console.log(data);
+        
         toast.add({ severity: 'success', summary: 'Form is submitted.', life: 3000 });
     }
 };
@@ -32,12 +36,12 @@ const onFormSubmit = ({ valid }: { valid: any }) => {
     <Form v-slot="$form" :resolver="resolver" :initialValues="initialValues" @submit="onFormSubmit"
         class="flex flex-col gap-4">
         <div class="flex flex-col gap-1">
-            <InputText name="title" type="text" placeholder="Title" />
+            <InputText v-model="initialValues.title" name="title" type="text" placeholder="Title" />
             <Message v-if="$form.username?.invalid" severity="error" size="small" variant="simple">{{
                 $form.username.error?.message }}</Message>
         </div>
         <div class="flex flex-col gap-1">
-            <Editor name="content" editorStyle="height: 320px" />
+            <Editor v-model="initialValues.content" name="content" editorStyle="height: 320px" />
             <Message v-if="$form.content?.invalid" severity="error" size="small" variant="simple">{{
                 $form.content.error?.message }}</Message>
         </div>

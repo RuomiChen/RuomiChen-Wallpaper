@@ -4,4 +4,5 @@
 @custom-variant dark (&:where(.dark, .dark *));     
 *{
     user-select: none;
+    /* cursor: url('../public/touch-white.png'); */
 }

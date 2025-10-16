@@ -40,7 +40,7 @@
                 </div>
             </Transition>
 
-            <div class="flex-1 flex flex-col overflow-hidden px-6">
+            <div class="flex-1 flex flex-col px-6">
                 <router-view />
             </div>
         </div>
@@ -52,7 +52,7 @@ import Avatar from 'primevue/avatar'
 import Button from 'primevue/button'
 import { onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import { router } from '../../router'
+import router from '../../router'
 import { useGlobalState } from '../../store/user'
 import { getServerSource } from '../../utils'
 

@@ -72,7 +72,7 @@ import {
 } from 'primevue';
 import { reactive, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
-import { router } from '../router';
+import router from '../router';
 import { useGlobalState } from '../store/user';
 import { AppToast } from '../utils/toast';
 

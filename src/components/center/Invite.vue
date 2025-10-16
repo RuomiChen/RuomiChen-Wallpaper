@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useClipboard } from '@vueuse/core';
 import { Button, Column, DataTable } from 'primevue';
-import { router } from '../../router';
+import router from '../../router';
 import { useGlobalState } from '../../store/user';
 defineProps<{
     data: {

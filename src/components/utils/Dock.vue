@@ -1,6 +1,6 @@
 <template>
     <div class="card dock-demo">
-        <div class="dock-window" :style="{ backgroundImage: `url(${getServerSource(data)})` }">
+        <div class="dock-window"  :style="{ backgroundImage: `url(${getServerSource(data)})` }">
             <Dock :model="items" position="bottom">
                 <template #itemicon="{ item }">
                     <img v-tooltip.top="item.label" :alt="item.label as string" :src="item.icon" style="width: 100%" />
@@ -43,8 +43,7 @@ const items = ref([
     width: 100%;
     height: 450px;
     position: relative;
-    background-repeat: no-repeat;
-    background-size: cover;
+    background-repeat: repeat;
     border-radius: 10px;
 }
 

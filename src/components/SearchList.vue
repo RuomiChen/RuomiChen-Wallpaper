@@ -61,7 +61,7 @@
 <script setup lang="ts">
 import { DataView,  Tag } from "primevue";
 import { getServerSource } from "../utils";
-import { router } from "../router";
+import router from "../router";
 import { AppDialog } from "../utils/dialog";
 
 

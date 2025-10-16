@@ -32,18 +32,20 @@ const view = (data: any) => {
 </script>
 
 <template>
-    <div>
+    <div class="flex items-center justify-between">
         <SelectButton v-model="value" :options="options" />
-        <Button label="Create" rounded raised @click="visible = true" />
-
+        <Button label="Create" rounded raised @click="{drawerData = null;visible = true}" />
     </div>
     <div v-if="loading">loading data...</div>
-    <div v-else class="mt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+    <div v-else-if="data.length" class="mt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
         <TaskCard v-for="item in data" :key="item" :data="item" @view="view" />
     </div>
+    <template v-else>
+        no data ...
+    </template>
     <Drawer v-model:visible="visible" :header="drawerData?.title || 'Write'" position="right">
-        <p class="text-white bg-contain bg-no-repeat" v-if="drawerData"
-            :style="{ 'background': `url(${getServerSource(drawerData?.image)})` }">{{ drawerData }}.</p>
+        <p class="bg-contain bg-no-repeat" v-if="drawerData"
+            :style="{ 'background': `url(${getServerSource(drawerData?.image)})` }" v-html="drawerData.content"></p>
         <template v-else>
            <WriteTaskForm/>
         </template>

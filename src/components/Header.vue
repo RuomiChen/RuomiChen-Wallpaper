@@ -44,7 +44,7 @@
 <script setup lang="ts">
 import { Button, MegaMenu, OverlayBadge, SplitButton } from "primevue";
 import { ref } from "vue";
-import { router } from "../router";
+import router from "../router";
 
 import { useDark, useStorage, useToggle } from '@vueuse/core';
 import { useGlobalState } from "../store/user";

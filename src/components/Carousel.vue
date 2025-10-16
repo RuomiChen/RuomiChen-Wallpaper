@@ -24,7 +24,7 @@
 <script setup>
 import { Carousel } from "primevue";
 import { ref } from "vue";
-import { router } from "../router";
+import router from "../router";
 import { getServerSource } from "../utils";
 defineProps({
     title: String,

@@ -1,13 +1,14 @@
 <script setup lang="ts">
-import { StorageSerializers, useStorage } from '@vueuse/core';
+import { StorageSerializers, useDateFormat, useStorage } from '@vueuse/core';
 import { Button, Divider } from 'primevue';
 import { computed, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import CreatorCard from '../components/CreatorCard.vue';
 import Recommend from '../components/detail/Recommend.vue';
+import RelationTag from '../components/detail/RelationTag.vue';
 import SimpleDIalog from '../components/dialog/SimpleDialog.vue';
 import Dock from '../components/utils/Dock.vue';
-import { router } from '../router';
+import router from '../router';
 import { useGlobalState } from '../store/user';
 import { getServerSource } from '../utils';
 import { AppDialog } from '../utils/dialog';
@@ -78,9 +79,9 @@ async function download() {
 }
 
 const collect = async () => {
-    const { data: res,error } = await useMyFetch('/api/collect').post({ target_id: data.value._id }).json()
-    if(error.value){
-        return router.push({name:'Account',query:{type:'login'}})
+    const { data: res, error } = await useMyFetch('/api/collect').post({ target_id: data.value._id }).json()
+    if (error.value) {
+        return router.push({ name: 'Account', query: { type: 'login' } })
     }
     data.value = { ...data.value, ...res.value }
 }
@@ -89,8 +90,8 @@ enum IOpenType {
 }
 const open = (type: IOpenType) => {
     let setting = useStorage<{
-        wechat_img:string
-    }>('setting', null,undefined, { serializer: StorageSerializers.object })
+        wechat_img: string
+    }>('setting', null, undefined, { serializer: StorageSerializers.object })
     switch (type) {
         case IOpenType.official:
             AppDialog.open(SimpleDIalog, {
@@ -115,45 +116,56 @@ const open = (type: IOpenType) => {
 const similarData = ref([])
 
 watch(
-  () => data.value?._id,
-  async (id) => {
-    if (!id) return
-    const { data: res, error } = await useMyFetch(`/api/product/recommend/${id}`).json()
-    if (!error.value) {
-      similarData.value = res.value
-    }
-  },
-  { immediate: true }
+    () => data.value?._id,
+    async (id) => {
+        if (!id) return
+        const { data: res, error } = await useMyFetch(`/api/product/recommend/${id}`).json()
+        if (!error.value) {
+            similarData.value = res.value
+        }
+    },
+    { immediate: true }
 )
 </script>
 
 <template>
     <div v-if="!isFinished">loading...</div>
     <div class="flex flex-col py-10 px-2  gap-10   text-[var(--p-content-color)]" v-else>
-        <div class="flex justify-between gap-10">
+        <div class="flex md:flex-row flex-col justify-between gap-10">
             <div class="flex-1">
                 <Dock :data="data?.source" />
             </div>
-            <div class="p-3 min-w-140 flex flex-col gap-2 border border-[var(--p-divider-border-color)]  rounded-2xl 
+            <div class="p-3 md:min-w-140 flex flex-col gap-2 border border-[var(--p-divider-border-color)]  rounded-2xl 
             ">
                 <!-- info -->
-                <div class="p-4 grid grid-cols-2 gap-4 border border-[var(--p-divider-border-color)]  rounded-2xl">
-                    <div class="flex items-center gap-2">Category：<span v-for="item in data.category">{{ item }}</span>
+                <div class="p-4 flex flex-col  gap-2 md:gap-8 border border-[var(--p-divider-border-color)]  rounded-2xl">
+                    <div class="flex md:flex-row flex-col justify-between md:items-center">
+                        <div class="flex-grow flex items-center gap-2">Category：
+                            <span v-for="item in data.category">{{ item}}</span>
+                        </div>
+                        <div class="flex-grow">Resolution： {{ data.resolution }}</div>
                     </div>
-                    <div>Resolution： 2560x1600</div>
-                    <div>Color：Unknown</div>
-                    <div></div>
-                    <div>Download：{{ data.download }}</div>
-                    <div>Collect：{{ data.collect }}</div>
-                    <div class="col-span-2 text-center">456</div>
+                    <div class="flex md:flex-row flex-col justify-between md:items-center">
+                        <div class="flex-grow">Color：Unknown</div>
+                        <div class="flex-grow flex items-center gap-2">Type：<span v-for="item in data.type">{{ item }}</span>
+                        </div>
+                    </div>
+                    <div class="flex md:flex-row flex-col justify-between md:items-center">
+                        <div class="flex-grow">Download：{{ data.download }}</div>
+                        <div class="flex-grow">Collect：{{ data.collect }}</div>
+                    </div>
+                    <div class="text-center">Publish Time：{{ useDateFormat(data.updated, 'YYYY-MM-DD') }}
+                    </div>
                 </div>
                 <CreatorCard :data="data.creator" v-if="data.creator" />
                 <div class="mt-auto">
                     <Divider />
-                    <div class="flex items-center justify-between px-6 ">
+                    <div class="flex md:flex-row flex-col md:items-center justify-between px-6 gap-2 md:gap-4">
                         <Button icon="pi pi-download" label="Download" severity="secondary" raised @click="download" />
-                        <Button :icon="`pi ${data.is_collect ? 'pi-heart-fill' : 'pi-heart'}`" severity="secondary" raised
-                            @click="collect" />
+                        <Button :icon="`pi ${data.is_collect ? 'pi-heart-fill' : 'pi-heart'}`"
+                        label="Collect"
+                        severity="secondary"
+                            raised @click="collect" />
                         <Button icon="pi pi-comment" label="Jogin Group" severity="secondary" raised />
                         <Button icon="pi pi-comment" label="Official" severity="secondary" raised
                             @click="open(IOpenType.official)" />
@@ -161,7 +173,8 @@ watch(
                 </div>
             </div>
         </div>
-        <Recommend :data="similarData"/>
+        <RelationTag :data="data.tag" />
+        <Recommend :data="similarData" />
     </div>
 </template>
 

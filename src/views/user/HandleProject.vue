@@ -1,36 +1,39 @@
 <template>
     <div class="min-h-screen ">
         <Button label="Back" rounded raised @click="router.back()" />
-
-        <Card>
-            <template #title>
-                <div class="flex items-center gap-3">
-                    <i class="pi pi-cloud-upload text-primary text-2xl"></i>
-                    <span>{{ type ? `${capitalize(type)} Project` : (projectId ? 'Edit Project' : 'Upload Image') }}</span>
-                </div>
-            </template>
-            <template #content>
-                <CreateProjectForm :handle-type="type" v-if="!projectId || formData._id" :tag="tagOptions"
-                    :category="categoryOptions" :type="typeOptions" :form-data="formData" :is-edit="!!projectId"
-                    @success="handleSuccess" />
-            </template>
-        </Card>
+        <ScrollPanel style="height: 85%;">
+            <Card>
+                <template #title>
+                    <div class="flex items-center gap-3">
+                        <i class="pi pi-cloud-upload text-primary text-2xl"></i>
+                        <span>{{ type ? `${capitalize(type)} Project` : (projectId ? 'Edit Project' : 'Upload Image')
+                        }}</span>
+                    </div>
+                </template>
+                <template #content>
+                    <CreateProjectForm :handle-type="type" v-if="!projectId || formData._id" :tag="tagOptions"
+                        :category="categoryOptions" :type="typeOptions" :form-data="formData" :is-edit="!!projectId"
+                        @success="handleSuccess" />
+                </template>
+            </Card>
+        </ScrollPanel>
     </div>
 </template>
 
 <script setup lang="ts">
-import { Button } from 'primevue'
+import { Button, ScrollPanel } from 'primevue'
 import Card from 'primevue/card'
-import { capitalize, onMounted, ref } from 'vue'
+import { capitalize, computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import CreateProjectForm from '../../components/form/CreateProjectForm.vue'
-import { router } from '../../router'
+import router from '../../router'
 import { useMyFetch } from '../../utils/request'
 import { AppToast } from '../../utils/toast'
 
 const route = useRoute()
-const projectId = route.params.id as string | undefined
-const type = route.params.type as string | undefined
+// ✅ 1. 使用 computed 保证路由变动能实时获取
+const projectId = computed(() => route.params.id as string | undefined)
+const type = computed(() => route.params.type as string | undefined)
 
 const formData = ref({
     _id: '',
@@ -49,9 +52,9 @@ const { data: tagOptions } = useMyFetch('/api/tag/all').json()
 
 // 编辑场景：拉取已有项目数据
 const fetchProjectData = async () => {
-    if (!projectId) return
+    if (!projectId.value) return
     try {
-        const { data } = await useMyFetch(`/api/creator/check/${projectId}`).json()
+        const { data } = await useMyFetch(`/api/creator/check/${projectId.value}`).json()
 
         formData.value = data.value
     } catch (error: any) {

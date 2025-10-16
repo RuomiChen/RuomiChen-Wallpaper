@@ -1,6 +1,6 @@
 // store.ts
 import { createGlobalState, StorageSerializers, useStorage } from '@vueuse/core';
-import { router } from '../router';
+import router from '../router';
 import { useMyFetch } from '../utils/request';
 import { AppToast } from '../utils/toast';
 

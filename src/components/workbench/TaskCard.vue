@@ -28,7 +28,7 @@ const view = (data: any) => {
 <template>
     <Card style=" overflow: hidden">
         <template #header>
-            <img alt="user header" class="" :src="getServerSource(data.image)" />
+            <img v-if="data.image" alt="user header" class="" :src="getServerSource(data.image)" />
         </template>
         <template #title>{{ data.title }}</template>
         <template #footer>

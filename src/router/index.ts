@@ -1,6 +1,9 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
+import { createRouter, createWebHashHistory, type RouteLocationNormalizedLoadedGeneric } from 'vue-router'
 
+import { useStorage } from '@vueuse/core'
 import Main from '../layouts/Main.vue'
+import { useMyFetch } from '../utils/request'
+import { AppToast } from '../utils/toast'
 import About from '../views/About.vue'
 import Account from '../views/Account.vue'
 import Center from '../views/Center.vue'
@@ -25,13 +28,19 @@ const routes = [
       { name: 'Contact', path: '/contact', component: Contact },
       { name: 'About', path: '/about', component: About },
       { name: 'WallpaperDetail', path: '/wallpaper/:id', component: WallpaperDetail },
-      { name: 'Center', path: '/center', component: Center },
+      {
+        name: 'Center', path: '/center', component: Center,
+        meta: { requiresAuth: true },
+
+      },
     ]
   }, {
     name: 'Account', path: '/account', component: Account
   },
   {
-    name: 'Workbench', path: '/workbench', component: Workbench, children: [
+    name: 'Workbench', path: '/workbench',
+    meta: { requiresAuth: true },
+    component: Workbench, children: [
       {
         name: 'Dashboard', path: '', component: Dashboard
       },
@@ -40,7 +49,7 @@ const routes = [
       },
       {
         name: 'Projects', path: 'projects', component: Project
-      },{
+      }, {
         name: 'Tasks', path: 'tasks', component: Tasks
       },
       {
@@ -57,7 +66,56 @@ const routes = [
 
 ]
 
-export const router = createRouter({
+
+const router = createRouter({
   history: createWebHashHistory(),
   routes,
 })
+
+// 全局前置守卫
+router.beforeEach((to, _from, next) => {
+  const tokenStore = useStorage('token', null)
+
+  if (to.meta.requiresAuth && !tokenStore.value) {
+    // 未登录，跳到登录页
+    AppToast.error('please login first')
+    next({ name: 'Account', query: { redirect: to.fullPath } })
+  } else {
+    next()
+  }
+})
+
+router.afterEach((to, from) => {
+  logPageView({
+    from: from,
+    to: to,
+  })
+})
+
+/**
+ * 埋点
+ * @param payload 
+ */
+async function logPageView({ from, to }: { from: RouteLocationNormalizedLoadedGeneric, to: RouteLocationNormalizedLoadedGeneric }) {
+  let id: string | undefined
+  const tokenStore = useStorage('token', null)
+
+
+  if (tokenStore.value && to.name === 'WallpaperDetail') {
+    id = to.params.id as string // ✅ 通过 params 获取 id
+    const {data} = 
+    await useMyFetch('/api/record').post({
+      from: from.fullPath,
+      to: to.fullPath,
+      action: 'wallpaper view',
+      extra: id ? JSON.stringify({ id }) : undefined
+    }).json()
+    console.log(data);
+    
+  }
+  // 可以本地存储 / 上报接口
+  // fetch("/api/track", { method: "POST", body: JSON.stringify(payload) })
+}
+
+
+export default router
