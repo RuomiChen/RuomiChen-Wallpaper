@@ -32,8 +32,8 @@ function handleMouseMove(e: MouseEvent) {
   if (!props.turn) return;
   if (!containerRef.value) return;
   const { left, top, width, height } = containerRef.value.getBoundingClientRect();
-  const x = (e.clientX - left - width / 2) / 25;
-  const y = (e.clientY - top - height / 2) / 25;
+  const x = (e.clientX - left - width / 2) /10;
+  const y = (e.clientY - top - height / 2) / 10;
   containerRef.value.style.transform = `rotateY(${x}deg) rotateX(${y}deg)`;
 }
 

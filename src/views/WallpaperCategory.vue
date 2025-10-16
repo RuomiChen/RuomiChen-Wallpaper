@@ -13,7 +13,7 @@ watch(
   () => route.params.category,
   () => {
     execute()
-  }
+  },
 )
 
 import WallpaperCard from '../components/WallpaperCard.vue';
@@ -25,7 +25,7 @@ import WallpaperCard from '../components/WallpaperCard.vue';
   <div v-if="isFetching">loading...</div>
   <div v-else-if="error">{{ error }}</div>
   <div v-else>
-    <div v-if="data.length" class="grid grid-cols-3 gap-4 w-full">
+    <div v-if="data?.length" class="grid grid-cols-3 gap-4 w-full">
       <div v-for="(item, index) of data" :key="index" >
         <WallpaperCard :data="item" />
       </div>
