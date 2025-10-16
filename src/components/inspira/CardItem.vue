@@ -22,6 +22,7 @@ const props = defineProps({
   rotateX: { type: [Number, String], default: 0 },
   rotateY: { type: [Number, String], default: 0 },
   rotateZ: { type: [Number, String], default: 0 },
+  scale: { type: [Number, String], default: 1 },
 });
 
 const refElement = ref<HTMLElement | null>(null);
@@ -32,9 +33,9 @@ function handleAnimation(isMouseEntered: Readonly<Ref<boolean, boolean>>) {
   if (!refElement.value) return;
 
   if (isMouseEntered) {
-    refElement.value.style.transform = `translateX(${props.translateX}px) translateY(${props.translateY}px) translateZ(${props.translateZ}px) rotateX(${props.rotateX}deg) rotateY(${props.rotateY}deg) rotateZ(${props.rotateZ}deg)`;
+    refElement.value.style.transform = `translateX(${props.translateX}px) translateY(${props.translateY}px) translateZ(${props.translateZ}px) rotateX(${props.rotateX}deg) rotateY(${props.rotateY}deg) rotateZ(${props.rotateZ}deg) scale(${props.scale})`;
   } else {
-    refElement.value.style.transform = `translateX(0px) translateY(0px) translateZ(0px) rotateX(0deg) rotateY(0deg) rotateZ(0deg)`;
+    refElement.value.style.transform = `translateX(0px) translateY(0px) translateZ(0px) rotateX(0deg) rotateY(0deg) rotateZ(0deg) ${props.scale&&'scale(1)'}`;
   }
 }
 

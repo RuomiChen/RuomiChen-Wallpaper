@@ -5,6 +5,7 @@ import { computed, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import CreatorCard from '../components/CreatorCard.vue';
 import Recommend from '../components/detail/Recommend.vue';
+import RelationCollect from '../components/detail/RelationCollect.vue';
 import RelationTag from '../components/detail/RelationTag.vue';
 import SimpleDIalog from '../components/dialog/SimpleDialog.vue';
 import Dock from '../components/utils/Dock.vue';
@@ -114,6 +115,7 @@ const open = (type: IOpenType) => {
 }
 
 const similarData = ref([])
+const collectData = ref([])
 
 watch(
     () => data.value?._id,
@@ -123,6 +125,11 @@ watch(
         if (!error.value) {
             similarData.value = res.value
         }
+        const { data: res2, error:error2 } = await useMyFetch(`/api/product/collect/${id}`).json()
+        if (!error2.value) {
+            collectData.value = res2.value
+        }
+
     },
     { immediate: true }
 )
@@ -138,16 +145,18 @@ watch(
             <div class="p-3 md:min-w-140 flex flex-col gap-2 border border-[var(--p-divider-border-color)]  rounded-2xl 
             ">
                 <!-- info -->
-                <div class="p-4 flex flex-col  gap-2 md:gap-8 border border-[var(--p-divider-border-color)]  rounded-2xl">
+                <div
+                    class="p-4 flex flex-col  gap-2 md:gap-8 border border-[var(--p-divider-border-color)]  rounded-2xl">
                     <div class="flex md:flex-row flex-col justify-between md:items-center">
                         <div class="flex-grow flex items-center gap-2">Category：
-                            <span v-for="item in data.category">{{ item}}</span>
+                            <span v-for="item in data.category">{{ item }}</span>
                         </div>
                         <div class="flex-grow">Resolution： {{ data.resolution }}</div>
                     </div>
                     <div class="flex md:flex-row flex-col justify-between md:items-center">
                         <div class="flex-grow">Color：Unknown</div>
-                        <div class="flex-grow flex items-center gap-2">Type：<span v-for="item in data.type">{{ item }}</span>
+                        <div class="flex-grow flex items-center gap-2">Type：<span v-for="item in data.type">{{ item
+                                }}</span>
                         </div>
                     </div>
                     <div class="flex md:flex-row flex-col justify-between md:items-center">
@@ -162,10 +171,8 @@ watch(
                     <Divider />
                     <div class="flex md:flex-row flex-col md:items-center justify-between px-6 gap-2 md:gap-4">
                         <Button icon="pi pi-download" label="Download" severity="secondary" raised @click="download" />
-                        <Button :icon="`pi ${data.is_collect ? 'pi-heart-fill' : 'pi-heart'}`"
-                        label="Collect"
-                        severity="secondary"
-                            raised @click="collect" />
+                        <Button :icon="`pi ${data.is_collect ? 'pi-heart-fill' : 'pi-heart'}`" label="Collect"
+                            severity="secondary" raised @click="collect" />
                         <Button icon="pi pi-comment" label="Jogin Group" severity="secondary" raised />
                         <Button icon="pi pi-comment" label="Official" severity="secondary" raised
                             @click="open(IOpenType.official)" />
@@ -174,6 +181,7 @@ watch(
             </div>
         </div>
         <RelationTag :data="data.tag" />
+        <RelationCollect :data="collectData" />
         <Recommend :data="similarData" />
     </div>
 </template>
