@@ -22,6 +22,8 @@ export const useGlobalState = createGlobalState(
                 userInfo.value = user
                 localStorage.setItem('token', token)
             }
+            router.push({ name: 'Home' })
+
         }
         // ✅ 新增方法：更新用户信息
         const updateUserInfo = (newData: Partial<typeof userInfo.value>) => {

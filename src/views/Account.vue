@@ -113,11 +113,10 @@ const handleSubmit = async () => {
             return AppToast.error('Invalid email format.')
         }
 
-        await userState.login({
+         await userState.login({
             email: form.email,
             password: form.password
         })
-        router.push({ name: 'Home' })
     }
 
     // === 注册 ===
