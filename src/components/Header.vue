@@ -28,8 +28,6 @@
                     <SplitButton :label="locale" dropdownIcon="pi pi-language" :model="languageItems" />
                     <OverlayBadge v-if="hasLogin" severity="danger" class="inline-flex">
                         <SplitButton :plain="false" raised text :model="userDropdown">
-                            <!-- <Avatar class="p-overlay-badge"
-                            :image="getServerSource(user.avatar)" size="xlarge" /> -->
                             <img :src="getServerSource(user?.avatar)" class="size-14 rounded-full" />
                         </SplitButton>
                     </OverlayBadge>
