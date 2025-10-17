@@ -1,17 +1,17 @@
 <template>
     <div class="rounded-lg shadow-sm p-6">
         <div class="flex items-center justify-between mb-6">
-            <h2 class="text-xl font-semibold ">User Info</h2>
-            <Button v-if="!isEditing" @click="isEditing = !isEditing" label="Edit" icon="pi pi-pencil"
+            <h2 class="text-xl font-semibold ">{{t('center.userInfo')}}</h2>
+            <Button v-if="!isEditing" @click="isEditing = !isEditing" :label="t('common.edit')" icon="pi pi-pencil"
                 class="p-button-sm" />
             <div v-else class="space-x-2">
-                <Button @click="saveProfile" label="Save" icon="pi pi-check" class="p-button-sm" />
-                <Button @click="cancelEdit" label="Cancel" icon="pi pi-times" class="p-button-sm p-button-secondary" />
+                <Button @click="saveProfile" :label="t('common.save')" icon="pi pi-check" class="p-button-sm" />
+                <Button @click="cancelEdit" :label="t('common.cancel')" icon="pi pi-times" class="p-button-sm p-button-secondary" />
             </div>
         </div>
 
         <div class="space-y-6" v-if="originalProfile">
-            Avatar
+            
             <div class="flex items-center gap-6">
                 <img @click="preview" :src="getServerSource(originalProfile.avatar)" alt="Avatar"
                     class="size-34 rounded-full object-cover border-4 border-gray-100" />
@@ -24,18 +24,18 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                    <label class="block text-sm font-medium  mb-2">Nickname</label>
+                    <label class="block text-sm font-medium  mb-2">{{t('center.userInfoContent.nickName')}}</label>
                     <InputText v-model="originalProfile.nickname" :disabled="!isEditing" class="w-full" />
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium  mb-2">Email</label>
+                    <label class="block text-sm font-medium  mb-2">{{t('center.userInfoContent.email')}}</label>
                     <InputText v-model="originalProfile.email" :disabled="!isEditing" class="w-full" />
                 </div>
 
 
                 <div class="md:col-span-2">
-                    <label class="block text-sm font-medium  mb-2">Signature</label>
+                    <label class="block text-sm font-medium  mb-2">{{t('center.userInfoContent.signature')}}</label>
                     <Textarea v-model="originalProfile.signature" :disabled="!isEditing" rows="4" class="w-full" />
                 </div>
             </div>
@@ -43,15 +43,15 @@
             <div class="grid grid-cols-3 gap-4 pt-6 border-t">
                 <div class="text-center">
                     <div class="text-2xl font-bold text-blue-600">{{ userInfo?.points }}</div>
-                    <div class="text-sm text-gray-600 mt-1">Points</div>
+                    <div class="text-sm text-gray-600 mt-1">{{t('center.userInfoContent.points')}}</div>
                 </div>
                 <div class="text-center">
                     <div class="text-2xl font-bold text-green-600">{{ userInfo?.checkInDays }}</div>
-                    <div class="text-sm text-gray-600 mt-1">CheckInDays</div>
+                    <div class="text-sm text-gray-600 mt-1">{{t('center.userInfoContent.checkInDays')}}</div>
                 </div>
                 <div class="text-center">
                     <div class="text-2xl font-bold text-purple-600">{{ userInfo?.inviteCount }}</div>
-                    <div class="text-sm text-gray-600 mt-1">InviteCount</div>
+                    <div class="text-sm text-gray-600 mt-1">{{t('center.userInfoContent.inviteCount')}}</div>
                 </div>
             </div>
         </div>
@@ -61,12 +61,16 @@
 import { useCloned } from '@vueuse/core'
 import { Button, FileUpload, InputText, Textarea } from 'primevue'
 import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useGlobalState } from '../../store/user'
 import { getServerSource } from '../../utils'
 import { AppDialog } from '../../utils/dialog'
 import { useMyFetch } from '../../utils/request'
 import { AppToast } from '../../utils/toast'
 import Cropper from '../utils/Cropper.vue'
+
+const { t } = useI18n({ useScope: 'global' })
+
 
 // 个人信息
 const isEditing = ref(false)

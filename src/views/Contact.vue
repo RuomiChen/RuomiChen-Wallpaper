@@ -52,13 +52,13 @@
       <!-- Contact Info + Map -->
       <div class="flex flex-col justify-between">
         <div class="rounded-lg shadow-lg p-4 ">
-          <h2 class="text-2xl font-semibold mb-4">Contact Information</h2>
+          <h2 class="text-2xl font-semibold mb-4">{{t('contact.info.title')}}</h2>
 
           <div class="space-y-4" v-if="data">
             <div class="flex items-start gap-4">
               <i class="pi pi-map-marker text-primary text-xl"></i>
               <div>
-                <h3 class="font-medium text-sm">Address</h3>
+                <h3 class="font-medium text-sm">{{t('contact.info.address')}}</h3>
                 <p class="text-sm">{{ data!.address }}</p>
               </div>
             </div>
@@ -66,7 +66,7 @@
             <div class="flex items-start gap-4">
               <i class="pi pi-phone text-primary text-xl"></i>
               <div>
-                <h3 class="font-medium text-sm">Ins</h3>
+                <h3 class="font-medium text-sm">{{t('contact.info.whatsapp')}}</h3>
                 <Skeleton size="2rem" class="mr-2" v-if="!isFinished"></Skeleton>
                 <Button v-else class="p-0" as="a" variant="link" :label="data!.ins" :href="data!.ins" target="_blank"
                   rel="noopener" />
@@ -76,7 +76,7 @@
             <div class="flex items-start gap-4">
               <i class="pi pi-envelope text-primary text-xl"></i>
               <div>
-                <h3 class="font-medium text-sm">Email</h3>
+                <h3 class="font-medium text-sm">{{t('contact.info.email')}}</h3>
                 <Skeleton size="2rem" class="mr-2" v-if="!isFinished"></Skeleton>
                 <Button v-else class="p-0" as="a" variant="link" :label="data!.email" :href="`mailto:${data!.email}`"
                   target="_blank" rel="noopener" />
@@ -98,7 +98,7 @@
 
         <!-- Social Media -->
         <div class="bg-primary rounded-lg shadow-lg p-6 text-white">
-          <h3 class="text-xl font-semibold mb-4">Follow Us</h3>
+          <h3 class="text-xl font-semibold mb-4">{{t('contact.info.follow')}}</h3>
           <div class="flex space-x-4" v-if="isFinished">
             <!-- <Button icon="pi pi-facebook" rounded text severity="secondary"
               class="text-primary hover:bg-white/70 bg-white" />
