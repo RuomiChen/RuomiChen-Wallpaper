@@ -2,49 +2,49 @@
   <div class="py-12 px-4 sm:px-6 lg:px-8 space-y-12">
     <!-- Header Section -->
     <div class="text-center">
-      <h1 class="text-4xl font-bold mb-4">Contact Us</h1>
-      <p class="text-lg">Have any questions or suggestions? We'd love to hear from you.</p>
+      <h1 class="text-4xl font-bold mb-4">{{t('header.contact')}}</h1>
+      <p class="text-lg">{{t('contact.tip')}}</p>
     </div>
 
     <div class="grid md:grid-cols-2 gap-8">
       <!-- Contact Form -->
       <div class="rounded-lg shadow-lg p-8 space-y-6">
-        <h2 class="text-2xl font-semibold mb-6">Send a Message</h2>
+        <h2 class="text-2xl font-semibold mb-6">{{t('contact.form.title')}}</h2>
 
         <form @submit.prevent="handleSubmit" class="space-y-4">
           <div>
-            <label for="name" class="block text-sm font-medium mb-2">Name <span class="text-red-500">*</span></label>
-            <InputText id="name" v-model="formData.name" placeholder="Enter your name" class="w-full"
+            <label for="name" class="block text-sm font-medium mb-2">{{t('contact.form.name')}} <span class="text-red-500">*</span></label>
+            <InputText id="name" v-model="formData.name" :placeholder="t('contact.form.name')" class="w-full"
               :class="{ 'p-invalid': submitted && !formData.name }" />
           </div>
 
           <div>
-            <label for="email" class="block text-sm font-medium mb-2">Email <span class="text-red-500">*</span></label>
-            <InputText id="email" type="email" v-model="formData.email" placeholder="you@example.com" class="w-full"
+            <label for="email" class="block text-sm font-medium mb-2">{{t('contact.form.email')}} <span class="text-red-500">*</span></label>
+            <InputText id="email" type="email" v-model="formData.email" :placeholder="t('contact.form.email')" class="w-full"
               :class="{ 'p-invalid': submitted && !isValidEmail }" />
           </div>
 
           <div>
-            <label for="phone" class="block text-sm font-medium mb-2">Phone</label>
-            <InputText id="phone" v-model="formData.phone" placeholder="Enter your phone number" class="w-full" />
+            <label for="phone" class="block text-sm font-medium mb-2">{{t('contact.form.phone')}}</label>
+            <InputText id="phone" v-model="formData.phone" :placeholder="t('contact.form.phone')" class="w-full" />
           </div>
 
           <div>
-            <label for="subject" class="block text-sm font-medium mb-2">Subject <span
+            <label for="subject" class="block text-sm font-medium mb-2">{{t('contact.form.subject')}} <span
                 class="text-red-500">*</span></label>
             <Dropdown id="subject" v-model="formData.subject" :options="subjects" optionLabel="label"
-              optionValue="value" placeholder="Select a subject" class="w-full"
+              optionValue="value" :placeholder="t('contact.form.subject')" class="w-full"
               :class="{ 'p-invalid': submitted && !formData.subject }" />
           </div>
 
           <div>
-            <label for="message" class="block text-sm font-medium mb-2">Message <span
+            <label for="message" class="block text-sm font-medium mb-2">{{t('contact.form.message')}} <span
                 class="text-red-500">*</span></label>
-            <Textarea id="message" v-model="formData.message" rows="5" placeholder="Type your message..." class="w-full"
+            <Textarea id="message" v-model="formData.message" rows="5" :placeholder="t('contact.form.message')" class="w-full"
               :class="{ 'p-invalid': submitted && !formData.message }" />
           </div>
 
-          <Button type="submit" label="Send Message" icon="pi pi-send" :loading="loading" class="w-full dark:text-white"
+          <Button type="submit" :label="t('contact.form.submit')" icon="pi pi-send" :loading="loading" class="w-full dark:text-white"
             severity="primary" />
         </form>
       </div>
@@ -128,8 +128,13 @@ import Skeleton from 'primevue/skeleton'
 import Textarea from 'primevue/textarea'
 import Toast from 'primevue/toast'
 import { computed, ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useMyFetch } from '../utils/request'
 import { AppToast } from '../utils/toast'
+
+const { t } = useI18n({ useScope: 'global' })
+
+
 
 interface FormData {
   name: string

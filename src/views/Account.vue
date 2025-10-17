@@ -4,7 +4,7 @@
             <!-- 切换开关 -->
             <div class="flex justify-between items-center mb-6">
                 <h2 class="text-white text-2xl font-bold">
-                    {{ isLogin ? 'Login' : 'Register' }}
+                    {{ t(isLogin ? 'account.login' : 'account.register') }}
                 </h2>
                 <ToggleSwitch v-model="isLogin" />
             </div>
@@ -16,44 +16,47 @@
                     <InputIcon>
                         <i class="pi pi-user" />
                     </InputIcon>
-                    <InputText id="name" v-model="form.firstName" type="text" placeholder="FirstName" fluid />
+                    <InputText id="name" v-model="form.firstName" type="text" :placeholder="t('account.firstName')"
+                        fluid />
                 </IconField>
 
                 <IconField v-if="!isLogin">
                     <InputIcon>
                         <i class="pi pi-user" />
                     </InputIcon>
-                    <InputText id="name" v-model="form.lastName" type="text" placeholder="LastName" fluid />
+                    <InputText id="name" v-model="form.lastName" type="text" :placeholder="t('account.lastName')"
+                        fluid />
                 </IconField>
 
                 <IconField>
                     <InputIcon>
                         <i class="pi pi-envelope" />
                     </InputIcon>
-                    <InputText autocomplete="off" id="email" v-model="form.email" type="email" placeholder="Email"
-                        fluid />
+                    <InputText autocomplete="off" id="email" v-model="form.email" type="email"
+                        :placeholder="t('account.email')" fluid />
                 </IconField>
 
                 <IconField>
                     <InputIcon>
                         <i class="pi pi-lock" />
                     </InputIcon>
-                    <Password id="password" :feedback="!isLogin" placeholder="Password" autocomplete="off" v-model="form.password" fluid />
+                    <Password id="password" :feedback="!isLogin" :placeholder="t('account.password')" autocomplete="off"
+                        v-model="form.password" fluid />
                 </IconField>
 
                 <!-- 注册时显示“同意条款” -->
                 <div v-if="!isLogin" class="flex items-center gap-2">
                     <Checkbox inputId="accept" v-model="accept" name="accept" value="yes" />
                     <label for="accept" class="text-white text-sm cursor-pointer">
-                        I agree to the terms and conditions.
+                        {{ t('account.terms') }}
                     </label>
                 </div>
 
                 <!-- 按钮 -->
                 <div class="flex items-center gap-2">
                     <Button icon="pi pi-home" severity="secondary" @click="router.push({ name: 'Home' })" />
-                    <Button type="submit" class="ml-auto flex-1" :label="isLogin ? 'Login' : 'Register'"
-                        @click="handleSubmit" />
+                    <Button type="submit" class="ml-auto flex-1"
+                        :label="t(isLogin ? 'account.login' : 'account.register')" @click="handleSubmit" />
                 </div>
             </div>
         </div>
@@ -71,10 +74,14 @@ import {
     ToggleSwitch
 } from 'primevue';
 import { reactive, ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 import router from '../router';
 import { useGlobalState } from '../store/user';
 import { AppToast } from '../utils/toast';
+
+const { t } = useI18n({ useScope: 'global' })
+
 
 const route = useRoute()
 
@@ -113,7 +120,7 @@ const handleSubmit = async () => {
             return AppToast.error('Invalid email format.')
         }
 
-         await userState.login({
+        await userState.login({
             email: form.email,
             password: form.password
         })

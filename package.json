@@ -22,6 +22,7 @@
     "tailwindcss-primeui": "^0.6.1",
     "vue": "^3.5.21",
     "vue-advanced-cropper": "^2.8.9",
+    "vue-i18n": "^11.1.12",
     "vue-router": "4",
     "zod": "^4.1.12"
   },

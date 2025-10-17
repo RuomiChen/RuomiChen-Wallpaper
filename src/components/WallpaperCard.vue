@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { defineProps } from 'vue';
+import { useI18n } from 'vue-i18n';
 import router from '../router';
 import { getServerSource } from '../utils';
 import CardBody from './inspira/CardBody.vue';
 import CardContainer from './inspira/CardContainer.vue';
 import CardItem from './inspira/CardItem.vue';
+const { t, locale } = useI18n({ useScope: 'global' })
 
 const props = defineProps<{
   data: any
@@ -24,7 +26,7 @@ const props = defineProps<{
           </div>
           <div @click="router.push({ name: 'WallpaperDetail', params: { id: data._id } })"
             class="cursor-pointer hover:scale-120 transition-all shadow-[0_0_10px_#fff1f1] py-2 px-4 rounded-[50px] bg-[rgba(0,0,0,.6)] flex items-center gap-4">
-            Detail
+            {{t('common.detail')}}
             <i class="pi pi-arrow-down-right"></i>
           </div>
 

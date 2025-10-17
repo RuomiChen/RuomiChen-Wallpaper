@@ -1,12 +1,14 @@
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n';
 import IconTitle from '../IconTitle.vue';
 defineProps<{ data: [] }>();
+const { t, locale } = useI18n({ useScope: 'global' })
 
 </script>
 
 <template>
     <div>
-        <IconTitle icon="pi-bullseye" title="Relation Tag" />
+        <IconTitle icon="pi-bullseye" :title="t('common.relationTag')" />
         <div class="mt-4 flex items-center gap-4" v-if="data.length">
             <div v-for="tag in data" :key="tag"
                 class="flex items-center  gap-2 dark:bg-[rgba(84,84,84,.48)] rounded-[20px] px-3 py-[5px] text-shadow-[0_0_10px_#fff1f1]">

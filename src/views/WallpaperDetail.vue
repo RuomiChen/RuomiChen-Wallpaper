@@ -2,6 +2,7 @@
 import { StorageSerializers, useDateFormat, useStorage } from '@vueuse/core';
 import { Button, Divider, useConfirm } from 'primevue';
 import { computed, ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 import CreatorCard from '../components/CreatorCard.vue';
 import Recommend from '../components/detail/Recommend.vue';
@@ -16,6 +17,10 @@ import { getServerSource } from '../utils';
 import { AppDialog } from '../utils/dialog';
 import { useMyFetch } from '../utils/request';
 import { AppToast } from '../utils/toast';
+
+const { t, locale } = useI18n({ useScope: 'global' })
+
+
 const route = useRoute()
 const id = computed(() => route.params.id)
 // 监听 route.params.category 变化
@@ -191,33 +196,38 @@ watch(
                 <div
                     class="p-4 flex flex-col  gap-2 md:gap-8 border border-[var(--p-divider-border-color)]  rounded-2xl">
                     <div class="flex md:flex-row flex-col justify-between md:items-center">
-                        <div class="flex-grow flex items-center gap-2">Category：
+                        <div class="flex-grow flex items-center gap-2">{{t('detail.category')}}：
                             <span v-for="item in data.category">{{ item }}</span>
                         </div>
-                        <div class="flex-grow">Resolution： {{ data.resolution }}</div>
+                        <div class="flex-grow">{{t('detail.resolution')}}： {{ data.resolution }}</div>
                     </div>
                     <div class="flex md:flex-row flex-col justify-between md:items-center">
-                        <div class="flex-grow">Color：Unknown</div>
-                        <div class="flex-grow flex items-center gap-2">Type：<span v-for="item in data.type">{{ item
+                        <div class="flex-grow">{{t('detail.color')}}：Unknown</div>
+                        <div class="flex-grow flex items-center gap-2">{{t('detail.type')}}：<span v-for="item in data.type">{{ item
                                 }}</span>
                         </div>
                     </div>
                     <div class="flex md:flex-row flex-col justify-between md:items-center">
-                        <div class="flex-grow">Download：{{ data.download }}</div>
-                        <div class="flex-grow">Collect：{{ data.collect }}</div>
+                        <div class="flex-grow">{{t('detail.download')}}：{{ data.download }}</div>
+                        <div class="flex-grow">{{t('detail.collect')}}：{{ data.collect }}</div>
                     </div>
-                    <div class="text-center">Publish Time：{{ useDateFormat(data.updated, 'YYYY-MM-DD') }}
+                    <div class="text-center">{{t('detail.publishTime')}}：{{ useDateFormat(data.updated, 'YYYY-MM-DD') }}
                     </div>
                 </div>
                 <CreatorCard :data="data.creator" v-if="data.creator" />
                 <div class="mt-auto">
                     <Divider />
                     <div class="flex md:flex-row flex-col md:items-center justify-between px-6 gap-2 md:gap-4">
-                        <Button icon="pi pi-download" label="Download" severity="secondary" raised @click="hanleAction" />
-                        <Button :icon="`pi ${data.is_collect ? 'pi-heart-fill' : 'pi-heart'}`" label="Collect"
+                        <Button icon="pi pi-download" :label="t('detail.download')" severity="secondary" raised @click="hanleAction" />
+                        <Button :icon="`pi ${data.is_collect ? 'pi-heart-fill' : 'pi-heart'}`" 
+                        :label="t('detail.collect')"
                             severity="secondary" raised @click="collect" />
-                        <Button icon="pi pi-comment" label="Jogin Group" severity="secondary" raised />
-                        <Button icon="pi pi-comment" label="Official" severity="secondary" raised
+                        <Button icon="pi pi-comment" 
+                        :label="t('detail.joinGroup')"
+                        severity="secondary" raised />
+                        <Button icon="pi pi-comment" 
+                        :label="t('detail.official')"
+                        severity="secondary" raised
                             @click="open(IOpenType.official)" />
                     </div>
                 </div>

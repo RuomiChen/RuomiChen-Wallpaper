@@ -25,7 +25,7 @@
                 <div class="flex gap-4 items-center">
                     <Button icon="pi pi-search" aria-label="Save" @click="search" />
                     <Button :icon="`pi ${isDark ? 'pi-sun' : 'pi-moon'}`" aria-label="Save" @click="toggleDark()" />
-                    <!-- value="0" -->
+                    <SplitButton :label="locale" dropdownIcon="pi pi-language" :model="languageItems" />
                     <OverlayBadge v-if="hasLogin" severity="danger" class="inline-flex">
                         <SplitButton :plain="false" raised text :model="userDropdown">
                             <!-- <Avatar class="p-overlay-badge"
@@ -42,16 +42,20 @@
 </template>
 
 <script setup lang="ts">
-import { Button, MegaMenu, OverlayBadge, SplitButton } from "primevue";
-import { ref } from "vue";
-import router from "../router";
-
 import { useDark, useStorage, useToggle } from '@vueuse/core';
+import { Button, MegaMenu, OverlayBadge, SplitButton } from "primevue";
+import { computed, ref } from "vue";
+import { useI18n } from "vue-i18n";
+import router from "../router";
 import { useGlobalState } from "../store/user";
 import { getServerSource } from "../utils";
 import { AppDialog } from "../utils/dialog";
 import { AppToast } from "../utils/toast";
 import SearchDIalog from "./dialog/SearchDIalog.vue";
+
+
+const { t, locale } = useI18n({ useScope: 'global' })
+
 
 const isDark = useDark()
 const toggleDark = useToggle(isDark)
@@ -104,7 +108,7 @@ const search = () => {
 }
 const items = ref([
     {
-        label: 'Home',
+        label: computed(() => t('header.home')),
         command: () => {
             // Callback to run
             router.push('/')
@@ -113,7 +117,7 @@ const items = ref([
     },
 
     {
-        label: 'Resources',
+        label: computed(() => t('header.resources')),
         root: true,
         items: [
             [
@@ -142,7 +146,7 @@ const items = ref([
             ],
         ]
     }, {
-        label: 'About Us',
+        label: computed(() => t('header.about')),
         command: () => {
             // Callback to run
             router.push({ name: 'About' })
@@ -150,14 +154,14 @@ const items = ref([
         root: true
     },
     {
-        label: 'Contact',
+        label:  computed(() => t('header.contact')),
         command: () => {
             // Callback to run
             router.push({ name: 'Contact' })
         },
         root: true
     }, {
-        label: 'Other Product',
+        label: computed(() => t('header.otherProduct')),
         root: true,
         items: [
             [
@@ -195,6 +199,25 @@ const items = ref([
         ]
     },
 ]);
+const changeLanguage = (t: string) => {
+    if (locale.value == t) return
+    locale.value = t
+}
+const languageItems = ref([
+    {
+        label: 'zh',
+        command: () => {
+            changeLanguage('zh')
+        }
+    },
+    {
+        label: 'en',
+        command: () => {
+            changeLanguage('en')
+        }
+    },
+])
+
 </script>
 <style scoped>
 .p-splitbutton-raised {

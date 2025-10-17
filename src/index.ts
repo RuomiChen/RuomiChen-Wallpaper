@@ -8,10 +8,12 @@ import ToastService from 'primevue/toastservice';
 import { createApp } from 'vue';
 import App from './App.vue';
 import './index.css';
+import i18n from './locale';
 import router from './router';
 
 
 createApp(App)
+    .use(i18n)
     .directive('animateonscroll', AnimateOnScroll)
     .directive('focustrap', FocusTrap)
     .use(ToastService)
@@ -29,4 +31,6 @@ createApp(App)
                 }
             }
         }
-    }).mount('#root');
+    })
+    .mount('#root');
+
