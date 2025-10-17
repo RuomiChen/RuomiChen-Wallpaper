@@ -40,12 +40,24 @@ export const useGlobalState = createGlobalState(
             AppToast.success('register success')
 
         }
+
+        const refreshUserInfo = async () => {
+            const { data, error } = await useMyFetch('/api/user/info').get().json();
+            if (!error.value) {
+                console.log('data',data.value);
+                
+                userInfo.value = data.value;
+            } else {
+                AppToast.error('Failed to refresh user info');
+            }
+        };
         return {
             userInfo,
             login,
             register,
             logout,
-            updateUserInfo
+            updateUserInfo,
+            refreshUserInfo
         }
     }
 )

@@ -26,6 +26,7 @@ export const useMyFetch = createFetch({
         onFetchError({ error, data, response, context, execute }) {
             // same as afterFetch
             AppToast.error(error.message || "Network error");
+            
             return { error, data }
         },
     },

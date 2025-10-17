@@ -5,12 +5,13 @@ defineProps<{
 import { Divider, useConfirm } from 'primevue';
 import Button from 'primevue/button';
 import Card from 'primevue/card';
-import Dialog from 'primevue/dialog';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import DefaultImg from '../../../public/logo.svg';
 import { useGlobalState } from '../../store/user';
+import { AppDialog } from '../../utils/dialog';
 import { useMyFetch } from '../../utils/request';
 import { AppToast } from '../../utils/toast';
+import RedeemDialog from '../dialog/RedeemDialog.vue';
 
 interface StoreItem {
     _id: string
@@ -23,37 +24,13 @@ interface StoreItem {
 const userState = useGlobalState()
 const user = userState.userInfo
 
-const userPoints = ref(250)
-const showSuccessDialog = ref(false)
-const showErrorDialog = ref(false)
-const redeemedItem = ref<StoreItem | null>(null)
-const requiredPoints = ref(0)
-
+const redeemHistory = ref([])
 const canRedeem = (item: StoreItem): boolean => {
-    return userPoints.value >= item.point && item.stock > 0
+    return user.value.points >= item.point && item.stock > 0
 }
 
 const redeemItem = (item: StoreItem) => {
-    if (!canRedeem(item)) {
-        requiredPoints.value = item.point - userPoints.value
-        showErrorDialog.value = true
-        return
-    }
     confirmRedeem(item)
-    // AppDialog.open()
-
-
-    // // Deduct points
-    // userPoints.value -= item.point
-
-    // // Reduce stock
-    // item.stock -= 1
-
-    // // Show success dialog
-    // redeemedItem.value = item
-    // showSuccessDialog.value = true
-
-    // console.log('[v0] Item redeemed:', item.name, 'Remaining points:', userPoints.value)
 }
 const confirm = useConfirm();
 const confirmRedeem = (item: StoreItem) => {
@@ -71,30 +48,63 @@ const confirmRedeem = (item: StoreItem) => {
         },
         accept: async () => {
             // 扣分
-            user.value.points -= item.point
-            item.stock--
-            const { data,error } = await useMyFetch('/api/store/redee').post({id:item._id}).json()
-            if(!error.value){
-                AppToast.success('Redeem success')
+            const { data, error } = await useMyFetch('/api/store/redeem').post({ id: item._id }).json()
+            if (error.value) {
+                await userState.refreshUserInfo();
+                return;
+            }
+
+            if (data.value) {
+                user.value.points = data.value.points;
+                item.stock = data.value.stock;
+                AppToast.success('Redeem success');
             }
         },
         reject: () => {
         }
     });
 };
+const openRecord = () => {
+    AppDialog.open(RedeemDialog, {
+        header: 'Redeem Record',
+        style: {
+            width: '50vw',
+        },
+        breakpoints: {
+            '960px': '75vw',
+            '640px': '90vw'
+        },
+        data: redeemHistory, // ✅ 直接传 base64
+        emits: {
+            onSuccess: async (e) => {
+            }
+        }
+    })
+}
+const getRedeemRecord = async () => {
+    const { data, error } = await useMyFetch('/api/store/redeem_record').json()
+    if (!error.value) {
+        redeemHistory.value = data.value
+    }
+}
+onMounted(() => {
+    userState.refreshUserInfo()
+    getRedeemRecord()
+})
 </script>
 <template>
     <div class="min-h-screen bg-background">
         <div>
-            <div class="container mx-auto px-4 py-6">
-                <div class="flex items-center justify-end">
+            <div class="container mx-auto p-4 ">
+                <div class="flex items-center justify-end gap-4">
                     <div class=" flex items-center gap-3 bg-primary/10 px-6 py-3 rounded-full">
                         <i class="pi pi-star-fill text-primary text-xl"></i>
                         <div>
-                            <p class="text-xs text-muted-foreground">Your Points</p>
-                            <p class="text-2xl font-bold text-foreground">{{ user.points }}</p>
+                            <p class="text-2xl font-bold text-foreground">{{ user?.points }}</p>
                         </div>
                     </div>
+                    <!-- 兑换记录按钮 -->
+                    <Button icon="pi pi-clock" class="" label="Redeem Record" rounded outlined @click="openRecord" />
                 </div>
             </div>
         </div>
@@ -149,33 +159,7 @@ const confirmRedeem = (item: StoreItem) => {
             </div>
         </main>
 
-        <Dialog v-model:visible="showSuccessDialog" modal header="Redemption Successful!" :style="{ width: '450px' }">
-            <div class="flex flex-col items-center gap-4 py-4">
-                <i class="pi pi-check-circle text-6xl text-green-500"></i>
-                <p class="text-center text-lg">
-                    You've successfully redeemed <strong>{{ redeemedItem?.name }}</strong> for
-                    <strong>{{ redeemedItem?.point }} points</strong>!
-                </p>
-                <p class="text-muted-foreground text-sm">
-                    Remaining points: <strong>{{ userPoints }}</strong>
-                </p>
-            </div>
-            <template #footer>
-                <Button label="Continue Shopping" @click="showSuccessDialog = false" class="w-full" />
-            </template>
-        </Dialog>
 
-        <Dialog v-model:visible="showErrorDialog" modal header="Insufficient Points" :style="{ width: '450px' }">
-            <div class="flex flex-col items-center gap-4 py-4">
-                <i class="pi pi-times-circle text-6xl text-red-500"></i>
-                <p class="text-center text-lg">
-                    You need <strong>{{ requiredPoints }}</strong> more points to redeem this item.
-                </p>
-            </div>
-            <template #footer>
-                <Button label="Got It" @click="showErrorDialog = false" class="w-full" severity="secondary" />
-            </template>
-        </Dialog>
     </div>
 </template>
 
