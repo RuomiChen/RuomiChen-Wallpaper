@@ -3,6 +3,10 @@ export default {
     logo: 'MiChen Wallpaper',
     detail: 'Detail',
     edit: 'Edit',
+    save: 'Save',
+    cancel: 'Cancel',
+    copy: 'Copy',
+    copied: 'Copied !',
     relationTag: 'Relation Tag',
     relationCollect: 'Relation Collect',
     similarRecommend: 'Similar Recommend',
@@ -61,5 +65,58 @@ export default {
     invitationRecord: 'Invitation Record',
     collectRecord: 'Collect Record',
     pointStore: 'Point Store',
+    userInfoContent: {
+      nickName: 'Nickname',
+      email: 'Email',
+      signature: 'Signature',
+      points: 'Points',
+      checkInDays: 'CheckInDays',
+      inviteCount: 'InviteCount',
+      changeAvatar: 'Change Avatar'
+    },
+    checkInRecordContent: {
+      title: 'Daily Check-in',
+      tip: 'Continuous check-in {data} days',
+      checkIn: 'Check In',
+      checkInOk: 'I check in today',
+      points: 'Points',
+      checkInHistory: 'CheckIn History',
+      table: {
+        date: 'Date',
+        time: 'Time'
+      }
+    },
+    inviteRecordContent: {
+      title: 'My invitation code',
+      tip: 'Invite friends and both parties can receive points rewards',
+      totalInvitation: 'Total number of invitations',
+      activeUsers: 'Active users',
+      cumulativeRewards: 'Cumulative rewards',
+      invitationRecord: 'Invitation Record',
+      table: {
+        nickName: 'Nickname',
+        registerTime: 'Register Time',
+        status: 'Status',
+        type: 'Type',
+        value: 'Value'
+      }
+    },
+    storeContent: {
+      redeemRecord: 'Redeem Record',
+      table:{
+        goodsName:'Goods Name',
+        goodsDesc:'goods Description',
+        quantity:'Quantity',
+        totalPoints:'Total Points',
+      },
+      points:'points',
+      stock:'stock',
+      redeemBtn:'Redeem Now',
+      redeemBtnNo:'Insufficient Points',
+      dialog:{
+        header:'Redeem',
+        title:'Are you sure you want to redeem?',
+      }
+    }
   },
 }

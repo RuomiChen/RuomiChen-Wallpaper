@@ -5,6 +5,8 @@ export default {
     edit: '编辑',
     save: '保存',
     cancel: '取消',
+    copy: '复制',
+    copied: '已粘贴 !',
     relationTag: '关联标签',
     relationCollect: '关联收藏',
     similarRecommend: '相似推荐',
@@ -69,7 +71,52 @@ export default {
       signature: '个性签名',
       points: '积分',
       checkInDays: '连续签到天数',
-      inviteCount: '总邀请数'
+      inviteCount: '总邀请数',
+      changeAvatar: '修改头像'
+    },
+    checkInRecordContent: {
+      title: '每日签到',
+      tip: '连续签到{data}天',
+      checkIn: '签到',
+      checkInOk: '已签到',
+      points: '积分',
+      checkInHistory: '签到历史',
+      table: {
+        date: '日期',
+        time: '时间'
+      }
+    },
+    inviteRecordContent: {
+      title: '我的邀请码',
+      tip: '邀请好友，双方均可获得积分奖励',
+      totalInvitation: '邀请总数',
+      activeUsers: '活跃用户',
+      cumulativeRewards: '累计奖励',
+      invitationRecord: '邀请记录',
+      table: {
+        nickName: '昵称',
+        registerTime: '注册时间',
+        status: '状态',
+        type: '奖励类型',
+        value: '奖励值'
+      }
+    },
+    storeContent: {
+      redeemRecord: '兑换记录',
+      table: {
+        goodsName: '奖品名称',
+        goodsDesc: '奖品描述',
+        quantity: '数量',
+        totalPoints: '总需积分',
+      },
+      points: '积分',
+      stock: '库存',
+      redeemBtn: '立即兑换',
+      redeemBtnNo: '积分不足',
+      dialog: {
+        header: '兑换',
+        title: '你确定要兑换吗?',
+      }
     }
   },
 }

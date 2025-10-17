@@ -6,12 +6,16 @@ import { Divider, useConfirm } from 'primevue';
 import Button from 'primevue/button';
 import Card from 'primevue/card';
 import { onMounted, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 import DefaultImg from '../../../public/logo.svg';
 import { useGlobalState } from '../../store/user';
 import { AppDialog } from '../../utils/dialog';
 import { useMyFetch } from '../../utils/request';
 import { AppToast } from '../../utils/toast';
 import RedeemDialog from '../dialog/RedeemDialog.vue';
+
+const { t } = useI18n({ useScope: 'global' })
+
 
 interface StoreItem {
     _id: string
@@ -35,16 +39,16 @@ const redeemItem = (item: StoreItem) => {
 const confirm = useConfirm();
 const confirmRedeem = (item: StoreItem) => {
     confirm.require({
-        message: 'Are you sure you want to redeem?',
-        header: 'Redeem',
+        message: t('center.storeContent.dialog.title'),
+        header: t('center.storeContent.dialog.header'),
         icon: 'pi pi-star-fill text-primary',
         rejectProps: {
-            label: 'Cancel',
+            label:  t('common.cancel'),
             severity: 'secondary',
             outlined: true
         },
         acceptProps: {
-            label: 'Redeem'
+            label: t('center.storeContent.dialog.header'),
         },
         accept: async () => {
             // 扣分
@@ -66,7 +70,7 @@ const confirmRedeem = (item: StoreItem) => {
 };
 const openRecord = () => {
     AppDialog.open(RedeemDialog, {
-        header: 'Redeem Record',
+        header: t('center.storeContent.redeemRecord'),
         style: {
             width: '50vw',
         },
@@ -104,7 +108,7 @@ onMounted(() => {
                         </div>
                     </div>
                     <!-- 兑换记录按钮 -->
-                    <Button icon="pi pi-clock" class="" label="Redeem Record" rounded outlined @click="openRecord" />
+                    <Button icon="pi pi-clock" class="" :label="t('center.storeContent.redeemRecord')" rounded outlined @click="openRecord" />
                 </div>
             </div>
         </div>
@@ -135,10 +139,10 @@ onMounted(() => {
                                 <div class="flex items-center gap-2">
                                     <i class="pi pi-star-fill text-primary"></i>
                                     <span class="text-2xl font-bold text-foreground">{{ item.point }}</span>
-                                    <span class="text-sm text-muted-foreground">points</span>
+                                    <span class="text-sm text-muted-foreground">{{t('center.storeContent.points')}}</span>
                                 </div>
                                 <div class="text-right">
-                                    <p class="text-xs text-muted-foreground">Stock</p>
+                                    <p class="text-xs text-muted-foreground">{{t('center.storeContent.stock')}}</p>
                                     <p class="text-sm font-semibold text-foreground">{{ item.stock }}</p>
                                 </div>
                             </div>
@@ -146,7 +150,7 @@ onMounted(() => {
                     </template>
 
                     <template #footer>
-                        <Button :label="canRedeem(item) ? 'Redeem Now' : 'Insufficient Points'"
+                        <Button :label="t(canRedeem(item) ? 'center.storeContent.redeemBtn': 'center.storeContent.redeemBtnNo')"
                             :disabled="!canRedeem(item) || item.stock === 0"
                             :severity="canRedeem(item) && item.stock > 0 ? 'primary' : 'secondary'" class="w-full"
                             @click="redeemItem(item)">

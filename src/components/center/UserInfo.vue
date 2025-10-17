@@ -16,7 +16,7 @@
                 <img @click="preview" :src="getServerSource(originalProfile.avatar)" alt="Avatar"
                     class="size-34 rounded-full object-cover border-4 border-gray-100" />
                 <div v-if="isEditing">
-                    <FileUpload mode="basic" chooseIcon="pi pi-upload" chooseLabel="Change Avatar"
+                    <FileUpload mode="basic" chooseIcon="pi pi-upload" :chooseLabel="t('center.userInfoContent.changeAvatar')"
                         @select="onFileSelect" customUpload auto severity="secondary" class="p-button-outlined" />
                 </div>
 

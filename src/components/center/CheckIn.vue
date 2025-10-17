@@ -2,10 +2,16 @@
 import dayjs from 'dayjs';
 import { Button, Column, DataTable } from 'primevue';
 import { computed, ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { useGlobalState } from '../../store/user';
 import { useCheckInCalendar, type ServerCheckIn } from '../../utils';
 import { useMyFetch } from '../../utils/request';
 import { AppToast } from '../../utils/toast';
+
+const { t } = useI18n({ useScope: 'global' })
+
+
+
 const props = defineProps<{ data: ServerCheckIn[] }>();
 const emit = defineEmits(['reload'])
 const userState = useGlobalState()
@@ -68,11 +74,11 @@ const consecutiveDays = computed(() => {
         <div class=" rounded-lg shadow-sm p-6">
             <div class="flex items-center justify-between mb-6">
                 <div>
-                    <h2 class="text-xl font-semibold text-gray-900 dark:text-white">Daily check-in</h2>
-                    <p class="text-sm  mt-1">Continuous check-in {{ consecutiveDays }} days</p>
+                    <h2 class="text-xl font-semibold text-gray-900 dark:text-white">{{t('center.checkInRecordContent.title')}}</h2>
+                    <p class="text-sm  mt-1">{{t('center.checkInRecordContent.tip',{data:consecutiveDays})}}</p>
                 </div>
                 <Button @click="checkIn" :disabled="hasCheckedInToday"
-                    :label="hasCheckedInToday ? 'I signed in today' : 'Sign in immediately'" icon="pi pi-check-circle"
+                    :label="t(hasCheckedInToday?'center.checkInRecordContent.checkInOk':'center.checkInRecordContent.checkIn')" icon="pi pi-check-circle"
                     :class="hasCheckedInToday ? 'p-button-secondary' : 'p-button-success'" />
             </div>
 
@@ -84,16 +90,16 @@ const consecutiveDays = computed(() => {
                 ]">
                     <div class="font-medium">{{ day.day }}</div>
                     <i v-if="day.checked" class="pi pi-check text-xs mt-1"></i>
-                    <div v-if="day.checked" class="mt-4">10 Points</div>
+                    <div v-if="day.checked" class="mt-4">10 {{t('center.checkInRecordContent.points')}}</div>
                 </div>
             </div>
         </div>
 
         <div class=" rounded-lg shadow-sm p-6">
-            <h3 class="text-lg font-semibold  mb-4">CheckIn History</h3>
+            <h3 class="text-lg font-semibold  mb-4">{{t('center.checkInRecordContent.checkInHistory')}}</h3>
             <DataTable :value="data" :paginator="true" :rows="10">
-                <Column field="date" header="Date" sortable></Column>
-                <Column field="time" header="Time"></Column>
+                <Column field="date" :header="t('center.checkInRecordContent.table.date')" sortable></Column>
+                <Column field="time" :header="t('center.checkInRecordContent.table.time')"></Column>
             </DataTable>
         </div>
     </div>
