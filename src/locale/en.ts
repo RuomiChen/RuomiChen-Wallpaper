@@ -22,6 +22,7 @@ export default {
   },
   detail: {
     category: 'Category',
+    signature: 'Signature',
     resolution: 'Resolution',
     color: 'Color',
     type: 'Type',

@@ -1,9 +1,13 @@
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n';
 import { getServerSource } from '../utils';
 
 const props = defineProps<{
     data: any; // 图片 URL
 }>();
+
+const { t } = useI18n({ useScope: 'global' })
+
 </script>
 <template>
     <div class="flex gap-2 mx-auto py-2">
@@ -15,7 +19,7 @@ const props = defineProps<{
         </div>
         <div class="flex flex-col gap-1">
             <div>{{ data.nickname }}</div>
-            <div class="text-primary text-[12px] truncate max-w-80">Signature：{{data.signature}}</div>
+            <div class="text-primary text-[12px] truncate max-w-80">{{t('detail.signature')}}：{{data.signature}}</div>
         </div>
     </div>
 </template>

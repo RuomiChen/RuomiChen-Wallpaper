@@ -22,6 +22,7 @@ export default {
   },
   detail: {
     category: '分类',
+    signature: '个性签名',
     resolution: '分辨率',
     color: '颜色',
     type: '类型',
