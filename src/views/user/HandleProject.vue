@@ -7,7 +7,7 @@
                     <div class="flex items-center gap-3">
                         <i class="pi pi-cloud-upload text-primary text-2xl"></i>
                         <span>{{ type ? `${capitalize(type)} Project` : (projectId ? 'Edit Project' : 'Upload Image')
-                        }}</span>
+                            }}</span>
                     </div>
                 </template>
                 <template #content>
@@ -52,7 +52,6 @@ const { data: tagOptions } = useMyFetch('/api/tag/all').json()
 
 // 编辑场景：拉取已有项目数据
 const fetchProjectData = async () => {
-    if (!projectId.value) return
     try {
         const { data } = await useMyFetch(`/api/creator/check/${projectId.value}`).json()
 
@@ -71,6 +70,7 @@ const handleSuccess = () => {
 
 // 初始化
 onMounted(() => {
-    fetchProjectData()
+    if (!projectId.value) return
+        fetchProjectData()
 })
 </script>

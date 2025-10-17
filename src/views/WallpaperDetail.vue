@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { StorageSerializers, useDateFormat, useStorage } from '@vueuse/core';
-import { Button, Divider } from 'primevue';
+import { Button, Divider, useConfirm } from 'primevue';
 import { computed, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import CreatorCard from '../components/CreatorCard.vue';
@@ -28,13 +28,13 @@ const { data, isFinished, execute } = useMyFetch(url).json()
 
 
 watch(
-  () => data.value,
-  (newVal) => {
-    if (newVal) {
-      currentMock.value = newVal.mockup
-    }
-  },
-  { immediate: true }
+    () => data.value,
+    (newVal) => {
+        if (newVal) {
+            currentMock.value = newVal.mockup
+        }
+    },
+    { immediate: true }
 )
 
 // 监听 category 变化
@@ -52,7 +52,27 @@ const userState = useGlobalState()
 const user = userState.userInfo
 
 // 下载
+const confirm = useConfirm();
+
 console.log(user);
+const hanleAction = () => {
+    confirm.require({
+        header: 'Human-machine verification',
+        rejectProps: {
+            label: 'Cancel',
+            severity: 'secondary',
+            outlined: true
+        },
+        acceptProps: {
+            label: 'Download'
+        },
+        accept: async () => {
+            download()
+        },
+        reject: () => {
+        }
+    });
+};
 
 async function download() {
     let url
@@ -179,7 +199,7 @@ watch(
                     <div class="flex md:flex-row flex-col justify-between md:items-center">
                         <div class="flex-grow">Color：Unknown</div>
                         <div class="flex-grow flex items-center gap-2">Type：<span v-for="item in data.type">{{ item
-                        }}</span>
+                                }}</span>
                         </div>
                     </div>
                     <div class="flex md:flex-row flex-col justify-between md:items-center">
@@ -193,7 +213,7 @@ watch(
                 <div class="mt-auto">
                     <Divider />
                     <div class="flex md:flex-row flex-col md:items-center justify-between px-6 gap-2 md:gap-4">
-                        <Button icon="pi pi-download" label="Download" severity="secondary" raised @click="download" />
+                        <Button icon="pi pi-download" label="Download" severity="secondary" raised @click="hanleAction" />
                         <Button :icon="`pi ${data.is_collect ? 'pi-heart-fill' : 'pi-heart'}`" label="Collect"
                             severity="secondary" raised @click="collect" />
                         <Button icon="pi pi-comment" label="Jogin Group" severity="secondary" raised />

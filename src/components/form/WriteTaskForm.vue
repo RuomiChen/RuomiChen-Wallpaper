@@ -7,6 +7,7 @@ import { useToast } from "primevue/usetoast";
 import { ref } from 'vue';
 import { z } from 'zod';
 import { useMyFetch } from '../../utils/request';
+import Meteors from '../inspira/Meteors.vue';
 
 const toast = useToast();
 const initialValues = ref({
@@ -23,9 +24,9 @@ const resolver = ref(zodResolver(
 
 const onFormSubmit = ({ valid }: { valid: any }) => {
     if (valid) {
-        const {data} = useMyFetch('/api/creator/tasks').post(initialValues.value).json()
+        const { data } = useMyFetch('/api/creator/tasks').post(initialValues.value).json()
         console.log(data);
-        
+
         toast.add({ severity: 'success', summary: 'Form is submitted.', life: 3000 });
     }
 };
@@ -34,7 +35,7 @@ const onFormSubmit = ({ valid }: { valid: any }) => {
 
 <template>
     <Form v-slot="$form" :resolver="resolver" :initialValues="initialValues" @submit="onFormSubmit"
-        class="flex flex-col gap-4">
+        class="relative flex flex-col gap-4">
         <div class="flex flex-col gap-1">
             <InputText v-model="initialValues.title" name="title" type="text" placeholder="Title" />
             <Message v-if="$form.username?.invalid" severity="error" size="small" variant="simple">{{
@@ -46,5 +47,6 @@ const onFormSubmit = ({ valid }: { valid: any }) => {
                 $form.content.error?.message }}</Message>
         </div>
         <Button type="submit" severity="secondary" label="Submit" />
+        <Meteors />
     </Form>
 </template>

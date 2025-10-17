@@ -3,6 +3,7 @@
 import { Button, Drawer, SelectButton } from 'primevue'
 import { ref, watch } from 'vue'
 import WriteTaskForm from '../../components/form/WriteTaskForm.vue'
+import Meteors from '../../components/inspira/Meteors.vue'
 import TaskCard from '../../components/workbench/TaskCard.vue'
 import { getServerSource } from '../../utils'
 import { useMyFetch } from '../../utils/request'
@@ -34,7 +35,7 @@ const view = (data: any) => {
 <template>
     <div class="flex items-center justify-between">
         <SelectButton v-model="value" :options="options" />
-        <Button label="Create" rounded raised @click="{drawerData = null;visible = true}" />
+        <Button label="Create" rounded raised @click="{ drawerData = null; visible = true }" />
     </div>
     <div v-if="loading">loading data...</div>
     <div v-else-if="data.length" class="mt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
@@ -44,10 +45,15 @@ const view = (data: any) => {
         no data ...
     </template>
     <Drawer v-model:visible="visible" :header="drawerData?.title || 'Write'" position="right">
-        <p class="bg-contain bg-no-repeat" v-if="drawerData"
-            :style="{ 'background': `url(${getServerSource(drawerData?.image)})` }" v-html="drawerData.content"></p>
+        <div v-if="drawerData" class="relative">
+
+            <p class="bg-contain bg-no-repeat" :style="{ 'background': `url(${getServerSource(drawerData?.image)})` }"
+                v-html="drawerData.content"></p>
+            <Meteors />
+
+        </div>
         <template v-else>
-           <WriteTaskForm/>
+            <WriteTaskForm />
         </template>
     </Drawer>
 </template>
