@@ -55,9 +55,8 @@ function setBackgroundAdaptive(el, imageUrl) {
     height: 450px;
     position: relative;
     border-radius: 10px;
-    background-repeat: repeat;
-    background-size: auto;
-    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 .dock-demo>.p-dock {

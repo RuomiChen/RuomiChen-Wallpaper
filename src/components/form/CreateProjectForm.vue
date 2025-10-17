@@ -1,6 +1,6 @@
 <template>
     <div class="space-y-6">
-        
+
         <!-- File Upload -->
         <div class="space-y-3" v-if="!disabled">
             <FileUpload mode="basic" @select="onFileSelect" customUpload auto severity="secondary"
@@ -164,6 +164,12 @@ const onFileSelect = (event: any) => {
     if (!file) return
 
     localForm.value.file = file
+
+    const baseName = file.name.replace(/\.[^/.]+$/, '')
+    if (!localForm.value.name) {
+        localForm.value.name = baseName
+    }
+
     const reader = new FileReader()
     reader.onload = (e) => {
         src.value = e.target?.result as string

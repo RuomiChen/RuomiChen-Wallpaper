@@ -13,7 +13,7 @@ const props = defineProps<{
   <CardContainer :turn="false" class="cursor-pointer relative overflow-hidden h-[362px] w-full grid grid-cols-2 gap-4 p-4" v-if="data">
     <CardBody v-for="item in data.data" :key="item"
       class="z-1 overflow-clip group/card !h-full !w-full relative size-auto  sm:w-[30rem] ">
-      <CardItem class="w-full rounded-2xl  h-full bg-contain" scale="0.8" :style="`background:url(${getServerSource(item.source)})`">
+      <CardItem class="w-full rounded-2xl  h-full bg-cover" scale="0.8" :style="`background:url(${getServerSource(item.source)})`">
       </CardItem>
     </CardBody>
     <CardBody

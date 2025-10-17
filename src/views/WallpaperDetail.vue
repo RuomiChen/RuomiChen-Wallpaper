@@ -9,6 +9,7 @@ import RelationCollect from '../components/detail/RelationCollect.vue';
 import RelationTag from '../components/detail/RelationTag.vue';
 import SimpleDIalog from '../components/dialog/SimpleDialog.vue';
 import Dock from '../components/utils/Dock.vue';
+import DockMobile from '../components/utils/DockMobile.vue';
 import router from '../router';
 import { useGlobalState } from '../store/user';
 import { getServerSource } from '../utils';
@@ -19,14 +20,33 @@ const route = useRoute()
 const id = computed(() => route.params.id)
 // 监听 route.params.category 变化
 const url = computed(() => `/api/product/${id.value}`)
+
+
+const currentMock = ref()
+
 const { data, isFinished, execute } = useMyFetch(url).json()
+
+
+watch(
+  () => data.value,
+  (newVal) => {
+    if (newVal) {
+      currentMock.value = newVal.mockup
+    }
+  },
+  { immediate: true }
+)
+
 // 监听 category 变化
 watch(
     () => route.params.id,
     () => {
         execute()
+        currentMock.value = data.value?.mockup
     }
 )
+
+
 const userState = useGlobalState()
 
 const user = userState.userInfo
@@ -125,7 +145,7 @@ watch(
         if (!error.value) {
             similarData.value = res.value
         }
-        const { data: res2, error:error2 } = await useMyFetch(`/api/product/collect/${id}`).json()
+        const { data: res2, error: error2 } = await useMyFetch(`/api/product/collect/${id}`).json()
         if (!error2.value) {
             collectData.value = res2.value
         }
@@ -133,14 +153,17 @@ watch(
     },
     { immediate: true }
 )
+
+
 </script>
 
 <template>
     <div v-if="!isFinished">loading...</div>
     <div class="flex flex-col py-10 px-2  gap-10   text-[var(--p-content-color)]" v-else>
-        <div class="flex md:flex-row flex-col justify-between gap-10">
-            <div class="flex-1">
-                <Dock :data="data?.source" />
+        <div class="flex md:flex-row flex-col justify-between gap-10 items-center">
+            <div class="flex-1 border border-[var(--p-divider-border-color)] p-4 rounded-2xl">
+                <Dock v-if="!currentMock || currentMock == 'computer'" :data="data?.source" />
+                <DockMobile v-else="currentMock=='mobile'" :data="data?.source" />
             </div>
             <div class="p-3 md:min-w-140 flex flex-col gap-2 border border-[var(--p-divider-border-color)]  rounded-2xl 
             ">
@@ -156,7 +179,7 @@ watch(
                     <div class="flex md:flex-row flex-col justify-between md:items-center">
                         <div class="flex-grow">Color：Unknown</div>
                         <div class="flex-grow flex items-center gap-2">Type：<span v-for="item in data.type">{{ item
-                                }}</span>
+                        }}</span>
                         </div>
                     </div>
                     <div class="flex md:flex-row flex-col justify-between md:items-center">
