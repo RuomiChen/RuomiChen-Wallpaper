@@ -225,7 +225,7 @@ watch(
         </div>
         <RelationTag :data="data.tag" />
         <RelationCollect :data="collectData" />
-        <Recommend :data="similarData" />
+        <Recommend :data="similarData" :mockupType="data.mockup"/>
     </div>
 </template>
 
