@@ -9,7 +9,7 @@
                     <div @click="()=>router.push({name:'WallpaperDetail',params:{id:slotProps.data?._id}})" class="!h-full border border-surface-200 dark:border-surface-700 rounded mx-2  px-4 cursor-pointer">
                         <div class="mb-4">
                             <div class="relative ">
-                                <img  :src="getServerSource(slotProps.data?.source)" alt="Image" class="flex flex-col items-center" />
+                                <img  :src="getServerSource(slotProps.data?.source)" alt="Image" class="" />
                             </div>
                         </div>
                         <div class="mb-4 font-medium">{{ slotProps.data?.name }}</div>

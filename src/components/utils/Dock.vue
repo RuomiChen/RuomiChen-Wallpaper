@@ -1,6 +1,6 @@
 <template>
     <div class="card dock-demo">
-        <div class="dock-window"  :style="{ backgroundImage: `url(${getServerSource(data)})` }">
+        <div class="dock-window" :style="{ backgroundImage: `url(${getServerSource(data)})` }">
             <Dock :model="items" position="bottom">
                 <template #itemicon="{ item }">
                     <img v-tooltip.top="item.label" :alt="item.label as string" :src="item.icon" style="width: 100%" />
@@ -14,9 +14,9 @@
 import { Dock } from "primevue";
 import { ref } from "vue";
 import { getServerSource } from "../../utils";
-const props = defineProps < {
+const props = defineProps<{
     data: string; // 图片 URL
-} > ();
+}>();
 const items = ref([
     {
         label: 'Finder',
@@ -35,6 +35,17 @@ const items = ref([
         icon: 'https://primefaces.org/cdn/primevue/images/dock/trash.png'
     }
 ]);
+function setBackgroundAdaptive(el, imageUrl) {
+    const img = new Image()
+    img.src = imageUrl
+    img.onload = () => {
+        const { width, height } = img
+        const isSmall = width < el.offsetWidth || height < el.offsetHeight
+        el.style.backgroundImage = `url(${imageUrl})`
+        el.style.backgroundRepeat = isSmall ? 'repeat' : 'no-repeat'
+        el.style.backgroundSize = isSmall ? 'auto' : 'cover'
+    }
+}
 
 </script>
 
@@ -43,8 +54,10 @@ const items = ref([
     width: 100%;
     height: 450px;
     position: relative;
-    background-repeat: repeat;
     border-radius: 10px;
+    background-repeat: repeat;
+    background-size: auto;
+    background-position: center;
 }
 
 .dock-demo>.p-dock {

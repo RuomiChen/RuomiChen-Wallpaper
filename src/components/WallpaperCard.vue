@@ -13,7 +13,7 @@ const props = defineProps<{
 <template>
   <CardContainer class="overflow-hidden h-[362px] w-full" v-if="data">
     <CardBody :style="{ backgroundImage: `url(${getServerSource(data.source)})` }"
-      class="group/card !h-full !w-full relative size-auto rounded-xl border border-black/[0.1] bg-gray-50 p-6 sm:w-[30rem] dark:border-white/[0.2] dark:bg-gray-500/80 dark:hover:shadow-2xl dark:hover:shadow-emerald-500/[0.1]">
+      class=" bg-repeat bg-auto bg-center group/card !h-full !w-full relative size-auto rounded-xl border border-black/[0.1] bg-gray-50 p-6 sm:w-[30rem] dark:border-white/[0.2] dark:bg-gray-500/80 dark:hover:shadow-2xl dark:hover:shadow-emerald-500/[0.1]">
       <CardItem as="p" translate-y="-420"
         class="overflow-clip flex flex-col  shadow-[2px_2px_8px_#fff1f1] justify-center items-center gap-10 w-full h-full rounded-[40px]  translate-y-100 mt-2  text-sm text-neutral-500 dark:text-neutral-300 dark:bg-[rgba(78,71,71,.6)]">
 

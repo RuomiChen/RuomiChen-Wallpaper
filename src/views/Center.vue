@@ -24,6 +24,7 @@
                     <Invite v-if="activeTab === 'invite'" :data="inviteRecords"/>
                     <CheckIn v-if="activeTab === 'checkin'" :data="checkInRecords" @reload="checkInExe"/>
                     <Collect v-if="activeTab === 'collect'" :data="collectRecords" />
+                    <Store v-if="activeTab === 'store'" :data="storeData" />
                    
                 </div>
             </div>
@@ -37,6 +38,7 @@ import { useRoute } from 'vue-router'
 import CheckIn from '../components/center/CheckIn.vue'
 import Collect from '../components/center/Collect.vue'
 import Invite from '../components/center/Invite.vue'
+import Store from '../components/center/Store.vue'
 import UserInfo from '../components/center/UserInfo.vue'
 import { useMyFetch } from '../utils/request'
 import { AppToast } from '../utils/toast'
@@ -70,7 +72,8 @@ const tabs = [
     { id: 'profile', label: 'User Info', icon: 'pi pi-user' },
     { id: 'checkin', label: 'CheckIn Record', icon: 'pi pi-calendar-plus' },
     { id: 'invite', label: 'Invitation Record', icon: 'pi pi-users' },
-    { id: 'collect', label: 'Collect Record', icon: 'pi pi-heart' }
+    { id: 'collect', label: 'Collect Record', icon: 'pi pi-heart' },
+    { id: 'store', label: 'Point Store', icon: 'pi pi-shop' }
 ]
 
 const activeTab = ref('profile')
@@ -78,7 +81,7 @@ const activeTab = ref('profile')
 const { data: checkInRecords,execute:checkInExe } = useMyFetch('/api/user/checkIn').json()
 const { data: inviteRecords } = useMyFetch('/api/user/invite').json()
 const { data: collectRecords } = useMyFetch('/api/collect').json()
-
+const { data: storeData } = useMyFetch('/api/store').json()
 
 </script>
 

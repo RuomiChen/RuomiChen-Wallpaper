@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { DynamicDialog, Toast, useDialog, useToast } from 'primevue';
-import ConfirmPopup from 'primevue/confirmpopup';
+import { ConfirmDialog, DynamicDialog, Toast, useDialog, useToast } from 'primevue';
 import { setDialogInstance } from './utils/dialog';
 import { setToastInstance } from './utils/toast';
 // 初始化时注册全局实例
@@ -31,7 +30,8 @@ document.addEventListener('contextmenu', (e) => {
 <template>
     <router-view />
     <Toast />
-    <ConfirmPopup />
+    <!-- <ConfirmPopup /> -->
+    <ConfirmDialog />
     <DynamicDialog />
 </template>
 
