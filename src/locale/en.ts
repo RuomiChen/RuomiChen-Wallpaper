@@ -19,6 +19,11 @@ export default {
     about: 'About Us',
     contact: 'Contact',
     otherProduct: 'Other Product',
+    subMenu: {
+      mobile:'Mobile phone wallpaper',
+      computer:'Computer wallpaper',
+      avatarProduction:'Avatar Production',
+    },
   },
   detail: {
     category: 'Category',
@@ -104,19 +109,19 @@ export default {
     },
     storeContent: {
       redeemRecord: 'Redeem Record',
-      table:{
-        goodsName:'Goods Name',
-        goodsDesc:'goods Description',
-        quantity:'Quantity',
-        totalPoints:'Total Points',
+      table: {
+        goodsName: 'Goods Name',
+        goodsDesc: 'goods Description',
+        quantity: 'Quantity',
+        totalPoints: 'Total Points',
       },
-      points:'points',
-      stock:'stock',
-      redeemBtn:'Redeem Now',
-      redeemBtnNo:'Insufficient Points',
-      dialog:{
-        header:'Redeem',
-        title:'Are you sure you want to redeem?',
+      points: 'points',
+      stock: 'stock',
+      redeemBtn: 'Redeem Now',
+      redeemBtnNo: 'Insufficient Points',
+      dialog: {
+        header: 'Redeem',
+        title: 'Are you sure you want to redeem?',
       }
     }
   },

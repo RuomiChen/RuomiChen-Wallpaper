@@ -122,19 +122,19 @@ const items = ref([
                 {
                     items: [
                         {
-                            label: 'Mobile phone wallpaper', icon: 'pi pi-mobile', command: () => {
+                            label:computed(()=>t('header.subMenu.mobile')), icon: 'pi pi-mobile', command: () => {
                                 // Callback to run
                                 router.push({ name: 'WallpaperCategory', params: { category: 'mobile' } })
                             },
                         },
                         {
-                            label: 'Computer wallpaper', icon: 'pi pi-desktop', command: () => {
+                            label:computed(()=>t('header.subMenu.computer')), icon: 'pi pi-desktop', command: () => {
                                 // Callback to run
                                 router.push({ name: 'WallpaperCategory', params: { category: 'computer' } })
                             },
                         },
                         {
-                            label: 'Avatar production', icon: 'pi pi-user', command: () => {
+                            label:computed(()=>t('header.subMenu.avatarProduction')), icon: 'pi pi-user', command: () => {
                                 // Callback to run
                                 router.push({ name: 'WallpaperCategory', params: { category: 'mobile' } })
                             },
