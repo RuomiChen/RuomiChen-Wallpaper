@@ -3,10 +3,10 @@ import { pluginVue } from '@rsbuild/plugin-vue';
 
 export default defineConfig({
   html: {
-    title: 'RuomiChen Wall',
+    title: 'MiChen Wall',
     favicon: './public/logo.svg',
     appIcon: {
-      name: 'RuomiChen Wall',
+      name: 'MiChen Wall',
       icons: [
         { src: './public/logo.svg' },
       ],
