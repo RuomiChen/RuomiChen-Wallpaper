@@ -17,7 +17,7 @@ const { isFetching, error, data } = useMyFetch<{
     <div class="flex flex-col gap-20 w-full" v-else>
         <Carousel :data="data?.carousel!" />
         <People :data="data?.people!"/>
-        <Advantages />
+        <Advantages :data="data?.advantages!"/>
        
     </div>
 

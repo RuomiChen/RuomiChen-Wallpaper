@@ -7,7 +7,6 @@ export const useMyFetch = createFetch({
         async beforeFetch({ options }) {
             const token = useStorage('token', null)
             options.headers.Authorization = `Bearer ${token.value}`
-
             return { options }
         },
         afterFetch({ data, response, context, execute }) {
@@ -32,5 +31,6 @@ export const useMyFetch = createFetch({
     },
     fetchOptions: {
         mode: 'cors',
+        credentials:'include'
     },
 })
