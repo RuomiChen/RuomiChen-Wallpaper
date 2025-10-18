@@ -186,11 +186,11 @@ watch(
     <div v-if="!isFinished">loading...</div>
     <div class="flex flex-col py-10 px-2  gap-10   text-[var(--p-content-color)]" v-else>
         <div class="flex md:flex-row flex-col justify-between gap-10 items-center">
-            <div class="flex-1 border border-[var(--p-divider-border-color)] p-4 rounded-2xl">
+            <div class="flex-1 border border-[var(--p-divider-border-color)] p-4 rounded-2xl w-full">
                 <Dock v-if="!currentMock || currentMock == 'computer'" :data="data?.source" />
                 <DockMobile v-else="currentMock=='mobile'" :data="data?.source" />
             </div>
-            <div class="p-3 md:min-w-140 flex flex-col gap-2 border border-[var(--p-divider-border-color)]  rounded-2xl 
+            <div class="w-full md:w-auto p-3 md:min-w-140 flex flex-col gap-2 border border-[var(--p-divider-border-color)]  rounded-2xl 
             ">
                 <!-- info -->
                 <div
