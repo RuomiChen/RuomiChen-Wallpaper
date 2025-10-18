@@ -7,6 +7,7 @@ import { AppToast } from '../utils/toast'
 import About from '../views/About.vue'
 import Account from '../views/Account.vue'
 import Center from '../views/Center.vue'
+import CenterOther from '../views/CenterOther.vue'
 import Contact from '../views/Contact.vue'
 import Home from '../views/Home.vue'
 import Analytics from '../views/user/Analytics.vue'
@@ -32,6 +33,11 @@ const routes = [
         name: 'Center', path: '/center', component: Center,
         meta: { requiresAuth: true },
 
+      }, {
+        name: 'Center', path: '/center', component: Center,
+        meta: { requiresAuth: true },
+      },{
+        name: 'CenterOther', path: '/center/:id', component: CenterOther,
       },
     ]
   }, {

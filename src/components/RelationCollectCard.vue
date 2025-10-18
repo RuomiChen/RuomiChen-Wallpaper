@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { defineProps } from 'vue';
+import router from '../router';
 import { getServerSource } from '../utils';
 import CardBody from './inspira/CardBody.vue';
 import CardContainer from './inspira/CardContainer.vue';
@@ -10,7 +11,7 @@ const props = defineProps<{
 }>()
 </script>
 <template>
-  <CardContainer :turn="false" class="cursor-pointer relative overflow-hidden h-[362px] w-full grid grid-cols-2 gap-4 p-4" v-if="data">
+  <CardContainer @click="router.push({name:'CenterOther',params:{id:data.user_data._id}})" :turn="false" class="cursor-pointer relative overflow-hidden h-[362px] w-full grid grid-cols-2 gap-4 p-4" v-if="data">
     <CardBody v-for="item in data.data" :key="item"
       class="z-1 overflow-clip group/card !h-full !w-full relative size-auto  sm:w-[30rem] ">
       <CardItem class="w-full rounded-2xl  h-full bg-cover" scale="0.8" :style="`background:url(${getServerSource(item.source)})`">

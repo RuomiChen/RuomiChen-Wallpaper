@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
+import router from '../router';
 import { getServerSource } from '../utils';
 
 const props = defineProps<{
@@ -13,7 +14,7 @@ const { t } = useI18n({ useScope: 'global' })
     <div class="flex gap-2 mx-auto py-2">
         <div class="bg-primary rounded-full p-[2px] inline-flex">
             <div class="overflow-hidden rounded-full group">
-                <img :src="getServerSource(data.avatar)"
+                <img @click="router.push({name:'CenterOther',params:{id:data._id}})" :src="getServerSource(data.avatar)"
                     class="cursor-pointer size-14 rounded-full transition-transform duration-300 group-hover:scale-120" />
             </div>
         </div>

@@ -1,7 +1,7 @@
 <template>
-  <footer class=" text-white py-4 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+  <footer class=" dark:text-white text-black/40 py-4 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
     <!-- 左侧 Logo / 名称 -->
-    <div class="flex items-center gap-2">
+    <div class="flex items-center justify-between md:justify-start gap-2">
       <img src="../../public/logo.svg" alt="logo" class="h-8 w-8 object-contain" />
       <span class="font-semibold text-lg">{{ t('common.logo') }}</span>
     </div>

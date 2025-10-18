@@ -1,7 +1,7 @@
 <template>
-  <div :class="['flex items-center justify-center', containerClass]" style="perspective: 1000px">
+  <div :class="['flex ', containerClass]" style="perspective: 1000px">
     <div ref="containerRef" :class="[
-      'relative flex items-center justify-center transition-all duration-200 ease-linear',
+      'relative flex  transition-all duration-200 ease-linear',
       $props.class,
     ]" style="transform-style: preserve-3d" @mouseenter="handleMouseEnter" @mousemove="handleMouseMove"
       @mouseleave="handleMouseLeave">

@@ -69,9 +69,7 @@ useIntersectionObserver(
   <div v-else>
     <template v-if="category == 'computer'">
       <div v-if="items?.length" class="grid grid-cols-3 gap-4 w-full">
-        <div v-for="(item, index) of items" :key="index">
-          <WallpaperCard :data="item" :category="category" />
-        </div>
+          <WallpaperCard :data="item" v-for="(item, index) of items" :key="index" />
       </div>
     </template>
     <template v-else>
