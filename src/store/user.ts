@@ -42,7 +42,7 @@ export const useGlobalState = createGlobalState(
         }
 
         const refreshUserInfo = async () => {
-            const { data, error } = await useMyFetch('/api/user/info').get().json();
+            const { data, error } = await useMyFetch('/api/user/info_get').get().json();
             if (!error.value) {
                 console.log('data',data.value);
                 

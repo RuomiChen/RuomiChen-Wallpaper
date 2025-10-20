@@ -104,6 +104,22 @@ const search = () => {
 
     });
 }
+
+const languageItems = ref([
+    {
+        label: 'zh',
+        command: () => {
+            changeLanguage('zh')
+        }
+    },
+    {
+        label: 'en',
+        command: () => {
+            changeLanguage('en')
+        }
+    },
+])
+
 const items = ref([
     {
         label: computed(() => t('header.home')),
@@ -196,25 +212,37 @@ const items = ref([
             ]
         ]
     },
+      {
+    label: computed(() => t('header.tools')), // 新菜单
+    root: true,
+    items: [
+      [
+        {
+          items: [
+            {
+              label: 'Search',
+              icon: 'pi pi-search',
+              command: () => search()
+            },
+            {
+              label: 'Language',
+              icon: 'pi pi-language',
+              items: languageItems.value.map(lang => ({
+                label: lang.label,
+                command: lang.command
+              }))
+            }
+          ]
+        }
+      ]
+    ]
+  }
 ]);
 const changeLanguage = (t: string) => {
     if (locale.value == t) return
     locale.value = t
 }
-const languageItems = ref([
-    {
-        label: 'zh',
-        command: () => {
-            changeLanguage('zh')
-        }
-    },
-    {
-        label: 'en',
-        command: () => {
-            changeLanguage('en')
-        }
-    },
-])
+
 
 </script>
 <style scoped>
