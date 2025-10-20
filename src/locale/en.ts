@@ -19,10 +19,12 @@ export default {
     about: 'About Us',
     contact: 'Contact',
     otherProduct: 'Other Product',
+    tools: 'Tools',
     subMenu: {
-      mobile:'Mobile phone wallpaper',
-      computer:'Computer wallpaper',
-      avatarProduction:'Avatar Production',
+      mobile: 'Mobile phone wallpaper',
+      computer: 'Computer wallpaper',
+      avatarProduction: 'Avatar Production',
+      search: 'Search',
     },
   },
   detail: {

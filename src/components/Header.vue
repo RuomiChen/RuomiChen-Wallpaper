@@ -23,7 +23,7 @@
             </template>
             <template #end>
                 <div class="flex gap-4 items-center">
-                    <Button icon="pi pi-search" aria-label="Save" @click="search" />
+                    <Button v-if="!isMobile" icon="pi pi-search" aria-label="Save" @click="search" />
                     <Button :icon="`pi ${isDark ? 'pi-sun' : 'pi-moon'}`" aria-label="Save" @click="toggleDark()" />
                     <SplitButton :label="locale" dropdownIcon="pi pi-language" :model="languageItems" />
                     <OverlayBadge v-if="hasLogin" severity="danger" class="inline-flex">
@@ -40,7 +40,7 @@
 </template>
 
 <script setup lang="ts">
-import { useDark, useStorage, useToggle } from '@vueuse/core';
+import { useDark, useMediaQuery, useStorage, useToggle } from '@vueuse/core';
 import { Button, MegaMenu, OverlayBadge, SplitButton } from "primevue";
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
@@ -119,125 +119,92 @@ const languageItems = ref([
         }
     },
 ])
+const isMobile = useMediaQuery('(max-width: 1023px)')
 
-const items = ref([
-    {
-        label: computed(() => t('header.home')),
-        command: () => {
-            // Callback to run
-            router.push('/')
-        },
-        root: true
-    },
-
-    {
-        label: computed(() => t('header.resources')),
-        root: true,
-        items: [
-            [
-                {
-                    items: [
-                        {
-                            label:computed(()=>t('header.subMenu.mobile')), icon: 'pi pi-mobile', command: () => {
-                                // Callback to run
-                                router.push({ name: 'WallpaperCategory', params: { category: 'mobile' } })
-                            },
-                        },
-                        {
-                            label:computed(()=>t('header.subMenu.computer')), icon: 'pi pi-desktop', command: () => {
-                                // Callback to run
-                                router.push({ name: 'WallpaperCategory', params: { category: 'computer' } })
-                            },
-                        },
-                        {
-                            label:computed(()=>t('header.subMenu.avatarProduction')), icon: 'pi pi-user', command: () => {
-                                // Callback to run
-                                router.push({ name: 'WallpaperCategory', params: { category: 'mobile' } })
-                            },
-                        },
-                    ]
-                }
-            ],
-        ]
-    }, {
-        label: computed(() => t('header.about')),
-        command: () => {
-            // Callback to run
-            router.push({ name: 'About' })
-        },
-        root: true
-    },
-    {
-        label:  computed(() => t('header.contact')),
-        command: () => {
-            // Callback to run
-            router.push({ name: 'Contact' })
-        },
-        root: true
-    }, {
-        label: computed(() => t('header.otherProduct')),
-        root: true,
-        items: [
-            [
-                {
-                    items: [
-                        { label: 'Features', icon: 'pi pi-list', subtext: 'Subtext of item' },
-                        { label: 'Customers', icon: 'pi pi-users', subtext: 'Subtext of item' },
-                        { label: 'Case Studies', icon: 'pi pi-file', subtext: 'Subtext of item' }
-                    ]
-                }
-            ],
-            [
-                {
-                    items: [
-                        { label: 'Solutions', icon: 'pi pi-shield', subtext: 'Subtext of item' },
-                        { label: 'Faq', icon: 'pi pi-question', subtext: 'Subtext of item' },
-                        { label: 'Library', icon: 'pi pi-search', subtext: 'Subtext of item' }
-                    ]
-                }
-            ],
-            [
-                {
-                    items: [
-                        { label: 'Community', icon: 'pi pi-comments', subtext: 'Subtext of item' },
-                        { label: 'Rewards', icon: 'pi pi-star', subtext: 'Subtext of item' },
-                        { label: 'Investors', icon: 'pi pi-globe', subtext: 'Subtext of item' }
-                    ]
-                }
-            ],
-            [
-                {
-                    items: [{ image: 'https://primefaces.org/cdn/primevue/images/uikit/uikit-system.png', label: 'GET STARTED', subtext: 'Build spectacular apps in no time.' }]
-                }
-            ]
-        ]
-    },
-      {
-    label: computed(() => t('header.tools')), // 新菜单
-    root: true,
-    items: [
-      [
+const items = computed(() => {
+    const baseItems = [
         {
-          items: [
-            {
-              label: 'Search',
-              icon: 'pi pi-search',
-              command: () => search()
-            },
-            {
-              label: 'Language',
-              icon: 'pi pi-language',
-              items: languageItems.value.map(lang => ({
-                label: lang.label,
-                command: lang.command
-              }))
-            }
-          ]
+            label: computed(() => t('header.home')),
+            command: () => router.push('/'),
+            root: true
+        },
+        {
+            label: computed(() => t('header.resources')),
+            root: true,
+            items: [
+                [
+                    {
+                        items: [
+                            {
+                                label: computed(() => t('header.subMenu.mobile')),
+                                icon: 'pi pi-mobile',
+                                command: () => router.push({ name: 'WallpaperCategory', params: { category: 'mobile' } })
+                            },
+                            {
+                                label: computed(() => t('header.subMenu.computer')),
+                                icon: 'pi pi-desktop',
+                                command: () => router.push({ name: 'WallpaperCategory', params: { category: 'computer' } })
+                            },
+                            {
+                                label: computed(() => t('header.subMenu.avatarProduction')),
+                                icon: 'pi pi-user',
+                                command: () => router.push({ name: 'WallpaperCategory', params: { category: 'mobile' } })
+                            }
+                        ]
+                    }
+                ]
+            ]
+        },
+        {
+            label: computed(() => t('header.about')),
+            command: () => router.push({ name: 'About' }),
+            root: true
+        },
+        {
+            label: computed(() => t('header.contact')),
+            command: () => router.push({ name: 'Contact' }),
+            root: true
+        },
+        {
+            label: computed(() => t('header.otherProduct')),
+            root: true,
+            items: [
+                [
+                    {
+                        items: [
+                            { label: 'Features', icon: 'pi pi-list', subtext: 'Subtext of item' },
+                            { label: 'Customers', icon: 'pi pi-users', subtext: 'Subtext of item' },
+                            { label: 'Case Studies', icon: 'pi pi-file', subtext: 'Subtext of item' }
+                        ]
+                    }
+                ]
+            ]
         }
-      ]
     ]
-  }
-]);
+
+    // ✅ 手机端额外添加 Tools 菜单
+    if (isMobile.value) {
+        baseItems.push({
+            label: computed(() => t('header.tools')),
+            root: true,
+            items: [
+                [
+                    {
+                        items: [
+                            {
+                                label: t('header.subMenu.search'),
+                                icon: isMobile.value ? '' : 'pi pi-search',
+                                command: () => search()
+                            },
+                        ]
+                    }
+                ]
+            ]
+        })
+    }
+
+    return baseItems
+})
 const changeLanguage = (t: string) => {
     if (locale.value == t) return
     locale.value = t

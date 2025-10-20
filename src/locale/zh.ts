@@ -19,10 +19,12 @@ export default {
     about: '关于我们',
     contact: '联系我们',
     otherProduct: '其他产品',
+    tools: '拓展',
     subMenu: {
       mobile: '手机壁纸',
       computer: '桌面壁纸',
       avatarProduction: '头像制作',
+      search: '搜索',
     },
   },
   detail: {
