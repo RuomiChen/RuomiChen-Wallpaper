@@ -1,5 +1,5 @@
 <template>
-    <div class="h-screen flex flex-col ">
+    <div class="md:h-screen flex flex-col ">
         <div class="  px-4 py-3 flex items-center justify-between">
             <div class="flex items-center gap-4">
                 <i class="pi pi-bars text-2xl text-primary cursor-pointer"
@@ -15,9 +15,9 @@
             </div>
         </div>
 
-        <div class="flex flex-1 overflow-hidden">
+        <div class="flex flex-1 overflow-hidden md:flex-row flex-col">
             <Transition name="slide">
-                <div v-if="sidebarVisible" class="w-64 flex flex-col">
+                <div v-if="sidebarVisible" class="md:w-64 flex flex-col">
                    
                     <nav class="flex-1 overflow-y-auto p-2">
                         <div v-for="item in menuItems" :key="item.label" class="mb-1">

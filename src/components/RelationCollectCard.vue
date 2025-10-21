@@ -27,7 +27,7 @@ const props = defineProps<{
      <CardBody
       class="-z-1 absolute -top-[10%]  !w-full  group/card  ">
       <CardItem class="w-full h-full " translate-y="32" >
-        <div class="text-white md:text-[20px] text-shadow-[0_0_6px_#fff] text-center">
+        <div class="dark:text-white md:text-[20px] text-shadow-[0_0_6px_#004] dark:text-shadow-[0_0_6px_#fff] text-center">
           {{ data.user_data.nickname }}
         </div>
       </CardItem>

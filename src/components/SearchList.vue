@@ -68,7 +68,8 @@ import { AppDialog } from "../utils/dialog";
 
 defineProps<{
     data: [],
-    rows:number
+    rows:number,
+    currentKey:string
 }>();
 
 const to = (id: string) => {
