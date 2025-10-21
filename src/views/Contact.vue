@@ -8,7 +8,7 @@
 
     <div class="grid md:grid-cols-2 gap-8">
       <!-- Contact Form -->
-      <div class="rounded-lg shadow-lg p-8 space-y-6">
+      <div class="rounded-lg shadow-lg md:p-8 space-y-6">
         <h2 class="text-2xl font-semibold mb-6">{{t('contact.form.title')}}</h2>
 
         <form @submit.prevent="handleSubmit" class="space-y-4">
@@ -50,8 +50,8 @@
       </div>
 
       <!-- Contact Info + Map -->
-      <div class="flex flex-col justify-between">
-        <div class="rounded-lg shadow-lg p-4 ">
+      <div class="flex flex-col justify-between gap-4 md:gap-0">
+        <div class="rounded-lg shadow-lg md:p-4 ">
           <h2 class="text-2xl font-semibold mb-4">{{t('contact.info.title')}}</h2>
 
           <div class="space-y-4" v-if="data">

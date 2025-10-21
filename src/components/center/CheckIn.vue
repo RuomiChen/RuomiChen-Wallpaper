@@ -71,7 +71,7 @@ const consecutiveDays = computed(() => {
 
 <template>
     <div class="space-y-6">
-        <div class=" rounded-lg shadow-sm p-6">
+        <div class=" rounded-lg shadow-sm md:p-6">
             <div class="flex items-center justify-between mb-6">
                 <div>
                     <h2 class="text-xl font-semibold text-gray-900 dark:text-white">{{t('center.checkInRecordContent.title')}}</h2>
@@ -95,7 +95,7 @@ const consecutiveDays = computed(() => {
             </div>
         </div>
 
-        <div class=" rounded-lg shadow-sm p-6">
+        <div class=" rounded-lg shadow-sm md:p-6">
             <h3 class="text-lg font-semibold  mb-4">{{t('center.checkInRecordContent.checkInHistory')}}</h3>
             <DataTable :value="data" :paginator="true" :rows="10">
                 <Column field="date" :header="t('center.checkInRecordContent.table.date')" sortable></Column>

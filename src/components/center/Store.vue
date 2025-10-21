@@ -99,8 +99,8 @@ onMounted(() => {
 <template>
     <div class="min-h-screen bg-background">
         <div>
-            <div class="container mx-auto p-4 ">
-                <div class="flex items-center justify-end gap-4">
+            <div class="container mx-auto md:p-4 ">
+                <div class="flex md:items-center justify-end md:flex-row flex-col gap-4">
                     <div class=" flex items-center gap-3 bg-primary/10 px-6 py-3 rounded-full">
                         <i class="pi pi-star-fill text-primary text-xl"></i>
                         <div>

@@ -1,10 +1,10 @@
 <template>
-    <div class="min-h-screen  p-6">
+    <div class="min-h-screen  md:p-6">
         <div class="">
 
             <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
                 <div class="lg:col-span-1">
-                    <div class=" rounded-lg shadow-sm p-4">
+                    <div class=" rounded-lg shadow-sm md:p-4">
                         <nav class="space-y-2">
                             <button v-for="tab in tabs" :key="tab.id" @click="activeTab = tab.id" :class="[
                                 'cursor-pointer w-full text-left px-4 py-3 rounded-lg transition-colors flex items-center gap-3',
