@@ -6,6 +6,7 @@ import { useMyFetch } from '../utils/request'
 import { AppToast } from '../utils/toast'
 import About from '../views/About.vue'
 import Account from '../views/Account.vue'
+import AvatarCreate from '../views/AvatarCreate.vue'
 import Center from '../views/Center.vue'
 import CenterOther from '../views/CenterOther.vue'
 import Contact from '../views/Contact.vue'
@@ -38,7 +39,10 @@ const routes = [
         meta: { requiresAuth: true },
       },{
         name: 'CenterOther', path: '/center/:id', component: CenterOther,
+      },{
+        name: 'AvatarCreate', path: '/avatar_create', component: AvatarCreate,
       },
+      
     ]
   }, {
     name: 'Account', path: '/account', component: Account

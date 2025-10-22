@@ -23,10 +23,6 @@
   }
 }
 
-* {
-  user-select: none;
-  /* cursor: url('../public/touch-white.png'); */
-}
 
 :root {
   --p-tabs-tablist-background: black;

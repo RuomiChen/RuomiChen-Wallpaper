@@ -136,19 +136,20 @@ const items = computed(() => {
                     {
                         items: [
                             {
-                                label: computed(() => t('header.subMenu.mobile')),
-                                icon: 'pi pi-mobile',
-                                command: () => router.push({ name: 'WallpaperCategory', params: { category: 'mobile' } })
-                            },
-                            {
                                 label: computed(() => t('header.subMenu.computer')),
                                 icon: 'pi pi-desktop',
                                 command: () => router.push({ name: 'WallpaperCategory', params: { category: 'computer' } })
                             },
                             {
+                                label: computed(() => t('header.subMenu.mobile')),
+                                icon: 'pi pi-mobile',
+                                command: () => router.push({ name: 'WallpaperCategory', params: { category: 'mobile' } })
+                            },
+
+                            {
                                 label: computed(() => t('header.subMenu.avatarProduction')),
                                 icon: 'pi pi-user',
-                                command: () => router.push({ name: 'WallpaperCategory', params: { category: 'mobile' } })
+                                command: () => router.push({ name: 'AvatarCreate' })
                             }
                         ]
                     }
