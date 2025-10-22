@@ -18,8 +18,8 @@ const props = defineProps<{
       </CardItem>
     </CardBody>
     <CardBody
-      class="z-2 absolute left-[50%] top-[50%] -translate-x-[50%] -translate-y-[50%]  group/card !w-[54px] !h-[54px]    bg-contain  ">
-      <CardItem class="border-white border-2 rounded-full w-full h-full overflow-clip" scale="2.2" >
+      class="z-2 absolute left-[50%] top-[50%] -translate-x-[50%] -translate-y-[50%]  group/card size-24    bg-contain  ">
+      <CardItem class="border-white border-2 rounded-full w-full h-full overflow-clip" scale="1.4fea" >
         <!-- :style="`background:url(${getServerSource(data.user_data.avatar)})`" -->
          <img :src="getServerSource(data.user_data.avatar)" class="w-full h-full"/>
       </CardItem>
