@@ -31,6 +31,6 @@ export const useMyFetch = createFetch({
     },
     fetchOptions: {
         mode: 'cors',
-        credentials:'omitfea'
+        credentials:'omit'
     },
 })
